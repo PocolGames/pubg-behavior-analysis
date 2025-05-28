@@ -132,6 +132,11 @@ class UIManager {
         this.updateProbabilityChart(result.probabilities);
         this.updateInsights(inputData, result);
         
+        // 새로운 차트들 렌더링
+        if (typeof chartManager !== 'undefined') {
+            chartManager.renderAllCharts(inputData, result);
+        }
+        
         // 결과 패널 표시
         this.resultContent.classList.add('active');
         
@@ -147,26 +152,24 @@ class UIManager {
         // 유형별 클래스 적용
         card.className = `player-type-card type-${result.predictedType}`;
         
-        // 아이콘 업데이트
-        document.getElementById('typeIcon').textContent = typeData.icon;
+        // 아이콘 업데이트 
+        const typeIcon = document.getElementById('typeIcon');
+        if (typeIcon) {
+            typeIcon.textContent = typeData.icon;
+        }
         
         // 이름 및 설명 업데이트
-        document.getElementById('typeName').textContent = typeData.name;
-        document.getElementById('typeDescription').textContent = typeData.description;
+        const typeName = document.getElementById('typeName');
+        const typeDescription = document.getElementById('typeDescription');
         
-        // 신뢰도 업데이트
-        const confidenceValue = document.getElementById('confidenceValue');
-        const confidencePercent = Math.round(result.confidence * 100);
-        confidenceValue.textContent = `${confidencePercent}%`;
-        
-        // 신뢰도에 따른 색상 변경
-        if (confidencePercent >= 80) {
-            confidenceValue.className = 'confidence-value text-success';
-        } else if (confidencePercent >= 60) {
-            confidenceValue.className = 'confidence-value text-warning';
-        } else {
-            confidenceValue.className = 'confidence-value text-danger';
+        if (typeName) {
+            typeName.textContent = typeData.name;
         }
+        if (typeDescription) {
+            typeDescription.textContent = typeData.description;
+        }
+        
+        // 신뢰도는 프로그레스 링으로 표시 (charts.js에서 처리)
     }
 
     // 확률 차트 업데이트
@@ -323,7 +326,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 개발자 도구용 전역 변수
     window.classifier = classifier;
     window.uiManager = uiManager;
+    window.chartManager = chartManager;
     
     console.log('🎮 PUBG Player Classifier 초기화 완료');
+    console.log('📊 고급 차트 기능이 추가되었습니다!');
     console.log('샘플 데이터로 테스트해보세요!');
 });

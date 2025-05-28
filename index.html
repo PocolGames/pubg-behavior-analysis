@@ -6,6 +6,7 @@
     <title>PUBG Player Behavior Classifier</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/charts.css">
 </head>
 <body>
     <div class="container">
@@ -87,27 +88,37 @@
                     <div class="result-content" id="resultContent">
                         <h2 class="section-title">분석 결과</h2>
                         
-                        <div class="player-type-card" id="playerTypeCard">
-                            <div class="type-icon" id="typeIcon"></div>
-                            <div class="type-info">
-                                <h3 class="type-name" id="typeName"></h3>
-                                <p class="type-description" id="typeDescription"></p>
-                            </div>
-                            <div class="confidence-score">
-                                <span class="confidence-label">신뢰도</span>
-                                <span class="confidence-value" id="confidenceValue"></span>
+                        <div class="result-overview">
+                            <div class="player-type-card" id="playerTypeCard">
+                                <div class="type-icon" id="typeIcon"></div>
+                                <div class="type-info">
+                                    <h3 class="type-name" id="typeName"></h3>
+                                    <p class="type-description" id="typeDescription"></p>
+                                </div>
+                                <div id="confidenceRing"></div>
                             </div>
                         </div>
 
-                        <div class="probability-chart" id="probabilityChart">
-                            <h4>각 유형별 확률</h4>
-                            <div class="chart-bars" id="chartBars"></div>
+                        <div class="charts-container">
+                            <div class="radar-chart-container">
+                                <h4>능력치 분석</h4>
+                                <div class="radar-chart" id="radarChart"></div>
+                            </div>
+
+                            <div class="probability-chart" id="probabilityChart">
+                                <h4>각 유형별 확률</h4>
+                                <div class="chart-bars" id="chartBars"></div>
+                            </div>
                         </div>
+
+                        <div id="comparisonContainer"></div>
 
                         <div class="player-insights" id="playerInsights">
                             <h4>플레이어 특성 분석</h4>
                             <div class="insights-content" id="insightsContent"></div>
                         </div>
+
+                        <div id="globalStatsContainer"></div>
                     </div>
                 </div>
             </div>
@@ -120,6 +131,7 @@
 
     <script src="js/data.js"></script>
     <script src="js/classifier.js"></script>
+    <script src="js/charts.js"></script>
     <script src="js/ui.js"></script>
 </body>
 </html>

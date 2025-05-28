@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUBG Player Behavior Analysis - Model Performance Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/components.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">PUBG Player Behavior Analysis</h1>
+            <p class="subtitle">Model Performance Dashboard</p>
+        </header>
+
+        <main class="main-content">
+            <!-- 전체 모델 성능 메트릭 -->
+            <section class="metrics-section">
+                <h2 class="section-title">Overall Model Performance</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value" id="accuracy-value">99.25%</div>
+                        <div class="metric-label">Model Accuracy</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="f1-score-value">98.67%</div>
+                        <div class="metric-label">F1 Score (Macro)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="classes-value">8</div>
+                        <div class="metric-label">Player Types</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="features-value">30</div>
+                        <div class="metric-label">Features Used</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 플레이어 유형별 분류 정확도 -->
+            <section class="chart-section">
+                <h2 class="section-title">Player Type Classification Accuracy</h2>
+                <div class="chart-container">
+                    <canvas id="accuracyChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Confusion Matrix -->
+            <section class="chart-section">
+                <h2 class="section-title">Confusion Matrix</h2>
+                <div class="chart-container">
+                    <canvas id="confusionMatrix"></canvas>
+                </div>
+            </section>
+
+            <!-- Feature Importance -->
+            <section class="chart-section">
+                <h2 class="section-title">Feature Importance</h2>
+                <div class="chart-container">
+                    <canvas id="featureImportanceChart"></canvas>
+                </div>
+            </section>
+
+            <!-- 플레이어 유형 분포 -->
+            <section class="chart-section">
+                <h2 class="section-title">Player Type Distribution</h2>
+                <div class="chart-container">
+                    <canvas id="distributionChart"></canvas>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 PUBG Player Behavior Analysis Dashboard</p>
+        </footer>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

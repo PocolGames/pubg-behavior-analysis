@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUBG Player Behavior Classifier</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    <span class="title-main">PUBG</span>
+                    <span class="title-sub">Player Behavior Classifier</span>
+                </h1>
+                <p class="subtitle">AI 기반 플레이어 유형 분석 시스템</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="classifier-section">
+                <div class="input-panel">
+                    <h2 class="section-title">게임 통계 입력</h2>
+                    <form id="classifierForm" class="stats-form">
+                        <div class="form-group">
+                            <label for="kills">킬 수</label>
+                            <input type="number" id="kills" name="kills" min="0" max="50" value="3" step="1">
+                            <span class="input-help">게임에서 처치한 적의 수</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="damageDealt">총 데미지</label>
+                            <input type="number" id="damageDealt" name="damageDealt" min="0" max="5000" value="250" step="10">
+                            <span class="input-help">게임에서 입힌 총 데미지</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="walkDistance">도보 이동거리 (m)</label>
+                            <input type="number" id="walkDistance" name="walkDistance" min="0" max="15000" value="1500" step="100">
+                            <span class="input-help">걸어서 이동한 총 거리</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rideDistance">차량 이동거리 (m)</label>
+                            <input type="number" id="rideDistance" name="rideDistance" min="0" max="20000" value="500" step="100">
+                            <span class="input-help">차량을 이용한 총 이동거리</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="heals">치료템 사용</label>
+                            <input type="number" id="heals" name="heals" min="0" max="20" value="2" step="1">
+                            <span class="input-help">치료 아이템 사용 횟수</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="boosts">부스터 사용</label>
+                            <input type="number" id="boosts" name="boosts" min="0" max="20" value="1" step="1">
+                            <span class="input-help">부스터 아이템 사용 횟수</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="weaponsAcquired">무기 획득</label>
+                            <input type="number" id="weaponsAcquired" name="weaponsAcquired" min="0" max="20" value="4" step="1">
+                            <span class="input-help">획득한 무기의 총 개수</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="assists">어시스트</label>
+                            <input type="number" id="assists" name="assists" min="0" max="20" value="1" step="1">
+                            <span class="input-help">팀원을 도운 어시스트 횟수</span>
+                        </div>
+
+                        <button type="submit" class="classify-btn" id="classifyBtn">
+                            <span>플레이어 분류하기</span>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="result-panel" id="resultPanel">
+                    <div class="loading" id="loadingIndicator">
+                        <div class="loading-spinner"></div>
+                        <p>플레이어 행동 분석 중...</p>
+                    </div>
+
+                    <div class="result-content" id="resultContent">
+                        <h2 class="section-title">분석 결과</h2>
+                        
+                        <div class="player-type-card" id="playerTypeCard">
+                            <div class="type-icon" id="typeIcon"></div>
+                            <div class="type-info">
+                                <h3 class="type-name" id="typeName"></h3>
+                                <p class="type-description" id="typeDescription"></p>
+                            </div>
+                            <div class="confidence-score">
+                                <span class="confidence-label">신뢰도</span>
+                                <span class="confidence-value" id="confidenceValue"></span>
+                            </div>
+                        </div>
+
+                        <div class="probability-chart" id="probabilityChart">
+                            <h4>각 유형별 확률</h4>
+                            <div class="chart-bars" id="chartBars"></div>
+                        </div>
+
+                        <div class="player-insights" id="playerInsights">
+                            <h4>플레이어 특성 분석</h4>
+                            <div class="insights-content" id="insightsContent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 PUBG Player Behavior Classifier. Powered by AI.</p>
+        </footer>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/classifier.js"></script>
+    <script src="js/ui.js"></script>
+</body>
+</html>

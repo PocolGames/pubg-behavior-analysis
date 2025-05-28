@@ -1657,7 +1657,7 @@ Movement 평균:
 ----------------------------------------
 ```
 
-[!ScreenShot](image/3단계_타겟_변수_분포_분석.png)
+![Screenshot](image/3단계_타겟_변수_분포_분석.png)
 
 ``` bash
 📊 winPlacePerc 기본 통계:
@@ -1675,8 +1675,8 @@ Movement 평균:
 ----------------------------------------
 ```
 
-[!ScreenShot](image/4단계_전투_행동_분석.png)
-[!ScreenShot](image/4단계_전투_행동_분석2.png)
+![Screenshot](image/4단계_전투_행동_분석.png)
+![Screenshot](image/4단계_전투_행동_분석2.png)
 
 ``` bash
 ==================== 5단계: 성과 그룹별 분석 ====================
@@ -1690,7 +1690,7 @@ Movement 평균:
   Low (0-20%): 159,570명 (19.9%)
 ```
 
-[!ScreenShot](image/5단계_성과_그룹별_분석.png)
+![Screenshot](image/5단계_성과_그룹별_분석.png)
 
 ``` bash
 📋 성과 그룹별 평균 비교:
@@ -1709,7 +1709,7 @@ Top (80-100%)       2.06   259.019989   2645.280029   3.17    3.06
 ----------------------------------------
 ```
 
-[!ScreenShot](image/6단계_상관관계_분석.png)
+![Screenshot](image/6단계_상관관계_분석.png)
 
 ``` bash
 💪 강한 상관관계 (|r| > 0.7) 특성 쌍:
@@ -1760,7 +1760,7 @@ boosts                        0.00     220.502
 weaponsAcquired               1.00       4.960  
 ```
 
-[!ScreenShot](image/8단계_성능_비교_분석.png)
+![Screenshot](image/8단계_성능_비교_분석.png)
 
 ``` bash
 ==================== EDA 완료 요약 ====================
@@ -5607,7 +5607,7 @@ Restoring model weights from the end of the best epoch: 43.
 ----------------------------------------
 ```
 
-[!ScreenShot](image/Basic모델_훈련_과정_훈련과정_시각화.png)
+![Screenshot](image/Basic모델_훈련_과정_훈련과정_시각화.png)
 
 ``` bash
 📊 최종 훈련 성능:
@@ -5623,7 +5623,7 @@ Restoring model weights from the end of the best epoch: 43.
 ----------------------------------------
 ```
 
-[!ScreenShot](image/Advanced모델_훈련과정_시각화.png)
+![Screenshot](image/Advanced모델_훈련과정_시각화.png)
 
 ``` bash
 
@@ -5640,7 +5640,7 @@ Restoring model weights from the end of the best epoch: 43.
 ----------------------------------------
 ```
 
-[!ScreenShot](image/Residual모델_훈련과정_시각화.png)
+![Screenshot](image/Residual모델_훈련과정_시각화.png)
 
 ``` bash
 📊 최종 훈련 성능:
@@ -5722,7 +5722,7 @@ Restoring model weights from the end of the best epoch: 43.
   F1 (Macro): 0.9874
 ```
 
-[!ScreenShot](image/Residual모델평가.png)
+![Screenshot](image/Residual모델평가.png)
 
 ``` bash
 🏆 최고 성능 모델: Basic
@@ -5734,7 +5734,7 @@ Restoring model weights from the end of the best epoch: 43.
 ----------------------------------------
 ```
 
-[!ScreenShot](image/5단계_최고모델상세분석.png)
+![Screenshot](image/5단계_최고모델상세분석.png)
 
 ``` bash
 📊 클래스별 분류 정확도:
@@ -5751,7 +5751,7 @@ Restoring model weights from the end of the best epoch: 43.
 ----------------------------------------
 ```
 
-[!ScreenShot](image/예측_신뢰도_분석.png)
+![Screenshot](image/예측_신뢰도_분석.png)
 
 ``` bash
 📊 신뢰도 통계:
@@ -5768,7 +5768,7 @@ Restoring model weights from the end of the best epoch: 43.
   진행: 21/30
 ```
 
-[!ScreenShot](image/Permutation_Importance특성_중요도_분석.png)
+![Screenshot](image/Permutation_Importance특성_중요도_분석.png)
 
 ``` bash
 📊 상위 10개 중요 특성:

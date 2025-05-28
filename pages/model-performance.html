@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUBG Model Performance Dashboard</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1 class="dashboard-title">
+                    <span class="title-icon">📊</span>
+                    PUBG Model Performance Dashboard
+                </h1>
+                <nav class="dashboard-nav">
+                    <a href="../index.html" class="nav-link">홈</a>
+                    <a href="model-performance.html" class="nav-link active">모델 성능</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+            <!-- 모델 개요 섹션 -->
+            <section class="overview-section">
+                <h2 class="section-title">모델 개요</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card primary">
+                        <div class="metric-icon">🎯</div>
+                        <div class="metric-content">
+                            <h3 class="metric-value" id="modelAccuracy">99.245%</h3>
+                            <p class="metric-label">모델 정확도</p>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">🏷️</div>
+                        <div class="metric-content">
+                            <h3 class="metric-value" id="clusterCount">8개</h3>
+                            <p class="metric-label">클러스터 수</p>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">📈</div>
+                        <div class="metric-content">
+                            <h3 class="metric-value" id="featureCount">30개</h3>
+                            <p class="metric-label">분석 특성</p>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">👥</div>
+                        <div class="metric-content">
+                            <h3 class="metric-value" id="totalPlayers">80,000+</h3>
+                            <p class="metric-label">분석 플레이어</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 클러스터 분포 섹션 -->
+            <section class="cluster-section">
+                <h2 class="section-title">플레이어 유형 분포</h2>
+                <div class="chart-container">
+                    <div class="chart-wrapper">
+                        <canvas id="clusterDistributionChart"></canvas>
+                    </div>
+                    <div class="cluster-legend" id="clusterLegend">
+                        <!-- 동적으로 생성됨 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 성능 지표 섹션 -->
+            <section class="performance-section">
+                <h2 class="section-title">분류 성능 분석</h2>
+                <div class="performance-grid">
+                    <div class="performance-card">
+                        <h3>클러스터별 분류 정확도</h3>
+                        <canvas id="clusterAccuracyChart"></canvas>
+                    </div>
+                    <div class="performance-card">
+                        <h3>Confusion Matrix</h3>
+                        <div id="confusionMatrix" class="confusion-matrix">
+                            <!-- 동적으로 생성됨 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 특성 중요도 섹션 -->
+            <section class="features-section">
+                <h2 class="section-title">특성 중요도 분석</h2>
+                <div class="features-container">
+                    <div class="feature-importance-chart">
+                        <canvas id="featureImportanceChart"></canvas>
+                    </div>
+                    <div class="top-features" id="topFeatures">
+                        <h3>상위 10개 중요 특성</h3>
+                        <div class="features-list" id="featuresList">
+                            <!-- 동적으로 생성됨 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 클러스터 상세 분석 섹션 -->
+            <section class="cluster-details-section">
+                <h2 class="section-title">클러스터 상세 분석</h2>
+                <div class="cluster-tabs" id="clusterTabs">
+                    <!-- 동적으로 생성됨 -->
+                </div>
+                <div class="cluster-content" id="clusterContent">
+                    <!-- 선택된 클러스터 상세 정보 -->
+                </div>
+            </section>
+        </main>
+
+        <footer class="dashboard-footer">
+            <p>&copy; 2025 PUBG Player Behavior Analysis - Model Performance Dashboard</p>
+        </footer>
+    </div>
+
+    <script src="../js/model-data.js"></script>
+    <script src="../js/dashboard-charts.js"></script>
+    <script src="../js/dashboard.js"></script>
+</body>
+</html>

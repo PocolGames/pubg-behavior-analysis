@@ -1,0 +1,357 @@
+/* 대시보드 탭 시스템 스타일 */
+
+.cluster-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+    position: relative;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.cluster-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.cluster-tabs::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(79, 195, 247, 0.3), transparent);
+}
+
+.cluster-tab {
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    color: #a0a0a0;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+}
+
+.cluster-tab::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.6s ease;
+}
+
+.cluster-tab:hover::before {
+    left: 100%;
+}
+
+.cluster-tab::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #4fc3f7, #29b6f6);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.cluster-tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.cluster-tab:hover::after {
+    width: 80%;
+}
+
+.cluster-tab.active {
+    background: rgba(79, 195, 247, 0.2);
+    border-color: rgba(79, 195, 247, 0.5);
+    color: #4fc3f7;
+    box-shadow: 0 0 20px rgba(79, 195, 247, 0.3);
+    transform: translateY(-1px);
+}
+
+.cluster-tab.active::after {
+    width: 100%;
+    background: linear-gradient(90deg, #4fc3f7, #29b6f6, #26c6da);
+}
+
+.cluster-tab.active::before {
+    background: linear-gradient(90deg, transparent, rgba(79, 195, 247, 0.2), transparent);
+}
+
+/* 탭 컨텐츠 */
+.cluster-content {
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cluster-content.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.cluster-content.entering {
+    animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.cluster-content.leaving {
+    animation: slideOutDown 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideOutDown {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+/* 탭 헤더 개선 */
+.tab-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+}
+
+.tab-header h3 {
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tab-header h3::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(180deg, #4fc3f7, #29b6f6);
+    border-radius: 2px;
+}
+
+.tab-info {
+    font-size: 0.8rem;
+    color: #a0a0a0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tab-badge {
+    background: rgba(79, 195, 247, 0.2);
+    color: #4fc3f7;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border: 1px solid rgba(79, 195, 247, 0.3);
+}
+
+/* 특성 중요도 섹션 */
+.feature-importance {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 2rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.feature-importance::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #ff6b35, #ffc107);
+    border-radius: 1rem 1rem 0 0;
+}
+
+.importance-chart-container {
+    margin-top: 1.5rem;
+    height: 500px;
+    position: relative;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.importance-chart-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(255, 107, 53, 0.1), transparent);
+    pointer-events: none;
+}
+
+/* 성능 메트릭 섹션 */
+.performance-metrics {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 2rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.metrics-charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+/* 탭 네비게이션 향상 */
+.tab-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.tab-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.tab-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tab-counter {
+    background: rgba(255, 255, 255, 0.1);
+    color: #a0a0a0;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tab-search {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: #ffffff;
+    font-size: 0.8rem;
+    width: 200px;
+    transition: all 0.3s ease;
+}
+
+.tab-search:focus {
+    outline: none;
+    border-color: #4fc3f7;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.2);
+}
+
+.tab-search::placeholder {
+    color: #666;
+}
+
+/* 모바일 탭 스타일 */
+.mobile-tab-selector {
+    display: none;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    color: #ffffff;
+    font-size: 0.875rem;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.mobile-tab-selector:focus {
+    outline: none;
+    border-color: #4fc3f7;
+    box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.2);
+}
+
+/* 반응형 조정 */
+@media (max-width: 768px) {
+    .cluster-tabs {
+        display: none;
+    }
+    
+    .mobile-tab-selector {
+        display: block;
+    }
+    
+    .tab-navigation {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .tab-nav-right {
+        justify-content: center;
+    }
+    
+    .tab-search {
+        width: 100%;
+    }
+    
+    .metrics-charts {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .cluster-tab {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .tab-header h3 {
+        font-size: 1rem;
+    }
+    
+    .feature-importance,
+    .performance-metrics {
+        padding: 1.5rem;
+    }
+}

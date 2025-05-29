@@ -1,0 +1,318 @@
+/* 대시보드 메트릭 카드 스타일 */
+
+/* 모델 개요 섹션 */
+.model-overview {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    padding: 2rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.model-overview::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+    animation: rotate 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.model-overview h2 {
+    position: relative;
+    z-index: 1;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.metric-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.8s ease;
+}
+
+.metric-card:hover::before {
+    left: 100%;
+}
+
+.metric-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.metric-icon {
+    font-size: 2rem;
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.metric-card:hover .metric-icon {
+    transform: rotate(10deg) scale(1.1);
+}
+
+.accuracy-icon { 
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+}
+
+.feature-icon { 
+    background: rgba(33, 150, 243, 0.2);
+    color: #2196F3;
+}
+
+.cluster-icon { 
+    background: rgba(255, 152, 0, 0.2);
+    color: #FF9800;
+}
+
+.data-icon { 
+    background: rgba(156, 39, 176, 0.2);
+    color: #9C27B0;
+}
+
+.metric-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.metric-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+    transition: all 0.3s ease;
+}
+
+.metric-card:hover .metric-value {
+    color: #4fc3f7;
+    text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+}
+
+.metric-label {
+    font-size: 0.875rem;
+    color: #a0a0a0;
+    margin-top: 0.25rem;
+    transition: color 0.3s ease;
+}
+
+.metric-card:hover .metric-label {
+    color: #ffffff;
+}
+
+/* 향상된 메트릭 카드 변형 */
+.metric-card.enhanced {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.metric-card.enhanced::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, rgba(79, 195, 247, 0.5), rgba(41, 182, 246, 0.5));
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+    -webkit-mask-composite: xor;
+    padding: 2px;
+}
+
+/* 통계 카드 그리드 */
+.stats-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.stat-mini-card {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-mini-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #4fc3f7, #29b6f6);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.stat-mini-card:hover::before {
+    transform: scaleX(1);
+}
+
+.stat-mini-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+}
+
+.stat-mini-icon {
+    font-size: 1.5rem;
+    color: #4fc3f7;
+    margin-bottom: 0.5rem;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.stat-mini-card:hover .stat-mini-icon {
+    transform: scale(1.2);
+}
+
+.stat-mini-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 0.25rem;
+}
+
+.stat-mini-label {
+    font-size: 0.8rem;
+    color: #a0a0a0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* 성능 메트릭 특별 스타일 */
+.performance-metric {
+    position: relative;
+    background: radial-gradient(circle at top right, rgba(76, 175, 80, 0.1), transparent);
+}
+
+.performance-metric.excellent {
+    border-left: 4px solid #4CAF50;
+}
+
+.performance-metric.good {
+    border-left: 4px solid #2196F3;
+}
+
+.performance-metric.average {
+    border-left: 4px solid #FF9800;
+}
+
+.performance-metric.poor {
+    border-left: 4px solid #F44336;
+}
+
+/* 메트릭 트렌드 표시 */
+.metric-trend {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+}
+
+.trend-up {
+    color: #4CAF50;
+}
+
+.trend-down {
+    color: #F44336;
+}
+
+.trend-neutral {
+    color: #9E9E9E;
+}
+
+.trend-icon {
+    font-size: 0.7rem;
+}
+
+/* 반응형 조정 */
+@media (max-width: 1200px) {
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .metrics-grid,
+    .stats-card-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .metric-card {
+        padding: 1rem;
+        gap: 0.75rem;
+    }
+    
+    .metric-icon {
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.5rem;
+    }
+    
+    .metric-value {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .metric-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .model-overview {
+        padding: 1.5rem;
+    }
+}

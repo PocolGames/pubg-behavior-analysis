@@ -1,0 +1,211 @@
+/* 레이더 차트 전용 스타일 */
+
+.radar-chart-container {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.radar-chart-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+}
+
+.radar-chart-container h4 {
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    font-size: 1.1rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.radar-chart {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.radar-chart:hover {
+    transform: scale(1.02);
+}
+
+.radar-chart svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.radar-grid {
+    fill: none;
+    stroke: var(--border-color);
+    stroke-width: 1;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.radar-chart:hover .radar-grid {
+    opacity: 0.7;
+}
+
+.radar-axis {
+    stroke: var(--border-color);
+    stroke-width: 1;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.radar-chart:hover .radar-axis {
+    opacity: 0.9;
+}
+
+.radar-area {
+    fill: var(--primary-color);
+    fill-opacity: 0.2;
+    stroke: var(--primary-color);
+    stroke-width: 2;
+    transition: fill-opacity 0.3s ease, stroke-width 0.3s ease;
+}
+
+.radar-chart:hover .radar-area {
+    fill-opacity: 0.35;
+    stroke-width: 3;
+}
+
+.radar-points {
+    fill: var(--primary-color);
+    stroke: var(--text-primary);
+    stroke-width: 2;
+    r: 4;
+    transition: r 0.3s ease, fill 0.3s ease;
+}
+
+.radar-chart:hover .radar-points {
+    r: 6;
+    fill: var(--accent-color);
+}
+
+.radar-labels {
+    fill: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    transition: fill 0.3s ease, font-size 0.3s ease;
+}
+
+.radar-chart:hover .radar-labels {
+    fill: var(--text-primary);
+    font-size: 13px;
+}
+
+/* 레이더 차트 값 표시 */
+.radar-value-labels {
+    fill: var(--text-primary);
+    font-size: 10px;
+    font-weight: bold;
+    text-anchor: middle;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.radar-chart:hover .radar-value-labels {
+    opacity: 1;
+}
+
+/* 레이더 차트 범례 */
+.radar-legend {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.radar-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.radar-legend-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.radar-legend-color {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    transition: transform 0.2s ease;
+}
+
+.radar-legend-item:hover .radar-legend-color {
+    transform: scale(1.3);
+}
+
+/* 레이더 차트 로딩 상태 */
+.radar-chart.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.radar-chart.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    margin: -12px 0 0 -12px;
+    border: 2px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+}
+
+/* 반응형 조정 */
+@media (max-width: 768px) {
+    .radar-chart {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .radar-labels {
+        font-size: 10px;
+    }
+    
+    .radar-legend {
+        gap: 8px;
+    }
+    
+    .radar-legend-item {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .radar-chart {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .radar-chart-container {
+        padding: 15px;
+    }
+}

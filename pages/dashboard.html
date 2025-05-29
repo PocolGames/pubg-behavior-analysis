@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Performance Dashboard - PUBG Behavior Classifier</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    <span class="title-main">Model Performance</span>
+                    <span class="title-sub">Dashboard</span>
+                </h1>
+                <p class="subtitle">PUBG 플레이어 분류 모델 성능 분석</p>
+                <nav class="nav-links">
+                    <a href="../index.html" class="nav-link">분류기</a>
+                    <a href="dashboard.html" class="nav-link active">대시보드</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="dashboard-content">
+            <!-- 모델 개요 섹션 -->
+            <section class="model-overview">
+                <h2 class="section-title">모델 성능 개요</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon accuracy-icon">📊</div>
+                        <div class="metric-info">
+                            <span class="metric-value" id="modelAccuracy">99.245%</span>
+                            <span class="metric-label">모델 정확도</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon feature-icon">🔍</div>
+                        <div class="metric-info">
+                            <span class="metric-value" id="featureCount">30</span>
+                            <span class="metric-label">분석 특성</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon cluster-icon">🎯</div>
+                        <div class="metric-info">
+                            <span class="metric-value" id="clusterCount">8</span>
+                            <span class="metric-label">플레이어 유형</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon data-icon">👥</div>
+                        <div class="metric-info">
+                            <span class="metric-value" id="sampleCount">80,000</span>
+                            <span class="metric-label">분석 데이터</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 클러스터 분포 섹션 -->
+            <section class="cluster-analysis">
+                <h2 class="section-title">플레이어 유형 분포</h2>
+                <div class="cluster-charts">
+                    <div class="chart-container">
+                        <canvas id="clusterDistributionChart"></canvas>
+                    </div>
+                    <div class="cluster-details">
+                        <div class="cluster-legend" id="clusterLegend"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 특성 중요도 섹션 -->
+            <section class="feature-importance">
+                <h2 class="section-title">특성 중요도 분석</h2>
+                <div class="importance-chart-container">
+                    <canvas id="featureImportanceChart"></canvas>
+                </div>
+            </section>
+
+            <!-- 성능 메트릭 섹션 -->
+            <section class="performance-metrics">
+                <h2 class="section-title">성능 메트릭</h2>
+                <div class="metrics-charts">
+                    <div class="chart-box">
+                        <h3>분류 정확도</h3>
+                        <canvas id="accuracyChart"></canvas>
+                    </div>
+                    <div class="chart-box">
+                        <h3>클러스터링 품질</h3>
+                        <canvas id="qualityChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 클러스터 상세 분석 -->
+            <section class="cluster-details-section">
+                <h2 class="section-title">클러스터 상세 분석</h2>
+                <div class="cluster-tabs" id="clusterTabs"></div>
+                <div class="cluster-content" id="clusterContent"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 세명대학교 2018218051 컴퓨터학부 이은수.</p>
+        </footer>
+    </div>
+
+    <script src="../js/dashboard-data.js"></script>
+    <script src="../js/dashboard-charts.js"></script>
+    <script src="../js/dashboard-ui.js"></script>
+</body>
+</html>

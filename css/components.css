@@ -1,6 +1,5 @@
 /* 플레이어 유형 카드 */
 .player-type-card {
-    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
     border: 2px solid var(--primary-color);
     border-radius: 12px;
     padding: 24px;
@@ -149,7 +148,6 @@
 
 /* 확률 차트 */
 .probability-chart {
-    background: var(--bg-secondary);
     border-radius: 8px;
     padding: 20px;
     border: 1px solid var(--border-color);

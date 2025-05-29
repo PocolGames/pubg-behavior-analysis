@@ -1,0 +1,258 @@
+/* 카드 그라데이션 효과 스타일 */
+
+/* 동적 그라데이션 애니메이션 */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes gradientPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+/* 플레이어 유형 카드 그라데이션 개선 */
+.player-type-card {
+    background: linear-gradient(135deg, 
+        var(--bg-secondary) 0%, 
+        rgba(255, 107, 53, 0.1) 25%,
+        var(--bg-primary) 50%,
+        rgba(255, 193, 7, 0.1) 75%,
+        var(--bg-secondary) 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+    position: relative;
+}
+
+.player-type-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.03) 75%,
+        transparent 100%);
+    border-radius: 12px;
+    animation: gradientPulse 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+/* 유형별 맞춤 그라데이션 */
+.type-survivor.player-type-card {
+    background: linear-gradient(135deg, 
+        rgba(40, 167, 69, 0.1) 0%,
+        var(--bg-secondary) 25%,
+        rgba(76, 175, 80, 0.05) 50%,
+        var(--bg-primary) 75%,
+        rgba(40, 167, 69, 0.08) 100%);
+}
+
+.type-explorer.player-type-card {
+    background: linear-gradient(135deg, 
+        rgba(255, 193, 7, 0.1) 0%,
+        var(--bg-secondary) 25%,
+        rgba(255, 152, 0, 0.05) 50%,
+        var(--bg-primary) 75%,
+        rgba(255, 193, 7, 0.08) 100%);
+}
+
+.type-aggressive.player-type-card {
+    background: linear-gradient(135deg, 
+        rgba(244, 67, 54, 0.1) 0%,
+        var(--bg-secondary) 25%,
+        rgba(255, 87, 34, 0.05) 50%,
+        var(--bg-primary) 75%,
+        rgba(244, 67, 54, 0.08) 100%);
+}
+
+.type-balanced.player-type-card {
+    background: linear-gradient(135deg, 
+        rgba(33, 150, 243, 0.1) 0%,
+        var(--bg-secondary) 25%,
+        rgba(79, 195, 247, 0.05) 50%,
+        var(--bg-primary) 75%,
+        rgba(33, 150, 243, 0.08) 100%);
+}
+
+/* 호버 시 그라데이션 변화 */
+.player-type-card:hover {
+    background-size: 600% 600%;
+    animation: gradientShift 2s ease infinite;
+}
+
+.type-survivor.player-type-card:hover {
+    background: linear-gradient(135deg, 
+        rgba(40, 167, 69, 0.2) 0%,
+        rgba(76, 175, 80, 0.15) 25%,
+        var(--bg-secondary) 50%,
+        rgba(40, 167, 69, 0.1) 75%,
+        rgba(76, 175, 80, 0.2) 100%);
+}
+
+.type-explorer.player-type-card:hover {
+    background: linear-gradient(135deg, 
+        rgba(255, 193, 7, 0.2) 0%,
+        rgba(255, 152, 0, 0.15) 25%,
+        var(--bg-secondary) 50%,
+        rgba(255, 193, 7, 0.1) 75%,
+        rgba(255, 152, 0, 0.2) 100%);
+}
+
+.type-aggressive.player-type-card:hover {
+    background: linear-gradient(135deg, 
+        rgba(244, 67, 54, 0.2) 0%,
+        rgba(255, 87, 34, 0.15) 25%,
+        var(--bg-secondary) 50%,
+        rgba(244, 67, 54, 0.1) 75%,
+        rgba(255, 87, 34, 0.2) 100%);
+}
+
+.type-balanced.player-type-card:hover {
+    background: linear-gradient(135deg, 
+        rgba(33, 150, 243, 0.2) 0%,
+        rgba(79, 195, 247, 0.15) 25%,
+        var(--bg-secondary) 50%,
+        rgba(33, 150, 243, 0.1) 75%,
+        rgba(79, 195, 247, 0.2) 100%);
+}
+
+/* 확률 차트 그라데이션 */
+.probability-chart {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.02) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0.02) 100%);
+    position: relative;
+}
+
+.probability-chart::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, 
+        transparent 0%,
+        rgba(255, 107, 53, 0.05) 25%,
+        transparent 50%,
+        rgba(255, 193, 7, 0.05) 75%,
+        transparent 100%);
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.probability-chart:hover::before {
+    opacity: 1;
+}
+
+/* 인사이트 카드 그라데이션 */
+.player-insights {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.03) 0%,
+        rgba(255, 255, 255, 0.06) 50%,
+        rgba(255, 255, 255, 0.03) 100%);
+    position: relative;
+}
+
+.player-insights::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top left, 
+        rgba(79, 195, 247, 0.1) 0%,
+        transparent 50%);
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.player-insights:hover::before {
+    opacity: 1;
+}
+
+/* 바 채우기 그라데이션 개선 */
+.bar-fill {
+    background: linear-gradient(90deg, 
+        var(--primary-color) 0%,
+        rgba(255, 107, 53, 0.8) 25%,
+        var(--accent-color) 50%,
+        rgba(255, 193, 7, 0.8) 75%,
+        var(--primary-color) 100%);
+    background-size: 200% 100%;
+    animation: gradientFlow 3s linear infinite;
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+}
+
+.bar-fill:hover {
+    animation: gradientFlow 1s linear infinite;
+}
+
+/* 메트릭 카드 그라데이션 오버레이 */
+.metric-card {
+    position: relative;
+}
+
+.metric-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 30%,
+        transparent 70%,
+        rgba(255, 255, 255, 0.05) 100%);
+    border-radius: 0.75rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.metric-card:hover::after {
+    opacity: 1;
+}
+
+/* 특별 그라데이션 클래스 */
+.gradient-glow {
+    position: relative;
+    overflow: hidden;
+}
+
+.gradient-glow::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, 
+        #ff6b35, #f7931e, #ffc107, #4caf50, 
+        #2196f3, #9c27b0, #e91e63, #ff6b35);
+    background-size: 400% 400%;
+    border-radius: inherit;
+    animation: gradientShift 4s ease infinite;
+    z-index: -1;
+}
+
+.gradient-subtle {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.05) 0%,
+        rgba(255, 255, 255, 0.02) 50%,
+        rgba(255, 255, 255, 0.05) 100%);
+}
+
+.gradient-vibrant {
+    background: linear-gradient(135deg, 
+        rgba(255, 107, 53, 0.1) 0%,
+        rgba(255, 193, 7, 0.1) 25%,
+        rgba(76, 175, 80, 0.1) 50%,
+        rgba(33, 150, 243, 0.1) 75%,
+        rgba(156, 39, 176, 0.1) 100%);
+    background-size: 300% 300%;
+    animation: gradientShift 6s ease infinite;
+}

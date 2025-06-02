@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>모델 성능 대시보드 - PUBG 플레이어 행동 분석</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/components.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html">
+                    <i class="fas fa-gamepad"></i>
+                    <span>PUBG Analytics</span>
+                </a>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="../index.html">대시보드</a>
+                <a href="cluster-analysis.html">클러스터 분석</a>
+                <a href="model-performance.html" class="active">모델 성능</a>
+                <a href="player-prediction.html">플레이어 예측</a>
+            </nav>
+            
+            <button class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <nav class="breadcrumb">
+                <a href="../index.html">홈</a>
+                <span>/</span>
+                <span>모델 성능</span>
+            </nav>
+            <h1>모델 성능 대시보드</h1>
+            <p>딥러닝 분류 모델의 성능 지표와 해석 결과를 확인하세요</p>
+        </div>
+    </section>
+
+    <!-- Model Overview -->
+    <section class="model-overview">
+        <div class="container">
+            <h2>모델 성능 개요</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-target="99.27">0%</div>
+                        <div class="stat-label">앙상블 정확도</div>
+                        <div class="stat-description">3개 모델 앙상블</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-target="99.25">0%</div>
+                        <div class="stat-label">최고 단일 모델</div>
+                        <div class="stat-description">Basic Neural Network</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-target="98.67">0%</div>
+                        <div class="stat-label">F1 Score</div>
+                        <div class="stat-description">Macro Average</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-target="525.6">0초</div>
+                        <div class="stat-label">훈련 시간</div>
+                        <div class="stat-description">전체 파이프라인</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Model Comparison -->
+    <section class="model-comparison">
+        <div class="container">
+            <h2>모델 비교 분석</h2>
+            <div class="comparison-grid">
+                <!-- Model Performance Chart -->
+                <div class="chart-container">
+                    <h3>모델별 성능 비교</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="modelComparisonChart"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #ff6b35;"></span>
+                            <span>정확도 (Accuracy)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #667eea;"></span>
+                            <span>F1 Score</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Training History -->
+                <div class="chart-container">
+                    <h3>훈련 과정</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="trainingHistoryChart"></canvas>
+                    </div>
+                    <div class="model-selector">
+                        <button class="btn btn-sm model-btn active" data-model="basic">Basic</button>
+                        <button class="btn btn-sm model-btn" data-model="advanced">Advanced</button>
+                        <button class="btn btn-sm model-btn" data-model="residual">Residual</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Analysis -->
+    <section class="detailed-analysis">
+        <div class="container">
+            <div class="analysis-tabs">
+                <button class="tab-btn active" data-tab="confusion">혼동 행렬</button>
+                <button class="tab-btn" data-tab="features">특성 중요도</button>
+                <button class="tab-btn" data-tab="confidence">예측 신뢰도</button>
+                <button class="tab-btn" data-tab="interpretation">모델 해석</button>
+            </div>
+            
+            <div class="tab-content">
+                <!-- Confusion Matrix Tab -->
+                <div class="tab-pane active" id="confusion-tab">
+                    <div class="analysis-grid">
+                        <div class="chart-container full-width">
+                            <h3>혼동 행렬 (Confusion Matrix)</h3>
+                            <div class="confusion-matrix-wrapper">
+                                <canvas id="confusionMatrixChart"></canvas>
+                            </div>
+                            <div class="matrix-stats">
+                                <div class="stat-item">
+                                    <span class="stat-label">전체 정확도:</span>
+                                    <span class="stat-value">99.25%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Survivor 정확도:</span>
+                                    <span class="stat-value">99.8%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Explorer 정확도:</span>
+                                    <span class="stat-value">98.3%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Aggressive 정확도:</span>
+                                    <span class="stat-value">100%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature Importance Tab -->
+                <div class="tab-pane" id="features-tab">
+                    <div class="analysis-grid">
+                        <div class="chart-container">
+                            <h3>특성 중요도 순위</h3>
+                            <div class="chart-wrapper">
+                                <canvas id="featureImportanceChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="feature-details">
+                            <h3>핵심 특성 분석</h3>
+                            <div class="feature-list">
+                                <div class="feature-item">
+                                    <div class="feature-rank">1</div>
+                                    <div class="feature-info">
+                                        <div class="feature-name">has_kills</div>
+                                        <div class="feature-description">킬 여부 (이진 특성)</div>
+                                        <div class="feature-importance">중요도: 0.3232</div>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-rank">2</div>
+                                    <div class="feature-info">
+                                        <div class="feature-name">walkDistance_log</div>
+                                        <div class="feature-description">이동거리 (로그 변환)</div>
+                                        <div class="feature-importance">중요도: 0.0788</div>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-rank">3</div>
+                                    <div class="feature-info">
+                                        <div class="feature-name">walkDistance</div>
+                                        <div class="feature-description">보행 이동거리</div>
+                                        <div class="feature-importance">중요도: 0.0751</div>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-rank">4</div>
+                                    <div class="feature-info">
+                                        <div class="feature-name">total_distance</div>
+                                        <div class="feature-description">총 이동거리</div>
+                                        <div class="feature-importance">중요도: 0.0634</div>
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-rank">5</div>
+                                    <div class="feature-info">
+                                        <div class="feature-name">has_swimDistance</div>
+                                        <div class="feature-description">수영 여부</div>
+                                        <div class="feature-importance">중요도: 0.0609</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Confidence Analysis Tab -->
+                <div class="tab-pane" id="confidence-tab">
+                    <div class="analysis-grid">
+                        <div class="chart-container">
+                            <h3>예측 신뢰도 분포</h3>
+                            <div class="chart-wrapper">
+                                <canvas id="confidenceDistributionChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="confidence-stats">
+                            <h3>신뢰도 통계</h3>
+                            <div class="confidence-metrics">
+                                <div class="metric-card">
+                                    <div class="metric-value">0.990</div>
+                                    <div class="metric-label">평균 신뢰도</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value">98.2%</div>
+                                    <div class="metric-label">높은 신뢰도 (>0.8)</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value">0.0%</div>
+                                    <div class="metric-label">낮은 신뢰도 (<0.5)</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value">0.050</div>
+                                    <div class="metric-label">표준편차</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Model Interpretation Tab -->
+                <div class="tab-pane" id="interpretation-tab">
+                    <div class="interpretation-content">
+                        <h3>모델 해석 및 인사이트</h3>
+                        
+                        <div class="insight-cards">
+                            <div class="insight-card">
+                                <div class="insight-icon">
+                                    <i class="fas fa-crosshairs"></i>
+                                </div>
+                                <div class="insight-content">
+                                    <h4>킬 여부가 가장 중요한 특성</h4>
+                                    <p>has_kills 특성이 32.32%의 중요도를 차지하며, 플레이어 유형 분류에서 가장 핵심적인 역할을 합니다. 킬을 기록했는지 여부만으로도 플레이어의 성향을 크게 구분할 수 있습니다.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="insight-card">
+                                <div class="insight-icon">
+                                    <i class="fas fa-route"></i>
+                                </div>
+                                <div class="insight-content">
+                                    <h4>이동성이 플레이어 유형의 핵심</h4>
+                                    <p>이동거리 관련 특성들(walkDistance, total_distance)이 상위권을 차지합니다. Explorer 유형과 다른 유형들을 구분하는 핵심 지표로 작용합니다.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="insight-card">
+                                <div class="insight-icon">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div class="insight-content">
+                                    <h4>생존 전략의 다양성</h4>
+                                    <p>Survivor 유형이 전체의 49.4%를 차지하며, 보수적 vs 적극적으로 세분화됩니다. 각각 다른 생존 전략을 보여주어 게임의 전략적 다양성을 확인할 수 있습니다.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="insight-card">
+                                <div class="insight-icon">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="insight-content">
+                                    <h4>공격형 플레이어의 희소성</h4>
+                                    <p>Aggressive 유형은 전체의 0.1%(89명)에 불과하지만, 100% 정확도로 분류됩니다. 극단적인 공격 성향은 명확히 구분되는 특징을 보입니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="technical-insights">
+                            <h4>기술적 인사이트</h4>
+                            <div class="tech-grid">
+                                <div class="tech-item">
+                                    <h5>모델 아키텍처</h5>
+                                    <p>Basic Neural Network가 가장 우수한 성능을 보여, 복잡한 아키텍처보다 적절한 규제와 최적화가 더 중요함을 시사합니다.</p>
+                                </div>
+                                <div class="tech-item">
+                                    <h5>앙상블 효과</h5>
+                                    <p>앙상블 모델이 99.27%로 소폭 향상되어, 모델 다양성보다는 개별 모델의 품질이 더 중요함을 보여줍니다.</p>
+                                </div>
+                                <div class="tech-item">
+                                    <h5>특성 엔지니어링</h5>
+                                    <p>이진 특성(has_kills, has_swimDistance)과 로그 변환 특성이 상위권을 차지하여, 적절한 전처리의 중요성을 확인할 수 있습니다.</p>
+                                </div>
+                                <div class="tech-item">
+                                    <h5>클래스 불균형</h5>
+                                    <p>Aggressive 클래스의 극심한 불균형에도 불구하고 완벽한 분류가 가능하여, 데이터의 품질과 특성의 구별력이 우수함을 보여줍니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Export Section -->
+    <section class="export-section">
+        <div class="container">
+            <div class="export-card">
+                <h3>분석 결과 내보내기</h3>
+                <p>모델 성능 지표와 분석 결과를 다양한 형식으로 내보낼 수 있습니다.</p>
+                <div class="export-buttons">
+                    <button class="btn btn-primary" onclick="exportModelReport()">
+                        <i class="fas fa-file-pdf"></i>
+                        성능 보고서 (PDF)
+                    </button>
+                    <button class="btn btn-secondary" onclick="exportMetrics()">
+                        <i class="fas fa-download"></i>
+                        성능 지표 (JSON)
+                    </button>
+                    <button class="btn btn-success" onclick="exportCharts()">
+                        <i class="fas fa-chart-bar"></i>
+                        차트 이미지
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>PUBG 플레이어 행동 분석</h4>
+                    <p>머신러닝과 데이터 사이언스를 활용한 플레이어 행동 패턴 분석 프로젝트</p>
+                </div>
+                <div class="footer-section">
+                    <h4>기술 스택</h4>
+                    <ul>
+                        <li>Python & TensorFlow</li>
+                        <li>K-Means 클러스터링</li>
+                        <li>Neural Networks</li>
+                        <li>Chart.js & D3.js</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>분석 결과</h4>
+                    <ul>
+                        <li>8개 플레이어 유형 식별</li>
+                        <li>99.27% 분류 정확도</li>
+                        <li>80만명 데이터 분석</li>
+                        <li>30개 핵심 특성 추출</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 PUBG Analytics. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="../js/main.js"></script>
+    <script src="../js/chart-utils.js"></script>
+    <script src="../js/model-dashboard.js"></script>
+</body>
+</html>

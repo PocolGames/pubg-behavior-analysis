@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>클러스터 분석 - PUBG 플레이어 행동 분석</title>
+    <meta name="description" content="8가지 PUBG 플레이어 유형 클러스터 상세 분석 및 특성 비교">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/components.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <i class="fas fa-crosshairs logo-icon"></i>
+                    <h1 class="site-title">PUBG 플레이어 행동 분석</h1>
+                </div>
+                <nav class="main-nav">
+                    <ul class="nav-list">
+                        <li><a href="../index.html" class="nav-link">개요</a></li>
+                        <li><a href="cluster-analysis.html" class="nav-link active">클러스터 분석</a></li>
+                        <li><a href="model-performance.html" class="nav-link">모델 성능</a></li>
+                        <li><a href="player-prediction.html" class="nav-link">플레이어 예측</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <div class="breadcrumb">
+                    <a href="../index.html">홈</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>클러스터 분석</span>
+                </div>
+                <h2 class="page-title">플레이어 유형 클러스터 분석</h2>
+                <p class="page-description">
+                    머신러닝으로 발견한 8가지 플레이어 유형의 상세 분석 및 특성 비교
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="cluster-analysis-main">
+        <div class="container">
+
+            <!-- Cluster Overview -->
+            <section class="cluster-overview-section">
+                <h3 class="section-title">클러스터 개요</h3>
+                
+                <div class="overview-stats">
+                    <div class="overview-stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">800,000</div>
+                            <div class="stat-label">분석된 플레이어</div>
+                        </div>
+                    </div>
+                    <div class="overview-stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">8</div>
+                            <div class="stat-label">발견된 클러스터</div>
+                        </div>
+                    </div>
+                    <div class="overview-stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">0.139</div>
+                            <div class="stat-label">Silhouette Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cluster Distribution Chart -->
+                <div class="chart-container">
+                    <h4 class="chart-title">클러스터별 플레이어 분포</h4>
+                    <canvas id="clusterDistributionChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Cluster Filter & Comparison -->
+            <section class="cluster-filter-section">
+                <div class="filter-controls">
+                    <div class="filter-group">
+                        <label class="form-label">클러스터 선택</label>
+                        <div class="cluster-checkboxes">
+                            <div class="form-check">
+                                <input type="checkbox" id="cluster0" class="form-check-input cluster-filter" value="0" checked>
+                                <label for="cluster0" class="form-check-label survivor-label">Survivor (보수적)</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="cluster1" class="form-check-input cluster-filter" value="1" checked>
+                                <label for="cluster1" class="form-check-label survivor-label">Survivor (적극적)</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="cluster2" class="form-check-input cluster-filter" value="2" checked>
+                                <label for="cluster2" class="form-check-label explorer-label">Explorer (Type 1)</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="cluster3" class="form-check-input cluster-filter" value="3" checked>
+                                <label for="cluster3" class="form-check-label explorer-label">Explorer (Type 2)</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="cluster4" class="form-check-input cluster-filter" value="4" checked>
+                                <label for="cluster4" class="form-check-label explorer-label">Explorer (Type 3)</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="cluster5" class="form-check-input cluster-filter" value="5" checked>
+                                <label for="cluster5" class="form-check-label explorer-label">Explorer (Type 4)</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="cluster6" class="form-check-input cluster-filter" value="6" checked>
+                                <label for="cluster6" class="form-check-label explorer-label">Explorer (Type 5)</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" id="cluster7" class="form-check-input cluster-filter" value="7" checked>
+                                <label for="cluster7" class="form-check-label aggressive-label">Aggressive</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn btn-secondary" id="selectAllClusters">전체 선택</button>
+                        <button class="btn btn-ghost" id="clearAllClusters">전체 해제</button>
+                        <button class="btn btn-primary" id="compareSelected">선택된 클러스터 비교</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Detailed Cluster Analysis -->
+            <section class="detailed-analysis-section">
+                <div class="tabs">
+                    <ul class="tab-list">
+                        <li class="tab-item">
+                            <a href="#characteristics" class="tab-link active">클러스터 특성</a>
+                        </li>
+                        <li class="tab-item">
+                            <a href="#comparison" class="tab-link">비교 분석</a>
+                        </li>
+                        <li class="tab-item">
+                            <a href="#statistics" class="tab-link">상세 통계</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Tab Content: Characteristics -->
+                <div id="characteristics" class="tab-content active">
+                    <h4 class="tab-section-title">클러스터별 주요 특성</h4>
+                    
+                    <div class="cluster-cards-grid">
+                        <!-- Survivor Cluster 0 -->
+                        <div class="detailed-cluster-card survivor-type" data-cluster="0">
+                            <div class="cluster-header">
+                                <div class="cluster-info">
+                                    <i class="fas fa-shield-alt cluster-icon"></i>
+                                    <div>
+                                        <h5 class="cluster-name">Survivor (보수적)</h5>
+                                        <div class="cluster-stats">
+                                            <span class="cluster-percentage">18.2%</span>
+                                            <span class="cluster-count">14,527명</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline cluster-detail-btn" data-cluster="0">
+                                    <i class="fas fa-chart-bar"></i> 상세보기
+                                </button>
+                            </div>
+                            <div class="cluster-features">
+                                <div class="feature-radar">
+                                    <canvas id="radarChart0"></canvas>
+                                </div>
+                                <div class="key-features">
+                                    <h6>핵심 특징</h6>
+                                    <ul class="feature-list">
+                                        <li>치료 아이템 사용 빈도 매우 높음</li>
+                                        <li>팀플레이 지향적 (어시스트 높음)</li>
+                                        <li>안전한 플레이 스타일</li>
+                                        <li>수영 거리 상대적으로 높음</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Survivor Cluster 1 -->
+                        <div class="detailed-cluster-card survivor-type" data-cluster="1">
+                            <div class="cluster-header">
+                                <div class="cluster-info">
+                                    <i class="fas fa-heart cluster-icon"></i>
+                                    <div>
+                                        <h5 class="cluster-name">Survivor (적극적)</h5>
+                                        <div class="cluster-stats">
+                                            <span class="cluster-percentage">31.2%</span>
+                                            <span class="cluster-count">24,981명</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline cluster-detail-btn" data-cluster="1">
+                                    <i class="fas fa-chart-bar"></i> 상세보기
+                                </button>
+                            </div>
+                            <div class="cluster-features">
+                                <div class="feature-radar">
+                                    <canvas id="radarChart1"></canvas>
+                                </div>
+                                <div class="key-features">
+                                    <h6>핵심 특징</h6>
+                                    <ul class="feature-list">
+                                        <li>치료 아이템 사용 최고 수준</li>
+                                        <li>킬당 데미지 효율성 높음</li>
+                                        <li>어시스트 비율 최상위</li>
+                                        <li>전체 플레이어의 1/3 차지</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Explorer Clusters (Combined Display) -->
+                        <div class="detailed-cluster-card explorer-type" data-cluster="2-6">
+                            <div class="cluster-header">
+                                <div class="cluster-info">
+                                    <i class="fas fa-route cluster-icon"></i>
+                                    <div>
+                                        <h5 class="cluster-name">Explorer (5가지 유형)</h5>
+                                        <div class="cluster-stats">
+                                            <span class="cluster-percentage">49.5%</span>
+                                            <span class="cluster-count">40,403명</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline cluster-detail-btn" data-cluster="explorer">
+                                    <i class="fas fa-chart-bar"></i> 상세보기
+                                </button>
+                            </div>
+                            <div class="cluster-features">
+                                <div class="feature-radar">
+                                    <canvas id="radarChartExplorer"></canvas>
+                                </div>
+                                <div class="key-features">
+                                    <h6>핵심 특징</h6>
+                                    <ul class="feature-list">
+                                        <li>이동 거리 극대화 (평균 2,000-4,500배)</li>
+                                        <li>맵 탐색 및 포지셔닝 중시</li>
+                                        <li>장거리 교전 선호</li>
+                                        <li>전체 플레이어의 절반 차지</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Aggressive Cluster 7 -->
+                        <div class="detailed-cluster-card aggressive-type" data-cluster="7">
+                            <div class="cluster-header">
+                                <div class="cluster-info">
+                                    <i class="fas fa-crosshairs cluster-icon"></i>
+                                    <div>
+                                        <h5 class="cluster-name">Aggressive</h5>
+                                        <div class="cluster-stats">
+                                            <span class="cluster-percentage">0.1%</span>
+                                            <span class="cluster-count">89명</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline cluster-detail-btn" data-cluster="7">
+                                    <i class="fas fa-chart-bar"></i> 상세보기
+                                </button>
+                            </div>
+                            <div class="cluster-features">
+                                <div class="feature-radar">
+                                    <canvas id="radarChart7"></canvas>
+                                </div>
+                                <div class="key-features">
+                                    <h6>핵심 특징</h6>
+                                    <ul class="feature-list">
+                                        <li>킬 효율성 극상위 (23,000배 이상)</li>
+                                        <li>공격적 플레이 스타일</li>
+                                        <li>매우 희귀한 플레이어 유형</li>
+                                        <li>높은 데미지 산출 능력</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content: Comparison -->
+                <div id="comparison" class="tab-content">
+                    <h4 class="tab-section-title">클러스터 비교 분석</h4>
+                    
+                    <div class="comparison-charts">
+                        <div class="chart-container">
+                            <h5 class="chart-title">주요 특성 비교</h5>
+                            <canvas id="comparisonChart"></canvas>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <h5 class="chart-title">클러스터간 상관관계</h5>
+                            <canvas id="correlationChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="comparison-insights">
+                        <h5>주요 발견사항</h5>
+                        <div class="insights-grid">
+                            <div class="insight-card">
+                                <i class="fas fa-balance-scale insight-icon"></i>
+                                <h6>플레이어 분포</h6>
+                                <p>Explorer 유형이 49.5%로 가장 많고, Aggressive 유형이 0.1%로 가장 희귀합니다.</p>
+                            </div>
+                            <div class="insight-card">
+                                <i class="fas fa-trophy insight-icon"></i>
+                                <h6>성능 차이</h6>
+                                <p>Aggressive 유형의 킬 효율성이 압도적으로 높지만, Survivor 유형이 안정적인 생존률을 보입니다.</p>
+                            </div>
+                            <div class="insight-card">
+                                <i class="fas fa-map insight-icon"></i>
+                                <h6>플레이 스타일</h6>
+                                <p>Explorer 유형은 이동 중심, Survivor는 생존 중심, Aggressive는 전투 중심 패턴을 보입니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content: Statistics -->
+                <div id="statistics" class="tab-content">
+                    <h4 class="tab-section-title">상세 통계 데이터</h4>
+                    
+                    <div class="statistics-container">
+                        <div class="table-container">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>클러스터</th>
+                                        <th>플레이어 수</th>
+                                        <th>비율 (%)</th>
+                                        <th>평균 킬</th>
+                                        <th>평균 데미지</th>
+                                        <th>평균 이동거리</th>
+                                        <th>평균 생존시간</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="statisticsTableBody">
+                                    <!-- JavaScript로 동적 생성 -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="export-controls">
+                            <button class="btn btn-secondary" id="exportCSV">
+                                <i class="fas fa-download"></i> CSV 다운로드
+                            </button>
+                            <button class="btn btn-ghost" id="exportJSON">
+                                <i class="fas fa-file-code"></i> JSON 다운로드
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h5>PUBG 플레이어 행동 분석 프로젝트</h5>
+                    <p>머신러닝과 데이터 사이언스를 활용한 게임 플레이어 행동 패턴 분석</p>
+                </div>
+                <div class="footer-stats">
+                    <div class="footer-stat">
+                        <span class="stat-label">분석 기간</span>
+                        <span class="stat-value">2024-2025</span>
+                    </div>
+                    <div class="footer-stat">
+                        <span class="stat-label">데이터 소스</span>
+                        <span class="stat-value">Kaggle PUBG Dataset</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cluster Detail Modal -->
+    <div class="modal-overlay" id="clusterDetailModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalClusterTitle">클러스터 상세 정보</h4>
+                <button class="modal-close" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalClusterContent">
+                <!-- JavaScript로 동적 생성 -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="closeModalBtn">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="../js/main.js"></script>
+    <script src="../js/chart-utils.js"></script>
+    <script src="../js/cluster-analysis.js"></script>
+</body>
+</html>

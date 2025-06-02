@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUBG 플레이어 행동 분석 대시보드</title>
+    <meta name="description" content="머신러닝 기반 PUBG 플레이어 행동 패턴 분석 및 8가지 플레이어 유형 분류">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/components.css">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <i class="fas fa-crosshairs logo-icon"></i>
+                    <h1 class="site-title">PUBG 플레이어 행동 분석</h1>
+                </div>
+                <nav class="main-nav">
+                    <ul class="nav-list">
+                        <li><a href="#overview" class="nav-link active">개요</a></li>
+                        <li><a href="pages/cluster-analysis.html" class="nav-link">클러스터 분석</a></li>
+                        <li><a href="pages/model-performance.html" class="nav-link">모델 성능</a></li>
+                        <li><a href="pages/player-prediction.html" class="nav-link">플레이어 예측</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h2 class="hero-title">머신러닝 기반 플레이어 행동 패턴 분석</h2>
+                <p class="hero-description">
+                    80만명의 PUBG 플레이어 데이터를 분석하여 8가지 플레이어 유형을 발견했습니다.<br>
+                    99.2% 정확도의 딥러닝 모델로 플레이어 행동을 예측합니다.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">800,000+</span>
+                        <span class="stat-label">분석된 플레이어</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">8</span>
+                        <span class="stat-label">플레이어 유형</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">99.2%</span>
+                        <span class="stat-label">모델 정확도</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Dashboard -->
+    <main class="main-dashboard">
+        <div class="container">
+            
+            <!-- Player Types Overview -->
+            <section class="player-types-section" id="overview">
+                <h3 class="section-title">발견된 플레이어 유형</h3>
+                <div class="player-types-grid">
+                    
+                    <!-- Survivor Type 1 -->
+                    <div class="player-type-card survivor-type">
+                        <div class="card-header">
+                            <i class="fas fa-shield-alt type-icon"></i>
+                            <h4 class="type-name">Survivor (보수적)</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="type-percentage">18.2%</div>
+                            <div class="type-count">14,527명</div>
+                            <div class="type-features">
+                                <div class="feature-item">
+                                    <span class="feature-name">치료 아이템 비율</span>
+                                    <span class="feature-value">775x</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-name">어시스트</span>
+                                    <span class="feature-value">480x</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Survivor Type 2 -->
+                    <div class="player-type-card survivor-type">
+                        <div class="card-header">
+                            <i class="fas fa-heart type-icon"></i>
+                            <h4 class="type-name">Survivor (적극적)</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="type-percentage">31.2%</div>
+                            <div class="type-count">24,981명</div>
+                            <div class="type-features">
+                                <div class="feature-item">
+                                    <span class="feature-name">치료 아이템 비율</span>
+                                    <span class="feature-value">1,861x</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-name">킬당 데미지</span>
+                                    <span class="feature-value">865x</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Explorer Types (Combined) -->
+                    <div class="player-type-card explorer-type">
+                        <div class="card-header">
+                            <i class="fas fa-route type-icon"></i>
+                            <h4 class="type-name">Explorer</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="type-percentage">49.5%</div>
+                            <div class="type-count">40,403명</div>
+                            <div class="type-features">
+                                <div class="feature-item">
+                                    <span class="feature-name">이동 거리</span>
+                                    <span class="feature-value">2,245x</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-name">최장 킬 거리</span>
+                                    <span class="feature-value">611x</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Aggressive Type -->
+                    <div class="player-type-card aggressive-type">
+                        <div class="card-header">
+                            <i class="fas fa-crosshairs type-icon"></i>
+                            <h4 class="type-name">Aggressive</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="type-percentage">0.1%</div>
+                            <div class="type-count">89명</div>
+                            <div class="type-features">
+                                <div class="feature-item">
+                                    <span class="feature-name">킬 효율성</span>
+                                    <span class="feature-value">23,397x</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-name">킬당 데미지</span>
+                                    <span class="feature-value">1,436x</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Quick Analysis Section -->
+            <section class="quick-analysis-section">
+                <div class="analysis-grid">
+                    
+                    <!-- Model Performance Summary -->
+                    <div class="analysis-card">
+                        <div class="card-header">
+                            <i class="fas fa-brain"></i>
+                            <h4>모델 성능</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="performance-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">정확도</span>
+                                    <span class="metric-value">99.25%</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">F1 Score</span>
+                                    <span class="metric-value">98.67%</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">모델 타입</span>
+                                    <span class="metric-value">Neural Network</span>
+                                </div>
+                            </div>
+                            <a href="pages/model-performance.html" class="btn btn-primary">자세히 보기</a>
+                        </div>
+                    </div>
+
+                    <!-- Key Features -->
+                    <div class="analysis-card">
+                        <div class="card-header">
+                            <i class="fas fa-chart-line"></i>
+                            <h4>핵심 성공 요인</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="feature-ranking">
+                                <div class="rank-item">
+                                    <span class="rank-number">1</span>
+                                    <span class="rank-feature">킬 여부 (has_kills)</span>
+                                    <span class="rank-impact">32.3%</span>
+                                </div>
+                                <div class="rank-item">
+                                    <span class="rank-number">2</span>
+                                    <span class="rank-feature">이동거리 (log)</span>
+                                    <span class="rank-impact">7.9%</span>
+                                </div>
+                                <div class="rank-item">
+                                    <span class="rank-number">3</span>
+                                    <span class="rank-feature">총 이동거리</span>
+                                    <span class="rank-impact">6.3%</span>
+                                </div>
+                            </div>
+                            <a href="pages/cluster-analysis.html" class="btn btn-secondary">전체 분석</a>
+                        </div>
+                    </div>
+
+                    <!-- Player Prediction Tool -->
+                    <div class="analysis-card">
+                        <div class="card-header">
+                            <i class="fas fa-user-check"></i>
+                            <h4>플레이어 예측</h4>
+                        </div>
+                        <div class="card-content">
+                            <p class="tool-description">
+                                플레이어의 게임 통계를 입력하면<br>
+                                AI가 플레이어 유형을 예측합니다.
+                            </p>
+                            <div class="prediction-stats">
+                                <div class="pred-stat">
+                                    <span class="pred-label">예측 특성</span>
+                                    <span class="pred-value">30개</span>
+                                </div>
+                                <div class="pred-stat">
+                                    <span class="pred-label">클러스터</span>
+                                    <span class="pred-value">8가지</span>
+                                </div>
+                            </div>
+                            <a href="pages/player-prediction.html" class="btn btn-success">예측 시작</a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Insights Section -->
+            <section class="insights-section">
+                <h3 class="section-title">주요 인사이트</h3>
+                <div class="insights-grid">
+                    
+                    <div class="insight-card">
+                        <div class="insight-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <h4 class="insight-title">게임 밸런스</h4>
+                        <p class="insight-description">
+                            플레이어 유형이 균등하게 분포되어 있어 게임 밸런스가 양호합니다.
+                            Explorer 유형이 가장 많은 비중(49.5%)을 차지합니다.
+                        </p>
+                    </div>
+
+                    <div class="insight-card">
+                        <div class="insight-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h4 class="insight-title">승리 요인</h4>
+                        <p class="insight-description">
+                            킬 달성 여부가 가장 중요한 승리 요인입니다.
+                            이동 거리와 무기 습득도 중요한 변수로 확인되었습니다.
+                        </p>
+                    </div>
+
+                    <div class="insight-card">
+                        <div class="insight-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4 class="insight-title">플레이어 특성</h4>
+                        <p class="insight-description">
+                            Aggressive 유형은 극소수(0.1%)이지만 매우 높은 킬 효율성을 보입니다.
+                            Survivor 유형은 절반 가량(49.4%)을 차지하는 주요 플레이어군입니다.
+                        </p>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h5>PUBG 플레이어 행동 분석 프로젝트</h5>
+                    <p>머신러닝과 데이터 사이언스를 활용한 게임 플레이어 행동 패턴 분석</p>
+                </div>
+                <div class="footer-stats">
+                    <div class="footer-stat">
+                        <span class="stat-label">분석 기간</span>
+                        <span class="stat-value">2024-2025</span>
+                    </div>
+                    <div class="footer-stat">
+                        <span class="stat-label">데이터 소스</span>
+                        <span class="stat-value">Kaggle PUBG Dataset</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/main.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/chart-utils.js"></script>
+</body>
+</html>

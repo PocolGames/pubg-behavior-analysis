@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>플레이어 예측 도구 - PUBG 플레이어 행동 분석</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/components.css">
+    
+    <!-- External Libraries -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-gamepad"></i>
+                    <span>PUBG 분석</span>
+                </div>
+                <nav class="nav">
+                    <a href="../index.html">홈</a>
+                    <a href="cluster-analysis.html">클러스터 분석</a>
+                    <a href="model-performance.html">모델 성능</a>
+                    <a href="player-prediction.html" class="active">플레이어 예측</a>
+                </nav>
+                <button class="mobile-menu-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <section class="page-header">
+                <div class="breadcrumb">
+                    <a href="../index.html">홈</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>플레이어 예측</span>
+                </div>
+                <h1 class="page-title">
+                    <i class="fas fa-magic"></i>
+                    플레이어 유형 예측 도구
+                </h1>
+                <p class="page-description">
+                    플레이어의 게임 통계를 입력하여 8가지 유형 중 어떤 플레이어 스타일에 해당하는지 AI 모델로 예측해보세요.
+                    99.25% 정확도의 딥러닝 모델이 실시간으로 분석합니다.
+                </p>
+            </section>
+
+            <!-- Prediction Interface -->
+            <section class="prediction-interface">
+                <div class="prediction-layout">
+                    <!-- Input Panel -->
+                    <div class="input-panel">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-keyboard"></i> 플레이어 통계 입력</h3>
+                                <div class="header-actions">
+                                    <button class="btn btn-sm btn-outline" id="resetForm">
+                                        <i class="fas fa-undo"></i> 초기화
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary" id="loadSample">
+                                        <i class="fas fa-user"></i> 샘플 로드
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form id="playerForm" class="player-form">
+                                    <!-- Combat Stats -->
+                                    <div class="form-section">
+                                        <h4><i class="fas fa-crosshairs"></i> 전투 통계</h4>
+                                        <div class="form-grid">
+                                            <div class="form-group">
+                                                <label for="kills">킬 수</label>
+                                                <input type="number" id="kills" name="kills" min="0" max="50" value="0" step="1">
+                                                <small>게임에서 처치한 적의 수</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="damageDealt">총 데미지</label>
+                                                <input type="number" id="damageDealt" name="damageDealt" min="0" max="2000" value="0" step="10">
+                                                <small>게임 중 가한 총 데미지</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="longestKill">최장 킬 거리 (m)</label>
+                                                <input type="number" id="longestKill" name="longestKill" min="0" max="1000" value="0" step="5">
+                                                <small>가장 먼 거리에서 처치한 기록</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="headshotKills">헤드샷 킬 수</label>
+                                                <input type="number" id="headshotKills" name="headshotKills" min="0" max="20" value="0" step="1">
+                                                <small>헤드샷으로 처치한 적의 수</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="assists">어시스트</label>
+                                                <input type="number" id="assists" name="assists" min="0" max="20" value="0" step="1">
+                                                <small>팀원의 킬을 도운 횟수</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="weaponsAcquired">무기 획득 수</label>
+                                                <input type="number" id="weaponsAcquired" name="weaponsAcquired" min="0" max="20" value="3" step="1">
+                                                <small>게임 중 획득한 무기의 수</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Movement Stats -->
+                                    <div class="form-section">
+                                        <h4><i class="fas fa-running"></i> 이동 통계</h4>
+                                        <div class="form-grid">
+                                            <div class="form-group">
+                                                <label for="walkDistance">보행 거리 (m)</label>
+                                                <input type="number" id="walkDistance" name="walkDistance" min="0" max="10000" value="1000" step="50">
+                                                <small>걸어서 이동한 총 거리</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="rideDistance">탑승 거리 (m)</label>
+                                                <input type="number" id="rideDistance" name="rideDistance" min="0" max="20000" value="0" step="100">
+                                                <small>차량으로 이동한 총 거리</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="swimDistance">수영 거리 (m)</label>
+                                                <input type="number" id="swimDistance" name="swimDistance" min="0" max="1000" value="0" step="10">
+                                                <small>수영으로 이동한 총 거리</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Survival Stats -->
+                                    <div class="form-section">
+                                        <h4><i class="fas fa-heart"></i> 생존 통계</h4>
+                                        <div class="form-grid">
+                                            <div class="form-group">
+                                                <label for="heals">치료 아이템 사용</label>
+                                                <input type="number" id="heals" name="heals" min="0" max="30" value="1" step="1">
+                                                <small>사용한 치료 아이템 수</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="boosts">부스트 아이템 사용</label>
+                                                <input type="number" id="boosts" name="boosts" min="0" max="20" value="1" step="1">
+                                                <small>사용한 부스트 아이템 수</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="revives">소생 횟수</label>
+                                                <input type="number" id="revives" name="revives" min="0" max="10" value="0" step="1">
+                                                <small>팀원을 소생시킨 횟수</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="DBNOs">다운 시킨 수</label>
+                                                <input type="number" id="DBNOs" name="DBNOs" min="0" max="20" value="0" step="1">
+                                                <small>적을 다운시킨 횟수</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Additional Stats -->
+                                    <div class="form-section">
+                                        <h4><i class="fas fa-plus-circle"></i> 기타 통계</h4>
+                                        <div class="form-grid">
+                                            <div class="form-group">
+                                                <label for="killPlace">킬 순위</label>
+                                                <input type="number" id="killPlace" name="killPlace" min="1" max="100" value="50" step="1">
+                                                <small>킬 수 기준 순위 (낮을수록 상위)</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="matchDuration">게임 시간 (초)</label>
+                                                <input type="number" id="matchDuration" name="matchDuration" min="0" max="2400" value="1800" step="30">
+                                                <small>게임에 참여한 시간</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="maxPlace">최대 순위</label>
+                                                <input type="number" id="maxPlace" name="maxPlace" min="1" max="100" value="100" step="1">
+                                                <small>게임의 총 참가자 수</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="numGroups">팀 수</label>
+                                                <input type="number" id="numGroups" name="numGroups" min="1" max="50" value="50" step="1">
+                                                <small>게임의 총 팀 수</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary btn-lg">
+                                            <i class="fas fa-magic"></i>
+                                            플레이어 유형 예측하기
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Panel -->
+                    <div class="results-panel">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-chart-pie"></i> 예측 결과</h3>
+                                <div class="prediction-status" id="predictionStatus">
+                                    <span class="status-indicator">대기중</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <!-- Prediction Summary -->
+                                <div class="prediction-summary" id="predictionSummary" style="display: none;">
+                                    <div class="predicted-type">
+                                        <div class="type-icon">
+                                            <i class="fas fa-user-shield"></i>
+                                        </div>
+                                        <div class="type-info">
+                                            <h4 id="predictedTypeName">Survivor</h4>
+                                            <p id="predictedTypeDescription">신중하고 생존 지향적인 플레이어</p>
+                                            <div class="confidence-score">
+                                                <span>신뢰도: </span>
+                                                <strong id="confidenceScore">85.2%</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Probability Chart -->
+                                <div class="chart-container">
+                                    <h5>클러스터별 확률 분포</h5>
+                                    <canvas id="probabilityChart"></canvas>
+                                </div>
+
+                                <!-- Player Radar -->
+                                <div class="chart-container">
+                                    <h5>플레이어 특성 레이더</h5>
+                                    <canvas id="playerRadarChart"></canvas>
+                                </div>
+
+                                <!-- Analysis Details -->
+                                <div class="analysis-details" id="analysisDetails" style="display: none;">
+                                    <h5>분석 세부사항</h5>
+                                    <div class="detail-grid">
+                                        <div class="detail-item">
+                                            <span class="detail-label">가장 강한 특성:</span>
+                                            <span class="detail-value" id="strongestFeature">생존력</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">플레이 스타일:</span>
+                                            <span class="detail-value" id="playStyle">보수적</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">유사한 플레이어:</span>
+                                            <span class="detail-value" id="similarPlayers">31.2%</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">예측 시간:</span>
+                                            <span class="detail-value" id="predictionTime">0.15초</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sample Players -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-users"></i> 샘플 플레이어</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="sample-players">
+                                    <div class="sample-player" data-type="survivor-conservative">
+                                        <div class="sample-icon survivor">
+                                            <i class="fas fa-shield-alt"></i>
+                                        </div>
+                                        <div class="sample-info">
+                                            <h5>보수적 생존형</h5>
+                                            <p>킬: 1, 데미지: 150, 이동: 800m</p>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline">로드</button>
+                                    </div>
+                                    
+                                    <div class="sample-player" data-type="survivor-active">
+                                        <div class="sample-icon survivor">
+                                            <i class="fas fa-user-shield"></i>
+                                        </div>
+                                        <div class="sample-info">
+                                            <h5>적극적 생존형</h5>
+                                            <p>킬: 3, 데미지: 400, 이동: 1500m</p>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline">로드</button>
+                                    </div>
+
+                                    <div class="sample-player" data-type="explorer">
+                                        <div class="sample-icon explorer">
+                                            <i class="fas fa-map-marked-alt"></i>
+                                        </div>
+                                        <div class="sample-info">
+                                            <h5>탐험형</h5>
+                                            <p>킬: 2, 데미지: 250, 이동: 3000m</p>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline">로드</button>
+                                    </div>
+
+                                    <div class="sample-player" data-type="aggressive">
+                                        <div class="sample-icon aggressive">
+                                            <i class="fas fa-fire"></i>
+                                        </div>
+                                        <div class="sample-info">
+                                            <h5>공격형</h5>
+                                            <p>킬: 8, 데미지: 800, 이동: 1200m</p>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline">로드</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Model Information -->
+            <section class="model-info">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-info-circle"></i> 예측 모델 정보</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="model-stats">
+                            <div class="stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-bullseye"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h4>99.25%</h4>
+                                    <p>모델 정확도</p>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h4>800K</h4>
+                                    <p>훈련 데이터</p>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-layer-group"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h4>30개</h4>
+                                    <p>분석 특성</p>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h4>8가지</h4>
+                                    <p>플레이어 유형</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="model-description">
+                            <p>
+                                이 예측 도구는 80만명의 PUBG 플레이어 데이터로 훈련된 딥러닝 모델을 사용합니다.
+                                30가지 게임 특성을 분석하여 8가지 플레이어 유형 중 가장 적합한 스타일을 예측합니다.
+                                모델은 99.25%의 높은 정확도와 0.990의 신뢰도를 달성했습니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>PUBG 플레이어 행동 분석</h4>
+                    <p>머신러닝과 데이터 사이언스로 분석한 플레이어 행동 패턴</p>
+                </div>
+                <div class="footer-section">
+                    <h4>페이지</h4>
+                    <ul>
+                        <li><a href="../index.html">홈</a></li>
+                        <li><a href="cluster-analysis.html">클러스터 분석</a></li>
+                        <li><a href="model-performance.html">모델 성능</a></li>
+                        <li><a href="player-prediction.html">플레이어 예측</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>기술 스택</h4>
+                    <ul>
+                        <li>Python & TensorFlow</li>
+                        <li>Chart.js & D3.js</li>
+                        <li>HTML5 & CSS3</li>
+                        <li>JavaScript ES6+</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 PUBG 플레이어 행동 분석 프로젝트. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="../js/main.js"></script>
+    <script src="../js/chart-utils.js"></script>
+    <script src="../js/player-prediction.js"></script>
+</body>
+</html>

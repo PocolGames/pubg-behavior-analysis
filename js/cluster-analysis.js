@@ -1,6 +1,6 @@
 /**
  * PUBG 플레이어 행동 분석 웹사이트 - 클러스터 분석 페이지
- * 클러스터 분석 전용 로직 및 인터랙션
+ * 실제 JSON 데이터를 활용한 클러스터 분석 로직
  */
 
 // ==================== 클러스터 분석 객체 ====================
@@ -9,171 +9,110 @@ const ClusterAnalysis = {
         clusters: {},
         selectedClusters: new Set(),
         currentTab: 'features',
-        charts: new Map()
-    },
-    
-    // 실제 PUBG 클러스터 데이터 (분석 결과 기반)
-    clusterData: {
-        0: {
-            name: "Survivor (보수적)",
-            type: "Survivor",
-            count: 14527,
-            percentage: 18.2,
-            color: "#56ab2f",
-            characteristics: {
-                kills: 15.2,
-                damage: 25.3,
-                walkDistance: 35.8,
-                survival: 85.6,
-                assists: 75.4,
-                weapons: 42.1,
-                boosts: 78.9,
-                heals: 89.3
-            },
-            topFeatures: ["heal_boost_ratio", "assists", "has_swimDistance"],
-            description: "생존을 우선시하는 신중한 플레이어"
-        },
-        1: {
-            name: "Survivor (적극적)",
-            type: "Survivor", 
-            count: 24981,
-            percentage: 31.2,
-            color: "#4CAF50",
-            characteristics: {
-                kills: 28.5,
-                damage: 42.7,
-                walkDistance: 45.2,
-                survival: 82.1,
-                assists: 68.9,
-                weapons: 55.8,
-                boosts: 75.3,
-                heals: 85.7
-            },
-            topFeatures: ["heal_boost_ratio", "assists", "damage_per_kill"],
-            description: "적극적이면서도 생존력이 높은 플레이어"
-        },
-        2: {
-            name: "Explorer (활발한)",
-            type: "Explorer",
-            count: 10756,
-            percentage: 13.4,
-            color: "#667eea",
-            characteristics: {
-                kills: 35.8,
-                damage: 48.2,
-                walkDistance: 89.4,
-                survival: 65.3,
-                assists: 45.7,
-                weapons: 62.1,
-                boosts: 58.9,
-                heals: 68.2
-            },
-            topFeatures: ["walkDistance_log", "walkDistance", "revives"],
-            description: "높은 이동성과 탐험 성향의 플레이어"
-        },
-        3: {
-            name: "Explorer (균형형)",
-            type: "Explorer",
-            count: 15898,
-            percentage: 19.9,
-            color: "#5472d3",
-            characteristics: {
-                kills: 42.3,
-                damage: 55.1,
-                walkDistance: 78.6,
-                survival: 68.9,
-                assists: 52.4,
-                weapons: 68.7,
-                boosts: 62.1,
-                heals: 65.8
-            },
-            topFeatures: ["walkDistance_log", "longestKill", "has_kills"],
-            description: "이동과 전투의 균형을 이루는 플레이어"
-        },
-        4: {
-            name: "Explorer (극한)",
-            type: "Explorer",
-            count: 4312,
-            percentage: 5.4,
-            color: "#3f51b5",
-            characteristics: {
-                kills: 38.9,
-                damage: 52.8,
-                walkDistance: 95.7,
-                survival: 58.2,
-                assists: 48.6,
-                weapons: 65.3,
-                boosts: 55.4,
-                heals: 62.1
-            },
-            topFeatures: ["walkDistance_log", "walkDistance", "revives"],
-            description: "극한의 이동성을 보이는 모험가형 플레이어"
-        },
-        5: {
-            name: "Explorer (전술적)",
-            type: "Explorer",
-            count: 4046,
-            percentage: 5.1,
-            color: "#2196F3",
-            characteristics: {
-                kills: 45.2,
-                damage: 58.7,
-                walkDistance: 85.3,
-                survival: 62.4,
-                assists: 55.8,
-                weapons: 72.1,
-                boosts: 60.2,
-                heals: 58.9
-            },
-            topFeatures: ["walkDistance_log", "walkDistance", "weaponsAcquired"],
-            description: "전술적 이동과 무기 수집에 능한 플레이어"
-        },
-        6: {
-            name: "Explorer (지구력)",
-            type: "Explorer",
-            count: 5391,
-            percentage: 6.7,
-            color: "#00BCD4",
-            characteristics: {
-                kills: 41.7,
-                damage: 54.3,
-                walkDistance: 92.1,
-                survival: 64.8,
-                assists: 50.2,
-                weapons: 66.9,
-                boosts: 57.8,
-                heals: 61.5
-            },
-            topFeatures: ["walkDistance_log", "matchDuration", "walkDistance"],
-            description: "장시간 게임에서 높은 지구력을 보이는 플레이어"
-        },
-        7: {
-            name: "Aggressive (공격형)",
-            type: "Aggressive",
-            count: 89,
-            percentage: 0.1,
-            color: "#dc3545",
-            characteristics: {
-                kills: 92.5,
-                damage: 95.8,
-                walkDistance: 65.2,
-                survival: 45.3,
-                assists: 58.7,
-                weapons: 78.9,
-                boosts: 48.2,
-                heals: 42.1
-            },
-            topFeatures: ["kill_efficiency", "damage_per_kill", "assists"],
-            description: "극도로 공격적인 고실력 플레이어"
-        }
+        charts: new Map(),
+        rawData: null // 로드된 JSON 데이터
     }
+};
+
+// ==================== 데이터 로딩 ====================
+ClusterAnalysis.loadData = async function() {
+    try {
+        console.log('📊 클러스터 데이터 로딩 중...');
+        
+        const response = await fetch('../data/cluster-data.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        this.data.rawData = await response.json();
+        this.data.clusters = this.data.rawData.clusters;
+        
+        console.log('✅ 클러스터 데이터 로딩 완료:', Object.keys(this.data.clusters).length + '개 클러스터');
+        return true;
+        
+    } catch (error) {
+        console.error('❌ 클러스터 데이터 로딩 실패:', error);
+        
+        // 백업 데이터 사용
+        this.data.clusters = this.getFallbackData();
+        console.log('🔄 백업 데이터 사용');
+        return false;
+    }
+};
+
+// ==================== 백업 데이터 ====================
+ClusterAnalysis.getFallbackData = function() {
+    return {
+        "0": {
+            "id": 0,
+            "name": "Survivor (보수적)",
+            "type": "Survivor",
+            "count": 14527,
+            "percentage": 18.2,
+            "color": "#56ab2f",
+            "icon": "fa-shield-alt",
+            "characteristics": {
+                "killRate": 0.3,
+                "damageDealt": 57,
+                "walkDistance": 143,
+                "healUsage": 0.13,
+                "boostUsage": 0.07,
+                "survivalTime": 85,
+                "aggressiveness": 15,
+                "teamwork": 90
+            },
+            "description": "생존을 최우선으로 하는 신중한 플레이어",
+            "topFeatures": ["heal_boost_ratio", "assists", "has_swimDistance"]
+        },
+        "1": {
+            "id": 1,
+            "name": "Survivor (적극적)",
+            "type": "Survivor",
+            "count": 24981,
+            "percentage": 31.2,
+            "color": "#7cb342",
+            "icon": "fa-heart",
+            "characteristics": {
+                "killRate": 0.59,
+                "damageDealt": 95,
+                "walkDistance": 550,
+                "healUsage": 0.69,
+                "boostUsage": 0.40,
+                "survivalTime": 75,
+                "aggressiveness": 35,
+                "teamwork": 85
+            },
+            "description": "적극적이지만 신중한 생존 전략을 구사하는 플레이어",
+            "topFeatures": ["heal_boost_ratio", "assists", "damage_per_kill"]
+        },
+        "7": {
+            "id": 7,
+            "name": "Aggressive (공격형)",
+            "type": "Aggressive",
+            "count": 89,
+            "percentage": 0.1,
+            "color": "#dc3545",
+            "icon": "fa-fire",
+            "characteristics": {
+                "killRate": 2.06,
+                "damageDealt": 259,
+                "walkDistance": 2645,
+                "healUsage": 3.17,
+                "boostUsage": 3.06,
+                "survivalTime": 40,
+                "aggressiveness": 95,
+                "teamwork": 60
+            },
+            "description": "극도로 공격적인 고위험 고수익 플레이어",
+            "topFeatures": ["kill_efficiency", "damage_per_kill", "assists"]
+        }
+    };
 };
 
 // ==================== 페이지 초기화 ====================
 ClusterAnalysis.init = function() {
     console.log('🎯 클러스터 분석 페이지 초기화...');
     
-    // DOM이 로드된 후 실행
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => this.initPage());
     } else {
@@ -181,26 +120,48 @@ ClusterAnalysis.init = function() {
     }
 };
 
-ClusterAnalysis.initPage = function() {
-    // 기본 데이터 설정
-    this.data.clusters = this.clusterData;
+ClusterAnalysis.initPage = async function() {
+    this.showLoading(true);
     
-    // 모든 클러스터 기본 선택
-    Object.keys(this.clusterData).forEach(id => {
-        this.data.selectedClusters.add(parseInt(id));
-    });
-    
-    // UI 초기화
-    this.initTabs();
-    this.initFilters();
-    this.initCharts();
-    this.initEventListeners();
-    
-    // 초기 차트 생성
-    this.renderOverviewCharts();
-    this.renderFeatureTab();
-    
-    console.log('✅ 클러스터 분석 페이지 준비 완료');
+    try {
+        await this.loadData();
+        
+        Object.keys(this.data.clusters).forEach(id => {
+            this.data.selectedClusters.add(parseInt(id));
+        });
+        
+        this.initTabs();
+        this.initFilters();
+        this.initCharts();
+        this.initEventListeners();
+        
+        this.renderOverviewCharts();
+        this.renderFeatureTab();
+        
+        console.log('✅ 클러스터 분석 페이지 준비 완료');
+        
+    } catch (error) {
+        console.error('❌ 페이지 초기화 실패:', error);
+        this.showError('데이터 로딩에 실패했습니다.');
+    } finally {
+        this.showLoading(false);
+    }
+};
+
+// ==================== 로딩 및 오류 표시 ====================
+ClusterAnalysis.showLoading = function(show) {
+    const loader = document.querySelector('.page-loader');
+    if (loader) {
+        loader.style.display = show ? 'flex' : 'none';
+    }
+};
+
+ClusterAnalysis.showError = function(message) {
+    if (typeof App !== 'undefined' && App.showNotification) {
+        App.showNotification(message, 'error');
+    } else {
+        alert(message);
+    }
 };
 
 // ==================== 탭 시스템 ====================
@@ -213,7 +174,6 @@ ClusterAnalysis.initTabs = function() {
             e.preventDefault();
             const targetTab = tab.getAttribute('data-tab');
             
-            // 활성 탭 변경
             tabs.forEach(t => t.classList.remove('active'));
             contents.forEach(c => c.classList.remove('active'));
             
@@ -231,13 +191,12 @@ ClusterAnalysis.initFilters = function() {
     const filterContainer = document.querySelector('.cluster-filters');
     if (!filterContainer) return;
     
-    // 클러스터 체크박스 생성
     let filtersHTML = '<div class="filter-controls">';
     filtersHTML += '<button class="btn btn-sm btn-secondary" id="selectAllClusters">전체 선택</button>';
     filtersHTML += '<button class="btn btn-sm btn-outline" id="deselectAllClusters">전체 해제</button>';
     filtersHTML += '</div><div class="cluster-checkboxes">';
     
-    Object.entries(this.clusterData).forEach(([id, cluster]) => {
+    Object.entries(this.data.clusters).forEach(([id, cluster]) => {
         filtersHTML += `
             <label class="cluster-checkbox">
                 <input type="checkbox" value="${id}" checked>
@@ -252,12 +211,10 @@ ClusterAnalysis.initFilters = function() {
     filtersHTML += '</div>';
     filterContainer.innerHTML = filtersHTML;
     
-    // 이벤트 리스너 추가
     this.initFilterEvents();
 };
 
 ClusterAnalysis.initFilterEvents = function() {
-    // 개별 체크박스
     document.querySelectorAll('.cluster-checkbox input').forEach(checkbox => {
         checkbox.addEventListener('change', (e) => {
             const clusterId = parseInt(e.target.value);
@@ -272,7 +229,6 @@ ClusterAnalysis.initFilterEvents = function() {
         });
     });
     
-    // 전체 선택/해제
     document.getElementById('selectAllClusters')?.addEventListener('click', () => {
         this.selectAllClusters(true);
     });
@@ -301,7 +257,6 @@ ClusterAnalysis.selectAllClusters = function(select) {
 
 // ==================== 차트 초기화 ====================
 ClusterAnalysis.initCharts = function() {
-    // Chart.js 로드 확인
     if (typeof ChartUtils === 'undefined') {
         console.warn('⚠️ ChartUtils가 로드되지 않았습니다.');
         return;
@@ -312,10 +267,7 @@ ClusterAnalysis.initCharts = function() {
 
 // ==================== 개요 차트 ====================
 ClusterAnalysis.renderOverviewCharts = function() {
-    // 클러스터 분포 차트
     this.renderDistributionChart();
-    
-    // 통계 카드 업데이트
     this.updateStatistics();
 };
 
@@ -323,8 +275,8 @@ ClusterAnalysis.renderDistributionChart = function() {
     const selectedData = {};
     
     this.data.selectedClusters.forEach(clusterId => {
-        if (this.clusterData[clusterId]) {
-            selectedData[clusterId] = this.clusterData[clusterId];
+        if (this.data.clusters[clusterId]) {
+            selectedData[clusterId] = this.data.clusters[clusterId];
         }
     });
     
@@ -336,21 +288,30 @@ ClusterAnalysis.renderDistributionChart = function() {
 
 ClusterAnalysis.updateStatistics = function() {
     const totalPlayers = Array.from(this.data.selectedClusters)
-        .reduce((sum, clusterId) => sum + this.clusterData[clusterId].count, 0);
+        .reduce((sum, clusterId) => sum + this.data.clusters[clusterId].count, 0);
     
     const selectedCount = this.data.selectedClusters.size;
-    const totalClusters = Object.keys(this.clusterData).length;
+    const totalClusters = Object.keys(this.data.clusters).length;
     
-    // 통계 업데이트
+    const metadata = this.data.rawData?.metadata || {
+        totalPlayers: 80000,
+        silhouetteScore: 0.1391
+    };
+    
     const playerCountEl = document.querySelector('.stat-value[data-stat="players"]');
     const clusterCountEl = document.querySelector('.stat-value[data-stat="clusters"]');
+    const qualityScoreEl = document.querySelector('.stat-value[data-stat="quality"]');
     
-    if (playerCountEl) {
+    if (playerCountEl && typeof ChartUtils !== 'undefined') {
         ChartUtils.animateCounter(playerCountEl, 0, totalPlayers);
     }
     
     if (clusterCountEl) {
         clusterCountEl.textContent = `${selectedCount}/${totalClusters}`;
+    }
+    
+    if (qualityScoreEl) {
+        qualityScoreEl.textContent = metadata.silhouetteScore.toFixed(3);
     }
 };
 
@@ -377,10 +338,14 @@ ClusterAnalysis.renderFeatureTab = function() {
     let html = '<div class="cluster-radar-grid">';
     
     this.data.selectedClusters.forEach(clusterId => {
-        const cluster = this.clusterData[clusterId];
+        const cluster = this.data.clusters[clusterId];
+        
         html += `
             <div class="radar-card">
-                <h4 style="color: ${cluster.color}">${cluster.name}</h4>
+                <h4 style="color: ${cluster.color}">
+                    <i class="fas ${cluster.icon}"></i>
+                    ${cluster.name}
+                </h4>
                 <div class="radar-chart-container">
                     <canvas id="radarChart${clusterId}" width="300" height="300"></canvas>
                 </div>
@@ -391,6 +356,18 @@ ClusterAnalysis.renderFeatureTab = function() {
                             <i class="fas fa-users"></i>
                             ${cluster.count.toLocaleString()}명 (${cluster.percentage}%)
                         </span>
+                        <span class="stat-item">
+                            <i class="fas fa-tags"></i>
+                            ${cluster.type}
+                        </span>
+                    </div>
+                    <div class="top-features">
+                        <h5>주요 특성:</h5>
+                        <div class="feature-tags">
+                            ${cluster.topFeatures ? cluster.topFeatures.map(feature => 
+                                `<span class="feature-tag">${this.getFeatureDisplayName(feature)}</span>`
+                            ).join('') : ''}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -400,15 +377,33 @@ ClusterAnalysis.renderFeatureTab = function() {
     html += '</div>';
     container.innerHTML = html;
     
-    // 레이더 차트 생성
     setTimeout(() => {
         this.createRadarCharts();
     }, 100);
 };
 
+ClusterAnalysis.getFeatureDisplayName = function(feature) {
+    const featureNames = {
+        'heal_boost_ratio': '치료/부스트 비율',
+        'assists': '어시스트',
+        'has_swimDistance': '수영 활동',
+        'damage_per_kill': '킬당 데미지',
+        'walkDistance_log': '이동거리(로그)',
+        'walkDistance': '보행거리',
+        'revives': '소생',
+        'longestKill': '최장킬거리',
+        'has_kills': '킬 기록',
+        'weaponsAcquired': '무기획득',
+        'matchDuration': '게임시간',
+        'kill_efficiency': '킬 효율성'
+    };
+    
+    return featureNames[feature] || feature;
+};
+
 ClusterAnalysis.createRadarCharts = function() {
     this.data.selectedClusters.forEach(clusterId => {
-        const cluster = this.clusterData[clusterId];
+        const cluster = this.data.clusters[clusterId];
         const characteristics = Object.values(cluster.characteristics);
         
         if (typeof ChartUtils !== 'undefined') {
@@ -461,14 +456,14 @@ ClusterAnalysis.createComparisonChart = function() {
     const datasets = [];
     
     this.data.selectedClusters.forEach(clusterId => {
-        const cluster = this.clusterData[clusterId];
+        const cluster = this.data.clusters[clusterId];
         const data = Object.values(cluster.characteristics);
         
         datasets.push({
             label: cluster.name,
             data: data,
             borderColor: cluster.color,
-            backgroundColor: ChartUtils.adjustColorOpacity(cluster.color, 0.2),
+            backgroundColor: this.adjustColorOpacity(cluster.color, 0.2),
             borderWidth: 2,
             pointBackgroundColor: cluster.color,
             pointBorderColor: '#fff',
@@ -486,41 +481,50 @@ ClusterAnalysis.createComparisonChart = function() {
     }
 };
 
+ClusterAnalysis.adjustColorOpacity = function(color, opacity) {
+    if (color.startsWith('#')) {
+        const r = parseInt(color.slice(1, 3), 16);
+        const g = parseInt(color.slice(3, 5), 16);
+        const b = parseInt(color.slice(5, 7), 16);
+        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    }
+    return color;
+};
+
 ClusterAnalysis.generateComparisonInsights = function() {
     const container = document.getElementById('comparisonInsights');
     if (!container) return;
     
     const insights = [];
     const selectedClusters = Array.from(this.data.selectedClusters)
-        .map(id => this.clusterData[id]);
+        .map(id => this.data.clusters[id]);
     
-    // 가장 공격적인 클러스터
+    if (selectedClusters.length < 2) return;
+    
     const mostAggressive = selectedClusters.reduce((max, cluster) => 
-        cluster.characteristics.kills > max.characteristics.kills ? cluster : max
+        (cluster.characteristics.aggressiveness || 0) > (max.characteristics.aggressiveness || 0) ? cluster : max
     );
     
-    // 가장 생존력이 높은 클러스터
     const mostSurvival = selectedClusters.reduce((max, cluster) => 
-        cluster.characteristics.survival > max.characteristics.survival ? cluster : max
+        (cluster.characteristics.survivalTime || 0) > (max.characteristics.survivalTime || 0) ? cluster : max
     );
     
-    // 가장 이동력이 높은 클러스터
     const mostMobile = selectedClusters.reduce((max, cluster) => 
-        cluster.characteristics.walkDistance > max.characteristics.walkDistance ? cluster : max
+        (cluster.characteristics.walkDistance || 0) > (max.characteristics.walkDistance || 0) ? cluster : max
     );
     
     insights.push(
         `<div class="insight-item">
-            <i class="fas fa-crosshairs"></i>
-            <span><strong>${mostAggressive.name}</strong>이 가장 공격적입니다 (킬 수: ${mostAggressive.characteristics.kills})</span>
+            <i class="fas fa-crosshairs" style="color: ${mostAggressive.color}"></i>
+            <span><strong>${mostAggressive.name}</strong>이 가장 공격적입니다</span>
         </div>`,
         `<div class="insight-item">
-            <i class="fas fa-shield-alt"></i>
-            <span><strong>${mostSurvival.name}</strong>이 가장 높은 생존력을 보입니다 (생존력: ${mostSurvival.characteristics.survival})</span>
+            <i class="fas fa-shield-alt" style="color: ${mostSurvival.color}"></i>
+            <span><strong>${mostSurvival.name}</strong>이 가장 높은 생존력을 보입니다</span>
         </div>`,
         `<div class="insight-item">
-            <i class="fas fa-running"></i>
-            <span><strong>${mostMobile.name}</strong>이 가장 활발한 이동 패턴을 보입니다 (이동거리: ${mostMobile.characteristics.walkDistance})</span>
+            <i class="fas fa-running" style="color: ${mostMobile.color}"></i>
+            <span><strong>${mostMobile.name}</strong>이 가장 활발한 이동 패턴을 보입니다</span>
         </div>`
     );
     
@@ -541,12 +545,13 @@ ClusterAnalysis.renderStatisticsTab = function() {
                         <thead>
                             <tr>
                                 <th>클러스터</th>
+                                <th>유형</th>
                                 <th>인원</th>
                                 <th>비율</th>
-                                <th>킬 수</th>
-                                <th>데미지</th>
+                                <th>공격성</th>
                                 <th>생존력</th>
-                                <th>이동거리</th>
+                                <th>이동성</th>
+                                <th>팀워크</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -576,19 +581,22 @@ ClusterAnalysis.populateStatsTable = function() {
     
     let html = '';
     this.data.selectedClusters.forEach(clusterId => {
-        const cluster = this.clusterData[clusterId];
+        const cluster = this.data.clusters[clusterId];
         html += `
             <tr>
                 <td>
                     <span class="cluster-indicator" style="background-color: ${cluster.color}"></span>
                     ${cluster.name}
                 </td>
+                <td>
+                    <span class="badge" style="background-color: ${cluster.color}">${cluster.type}</span>
+                </td>
                 <td>${cluster.count.toLocaleString()}</td>
                 <td>${cluster.percentage}%</td>
-                <td>${cluster.characteristics.kills}</td>
-                <td>${cluster.characteristics.damage}</td>
-                <td>${cluster.characteristics.survival}</td>
-                <td>${cluster.characteristics.walkDistance}</td>
+                <td>${cluster.characteristics.aggressiveness || 'N/A'}</td>
+                <td>${cluster.characteristics.survivalTime || 'N/A'}</td>
+                <td>${cluster.characteristics.walkDistance || 'N/A'}</td>
+                <td>${cluster.characteristics.teamwork || 'N/A'}</td>
             </tr>
         `;
     });
@@ -600,7 +608,7 @@ ClusterAnalysis.populateStatsTable = function() {
 ClusterAnalysis.exportData = function(format) {
     const selectedData = {};
     this.data.selectedClusters.forEach(clusterId => {
-        selectedData[clusterId] = this.clusterData[clusterId];
+        selectedData[clusterId] = this.data.clusters[clusterId];
     });
     
     if (format === 'csv') {
@@ -608,31 +616,43 @@ ClusterAnalysis.exportData = function(format) {
     } else if (format === 'json') {
         this.exportAsJSON(selectedData);
     }
+    
+    if (typeof App !== 'undefined' && App.showNotification) {
+        App.showNotification(`${format.toUpperCase()} 파일이 다운로드되었습니다.`, 'success');
+    }
 };
 
 ClusterAnalysis.exportAsCSV = function(data) {
-    const headers = ['클러스터명', '인원', '비율', '킬수', '데미지', '생존력', '이동거리'];
+    const headers = ['클러스터명', '유형', '인원', '비율(%)', '공격성', '생존력', '이동성', '팀워크'];
     let csv = headers.join(',') + '\n';
     
     Object.values(data).forEach(cluster => {
         const row = [
-            cluster.name,
+            `"${cluster.name}"`,
+            cluster.type,
             cluster.count,
             cluster.percentage,
-            cluster.characteristics.kills,
-            cluster.characteristics.damage,
-            cluster.characteristics.survival,
-            cluster.characteristics.walkDistance
+            cluster.characteristics.aggressiveness || 0,
+            cluster.characteristics.survivalTime || 0,
+            cluster.characteristics.walkDistance || 0,
+            cluster.characteristics.teamwork || 0
         ];
         csv += row.join(',') + '\n';
     });
     
-    this.downloadFile(csv, 'cluster-analysis.csv', 'text/csv');
+    this.downloadFile(csv, 'pubg-cluster-analysis.csv', 'text/csv');
 };
 
 ClusterAnalysis.exportAsJSON = function(data) {
-    const json = JSON.stringify(data, null, 2);
-    this.downloadFile(json, 'cluster-analysis.json', 'application/json');
+    const exportData = {
+        exportDate: new Date().toISOString(),
+        selectedClusters: Object.keys(data),
+        totalSelected: Object.keys(data).length,
+        data: data
+    };
+    
+    const json = JSON.stringify(exportData, null, 2);
+    this.downloadFile(json, 'pubg-cluster-analysis.json', 'application/json');
 };
 
 ClusterAnalysis.downloadFile = function(content, filename, contentType) {
@@ -641,34 +661,22 @@ ClusterAnalysis.downloadFile = function(content, filename, contentType) {
     const link = document.createElement('a');
     link.href = url;
     link.download = filename;
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
     URL.revokeObjectURL(url);
 };
 
 // ==================== 차트 업데이트 ====================
 ClusterAnalysis.updateCharts = function() {
-    // 개요 차트 업데이트
     this.renderDistributionChart();
     this.updateStatistics();
-    
-    // 현재 탭 다시 렌더링
     this.renderCurrentTab();
 };
 
 // ==================== 이벤트 리스너 ====================
 ClusterAnalysis.initEventListeners = function() {
-    // 모달 이벤트
-    document.querySelectorAll('[data-modal="clusterDetailModal"]').forEach(trigger => {
-        trigger.addEventListener('click', (e) => {
-            const clusterId = e.target.closest('[data-cluster]')?.getAttribute('data-cluster');
-            if (clusterId) {
-                this.openClusterDetailModal(clusterId);
-            }
-        });
-    });
-    
-    // 리사이즈 이벤트
-    window.addEventListener('resize', App.utils.debounce(() => {
+    window.addEventListener('resize', this.debounce(() => {
         this.data.charts.forEach(chart => {
             if (chart && typeof chart.resize === 'function') {
                 chart.resize();
@@ -677,37 +685,17 @@ ClusterAnalysis.initEventListeners = function() {
     }, 250));
 };
 
-// ==================== 모달 ====================
-ClusterAnalysis.openClusterDetailModal = function(clusterId) {
-    const cluster = this.clusterData[clusterId];
-    if (!cluster) return;
-    
-    const modal = document.getElementById('clusterDetailModal');
-    if (!modal) return;
-    
-    // 모달 내용 업데이트
-    modal.querySelector('.modal-title').textContent = cluster.name;
-    modal.querySelector('.cluster-description').textContent = cluster.description;
-    
-    const statsContainer = modal.querySelector('.cluster-stats-detail');
-    statsContainer.innerHTML = `
-        <div class="stat-grid">
-            <div class="stat-item">
-                <span class="stat-label">인원</span>
-                <span class="stat-value">${cluster.count.toLocaleString()}명</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">비율</span>
-                <span class="stat-value">${cluster.percentage}%</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">주요 특징</span>
-                <span class="stat-value">${cluster.topFeatures.join(', ')}</span>
-            </div>
-        </div>
-    `;
-    
-    App.openModal('clusterDetailModal');
+// ==================== 유틸리티 ====================
+ClusterAnalysis.debounce = function(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 };
 
 // ==================== 초기화 실행 ====================

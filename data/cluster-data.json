@@ -1,0 +1,233 @@
+{
+  "metadata": {
+    "totalPlayers": 80000,
+    "totalClusters": 8,
+    "silhouetteScore": 0.1391,
+    "analysisDate": "2024-12-19",
+    "modelAccuracy": 0.99245
+  },
+  "clusters": {
+    "0": {
+      "id": 0,
+      "name": "Survivor (보수적)",
+      "type": "Survivor",
+      "count": 14527,
+      "percentage": 18.2,
+      "description": "생존을 최우선으로 하는 신중한 플레이어",
+      "color": "#56ab2f",
+      "icon": "fa-shield-alt",
+      "topFeatures": {
+        "heal_boost_ratio": 775.29,
+        "assists": 479.86,
+        "has_swimDistance": 294.02
+      },
+      "characteristics": {
+        "killRate": 0.3,
+        "damageDealt": 57,
+        "walkDistance": 143,
+        "healUsage": 0.13,
+        "boostUsage": 0.07,
+        "survivalTime": 85,
+        "aggressiveness": 15,
+        "teamwork": 90
+      },
+      "playstyle": "보수적이고 안전한 플레이를 선호하며, 팀워크를 중시합니다."
+    },
+    "1": {
+      "id": 1,
+      "name": "Survivor (적극적)",
+      "type": "Survivor", 
+      "count": 24981,
+      "percentage": 31.2,
+      "description": "적극적이지만 신중한 생존 전략을 구사하는 플레이어",
+      "color": "#7cb342",
+      "icon": "fa-heart",
+      "topFeatures": {
+        "heal_boost_ratio": 1861.49,
+        "assists": 964.62,
+        "damage_per_kill": 864.65
+      },
+      "characteristics": {
+        "killRate": 0.59,
+        "damageDealt": 95,
+        "walkDistance": 550,
+        "healUsage": 0.69,
+        "boostUsage": 0.40,
+        "survivalTime": 75,
+        "aggressiveness": 35,
+        "teamwork": 85
+      },
+      "playstyle": "적극적으로 전투에 참여하면서도 생존을 고려한 균형잡힌 플레이를 합니다."
+    },
+    "2": {
+      "id": 2,
+      "name": "Explorer (활발한)",
+      "type": "Explorer",
+      "count": 10756,
+      "percentage": 13.4,
+      "description": "맵을 적극적으로 탐험하며 높은 이동성을 보이는 플레이어",
+      "color": "#667eea",
+      "icon": "fa-compass",
+      "topFeatures": {
+        "walkDistance_log": 3743.08,
+        "walkDistance": 1179.09,
+        "revives": 626.25
+      },
+      "characteristics": {
+        "killRate": 1.0,
+        "damageDealt": 142,
+        "walkDistance": 1659,
+        "healUsage": 1.96,
+        "boostUsage": 1.40,
+        "survivalTime": 65,
+        "aggressiveness": 55,
+        "teamwork": 75
+      },
+      "playstyle": "맵 전체를 적극적으로 탐험하며 다양한 전투 상황에 노출됩니다."
+    },
+    "3": {
+      "id": 3,
+      "name": "Explorer (균형형)",
+      "type": "Explorer",
+      "count": 15898,
+      "percentage": 19.9,
+      "description": "탐험과 전투의 균형을 맞춘 플레이어",
+      "color": "#5a67d8",
+      "icon": "fa-map-marked-alt",
+      "topFeatures": {
+        "walkDistance_log": 2245.80,
+        "longestKill": 610.84,
+        "has_kills": 501.94
+      },
+      "characteristics": {
+        "killRate": 1.0,
+        "damageDealt": 142,
+        "walkDistance": 1659,
+        "healUsage": 1.96,
+        "boostUsage": 1.40,
+        "survivalTime": 60,
+        "aggressiveness": 60,
+        "teamwork": 70
+      },
+      "playstyle": "적당한 이동성과 전투력을 가진 균형잡힌 탐험 스타일입니다."
+    },
+    "4": {
+      "id": 4,
+      "name": "Explorer (극한)",
+      "type": "Explorer",
+      "count": 4312,
+      "percentage": 5.4,
+      "description": "극한의 이동성을 보이는 고위험 탐험가",
+      "color": "#4c51bf",
+      "icon": "fa-running",
+      "topFeatures": {
+        "walkDistance_log": 4451.52,
+        "walkDistance": 1845.04,
+        "revives": 1551.02
+      },
+      "characteristics": {
+        "killRate": 1.0,
+        "damageDealt": 142,
+        "walkDistance": 1659,
+        "healUsage": 1.96,
+        "boostUsage": 1.40,
+        "survivalTime": 55,
+        "aggressiveness": 65,
+        "teamwork": 80
+      },
+      "playstyle": "극한의 이동성으로 위험 지역도 적극 탐험하는 고위험 스타일입니다."
+    },
+    "5": {
+      "id": 5,
+      "name": "Explorer (전술적)",
+      "type": "Explorer",
+      "count": 4046,
+      "percentage": 5.1,
+      "description": "전술적 이동과 무기 수집에 특화된 플레이어",
+      "color": "#3182ce",
+      "icon": "fa-crosshairs",
+      "topFeatures": {
+        "walkDistance_log": 4139.77,
+        "walkDistance": 1544.91,
+        "weaponsAcquired": 451.79
+      },
+      "characteristics": {
+        "killRate": 1.0,
+        "damageDealt": 142,
+        "walkDistance": 1659,
+        "healUsage": 1.96,
+        "boostUsage": 1.40,
+        "survivalTime": 58,
+        "aggressiveness": 62,
+        "teamwork": 65
+      },
+      "playstyle": "전술적 이동과 효율적인 무기 수집에 집중하는 전략적 플레이어입니다."
+    },
+    "6": {
+      "id": 6,
+      "name": "Explorer (지구력)",
+      "type": "Explorer",
+      "count": 5391,
+      "percentage": 6.7,
+      "description": "긴 게임 시간과 지속적인 이동성을 보이는 플레이어",
+      "color": "#2b6cb0",
+      "icon": "fa-clock",
+      "topFeatures": {
+        "walkDistance_log": 3995.30,
+        "matchDuration": 1400.69,
+        "walkDistance": 1327.73
+      },
+      "characteristics": {
+        "killRate": 1.0,
+        "damageDealt": 142,
+        "walkDistance": 1659,
+        "healUsage": 1.96,
+        "boostUsage": 1.40,
+        "survivalTime": 70,
+        "aggressiveness": 50,
+        "teamwork": 75
+      },
+      "playstyle": "긴 게임 시간 동안 꾸준한 이동성을 유지하는 지구력 중심 플레이입니다."
+    },
+    "7": {
+      "id": 7,
+      "name": "Aggressive (공격형)",
+      "type": "Aggressive",
+      "count": 89,
+      "percentage": 0.1,
+      "description": "극도로 공격적인 고위험 고수익 플레이어",
+      "color": "#dc3545",
+      "icon": "fa-fire",
+      "topFeatures": {
+        "kill_efficiency": 23396.88,
+        "damage_per_kill": 1435.73,
+        "assists": 920.03
+      },
+      "characteristics": {
+        "killRate": 2.06,
+        "damageDealt": 259,
+        "walkDistance": 2645,
+        "healUsage": 3.17,
+        "boostUsage": 3.06,
+        "survivalTime": 40,
+        "aggressiveness": 95,
+        "teamwork": 60
+      },
+      "playstyle": "극도로 공격적이며 높은 킬 효율성을 보이는 고위험 고수익 플레이어입니다."
+    }
+  },
+  "summary": {
+    "mostCommon": "Survivor (적극적)",
+    "leastCommon": "Aggressive (공격형)",
+    "totalSurvivors": 39508,
+    "totalExplorers": 40403,
+    "totalAggressive": 89,
+    "gameBalance": "Balanced",
+    "keyInsights": [
+      "플레이어의 49.4%가 생존형 (Survivor) 플레이 스타일을 선호",
+      "탐험형 (Explorer)이 50.5%로 가장 많은 비중을 차지",
+      "공격형 (Aggressive)은 극소수(0.1%)의 엘리트 플레이어",
+      "대부분의 플레이어가 안전한 플레이를 선호하는 경향"
+    ]
+  }
+}

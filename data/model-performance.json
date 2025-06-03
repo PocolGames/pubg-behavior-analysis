@@ -1,0 +1,181 @@
+{
+  "metadata": {
+    "modelName": "Basic Neural Network",
+    "accuracy": 0.99245,
+    "trainingDate": "2024-12-19",
+    "datasetSize": 80000,
+    "features": 30,
+    "classes": 8
+  },
+  "models": {
+    "basic": {
+      "name": "Basic Neural Network",
+      "accuracy": 0.99245,
+      "precision": 0.9925,
+      "recall": 0.9924,
+      "f1Score": 0.9867,
+      "trainingTime": 90.6,
+      "architecture": "Sequential (128-64-32)",
+      "parameters": 15464
+    },
+    "advanced": {
+      "name": "Advanced Neural Network", 
+      "accuracy": 0.98960,
+      "precision": 0.9896,
+      "recall": 0.9895,
+      "f1Score": 0.9870,
+      "trainingTime": 221.8,
+      "architecture": "Functional API (Dual Branch)",
+      "parameters": 70312
+    },
+    "residual": {
+      "name": "Residual Neural Network",
+      "accuracy": 0.98990,
+      "precision": 0.9899,
+      "recall": 0.9898,
+      "f1Score": 0.9874,
+      "trainingTime": 154.9,
+      "architecture": "Residual Connections",
+      "parameters": 62056
+    },
+    "ensemble": {
+      "name": "Ensemble Model",
+      "accuracy": 0.99270,
+      "precision": 0.9927,
+      "recall": 0.9926,
+      "f1Score": 0.9882,
+      "trainingTime": 467.3,
+      "architecture": "Soft Voting",
+      "parameters": 147832
+    }
+  },
+  "featureImportance": [
+    {
+      "feature": "has_kills",
+      "importance": 0.3232,
+      "rank": 1,
+      "description": "플레이어가 킬을 기록했는지 여부 (이진 특성)"
+    },
+    {
+      "feature": "walkDistance_log",
+      "importance": 0.0788,
+      "rank": 2,
+      "description": "보행 이동 거리의 로그 변환값"
+    },
+    {
+      "feature": "walkDistance",
+      "importance": 0.0751,
+      "rank": 3,
+      "description": "게임 중 보행으로 이동한 총 거리"
+    },
+    {
+      "feature": "total_distance",
+      "importance": 0.0634,
+      "rank": 4,
+      "description": "모든 이동 수단을 합친 총 이동 거리"
+    },
+    {
+      "feature": "has_swimDistance",
+      "importance": 0.0609,
+      "rank": 5,
+      "description": "플레이어가 수영을 했는지 여부"
+    },
+    {
+      "feature": "weaponsAcquired",
+      "importance": 0.0588,
+      "rank": 6,
+      "description": "게임 중 획득한 무기의 수"
+    },
+    {
+      "feature": "killPlace",
+      "importance": 0.0573,
+      "rank": 7,
+      "description": "킬 수 기준 플레이어 순위"
+    },
+    {
+      "feature": "damageDealt",
+      "importance": 0.0519,
+      "rank": 8,
+      "description": "플레이어가 가한 총 데미지"
+    },
+    {
+      "feature": "rideDistance",
+      "importance": 0.0512,
+      "rank": 9,
+      "description": "차량으로 이동한 거리"
+    },
+    {
+      "feature": "heal_boost_ratio",
+      "importance": 0.0501,
+      "rank": 10,
+      "description": "치료 아이템과 부스트 아이템 사용 비율"
+    }
+  ],
+  "confusionMatrix": {
+    "classes": ["Survivor(보수적)", "Survivor(적극적)", "Explorer(활발한)", "Explorer(균형형)", "Explorer(극한)", "Explorer(전술적)", "Explorer(지구력)", "Aggressive"],
+    "matrix": [
+      [0.996, 0.003, 0.001, 0.000, 0.000, 0.000, 0.000, 0.000],
+      [0.001, 0.999, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000],
+      [0.005, 0.005, 0.990, 0.000, 0.000, 0.000, 0.000, 0.000],
+      [0.002, 0.003, 0.001, 0.994, 0.000, 0.000, 0.000, 0.000],
+      [0.010, 0.015, 0.006, 0.000, 0.969, 0.000, 0.000, 0.000],
+      [0.002, 0.001, 0.001, 0.000, 0.000, 0.996, 0.000, 0.000],
+      [0.015, 0.010, 0.008, 0.000, 0.000, 0.000, 0.967, 0.000],
+      [0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 1.000]
+    ],
+    "classAccuracy": [0.996, 0.999, 0.990, 0.994, 0.969, 0.996, 0.967, 1.000]
+  },
+  "confidenceAnalysis": {
+    "meanConfidence": 0.990,
+    "stdConfidence": 0.050,
+    "highConfidence": 0.982,
+    "lowConfidence": 0.000,
+    "distribution": [
+      {"range": "0.90-1.00", "count": 78400, "percentage": 98.0},
+      {"range": "0.80-0.90", "count": 1200, "percentage": 1.5},
+      {"range": "0.70-0.80", "count": 300, "percentage": 0.4},
+      {"range": "0.60-0.70", "count": 80, "percentage": 0.1},
+      {"range": "0.50-0.60", "count": 20, "percentage": 0.0}
+    ]
+  },
+  "insights": {
+    "technical": [
+      "has_kills (킬 여부)가 32.3%로 가장 중요한 분류 특성",
+      "이동 관련 특성들(walkDistance 계열)이 상위 3개 차지",
+      "Basic 모델이 가장 높은 성능(99.25%)을 달성",
+      "앙상블 효과로 0.02% 성능 향상 달성"
+    ],
+    "business": [
+      "킬 행동 여부가 플레이어 유형 결정의 핵심 요소",
+      "이동성이 플레이어 스타일 분류의 중요 지표",
+      "Aggressive 유형은 100% 완벽 분류 가능",
+      "모델 신뢰도 98.2%로 실용적 활용 가능"
+    ]
+  },
+  "trainingHistory": {
+    "basic": {
+      "epochs": 50,
+      "finalTrainAccuracy": 0.9869,
+      "finalValAccuracy": 0.9927,
+      "finalTrainLoss": 0.0347,
+      "finalValLoss": 0.0181,
+      "overfitting": false
+    },
+    "advanced": {
+      "epochs": 50,
+      "finalTrainAccuracy": 0.9871,
+      "finalValAccuracy": 0.9911,
+      "finalTrainLoss": 0.0327,
+      "finalValLoss": 0.0208,
+      "overfitting": false
+    },
+    "residual": {
+      "epochs": 43,
+      "finalTrainAccuracy": 0.9934,
+      "finalValAccuracy": 0.9887,
+      "finalTrainLoss": 0.0167,
+      "finalValLoss": 0.0279,
+      "overfitting": false
+    }
+  }
+}

@@ -1,111 +1,163 @@
 /**
  * PUBG Player Prediction System
  * 플레이어 특성 기반 유형 예측 시스템
+ * JSON 데이터 연동 버전
  */
 
 class PlayerPredictor {
     constructor() {
         this.charts = new Map();
         this.currentPrediction = null;
+        this.predictionData = null;
+        this.isDataLoaded = false;
         
-        // 클러스터 정보 (실제 분석 결과 기반)
-        this.clusterInfo = {
-            0: {
-                name: "Survivor (보수적)",
-                description: "신중하고 생존 지향적인 플레이어",
-                color: "#56ab2f",
-                icon: "fas fa-shield-alt",
-                percentage: 18.2,
-                characteristics: ["높은 생존력", "신중한 플레이", "안전 우선"]
-            },
-            1: {
-                name: "Survivor (적극적)",
-                description: "생존력과 공격성을 균형있게 갖춘 플레이어",
-                color: "#4CAF50",
-                icon: "fas fa-user-shield",
-                percentage: 31.2,
-                characteristics: ["균형잡힌 플레이", "팀워크 중시", "전략적 사고"]
-            },
-            2: {
-                name: "Explorer (활발한)",
-                description: "맵을 적극적으로 탐험하는 플레이어",
-                color: "#667eea",
-                icon: "fas fa-map-marked-alt",
-                percentage: 13.4,
-                characteristics: ["높은 이동성", "맵 탐험", "위험 감수"]
-            },
-            3: {
-                name: "Explorer (균형형)",
-                description: "탐험과 전투를 균형있게 하는 플레이어",
-                color: "#5A67D8",
-                icon: "fas fa-compass",
-                percentage: 19.9,
-                characteristics: ["균형적 이동", "상황 판단", "유연한 전략"]
-            },
-            4: {
-                name: "Explorer (극한)",
-                description: "극도로 높은 이동성을 보이는 플레이어",
-                color: "#4299E1",
-                icon: "fas fa-rocket",
-                percentage: 5.4,
-                characteristics: ["극한 이동", "고위험 탐험", "독특한 플레이"]
-            },
-            5: {
-                name: "Explorer (전술적)",
-                description: "전술적 이동과 무기 수집에 능한 플레이어",
-                color: "#3182CE",
-                icon: "fas fa-chess",
-                percentage: 5.1,
-                characteristics: ["전략적 이동", "무기 수집", "계획적 플레이"]
-            },
-            6: {
-                name: "Explorer (지구력)",
-                description: "높은 지구력과 지속성을 보이는 플레이어",
-                color: "#2B6CB0",
-                icon: "fas fa-mountain",
-                percentage: 6.7,
-                characteristics: ["높은 지구력", "장시간 플레이", "끈기있는 탐험"]
-            },
-            7: {
-                name: "Aggressive (공격형)",
-                description: "극도로 공격적이고 위험을 감수하는 플레이어",
-                color: "#dc3545",
-                icon: "fas fa-fire",
-                percentage: 0.1,
-                characteristics: ["극도의 공격성", "고위험 고수익", "빠른 결정"]
-            }
+        // 백업 클러스터 정보 (JSON 로딩 실패 시 사용)
+        this.fallbackClusterInfo = {
+            0: { name: "Survivor (보수적)", description: "신중하고 생존 지향적인 플레이어", color: "#56ab2f", icon: "fas fa-shield-alt", percentage: 18.2 },
+            1: { name: "Survivor (적극적)", description: "생존력과 공격성을 균형있게 갖춘 플레이어", color: "#4CAF50", icon: "fas fa-user-shield", percentage: 31.2 },
+            2: { name: "Explorer (활발한)", description: "맵을 적극적으로 탐험하는 플레이어", color: "#667eea", icon: "fas fa-map-marked-alt", percentage: 13.4 },
+            3: { name: "Explorer (균형형)", description: "탐험과 전투를 균형있게 하는 플레이어", color: "#5A67D8", icon: "fas fa-compass", percentage: 19.9 },
+            4: { name: "Explorer (극한)", description: "극도로 높은 이동성을 보이는 플레이어", color: "#4299E1", icon: "fas fa-rocket", percentage: 5.4 },
+            5: { name: "Explorer (전술적)", description: "전술적 이동과 무기 수집에 능한 플레이어", color: "#3182CE", icon: "fas fa-chess", percentage: 5.1 },
+            6: { name: "Explorer (지구력)", description: "높은 지구력과 지속성을 보이는 플레이어", color: "#2B6CB0", icon: "fas fa-mountain", percentage: 6.7 },
+            7: { name: "Aggressive (공격형)", description: "극도로 공격적이고 위험을 감수하는 플레이어", color: "#dc3545", icon: "fas fa-fire", percentage: 0.1 }
         };
 
-        // 샘플 플레이어 데이터
-        this.samplePlayers = {
-            'survivor-conservative': {
-                kills: 1, damageDealt: 150, longestKill: 50, headshotKills: 0, assists: 0, weaponsAcquired: 2,
-                walkDistance: 800, rideDistance: 0, swimDistance: 0,
-                heals: 3, boosts: 1, revives: 0, DBNOs: 1,
-                killPlace: 70, matchDuration: 2000, maxPlace: 100, numGroups: 50
-            },
-            'survivor-active': {
-                kills: 3, damageDealt: 400, longestKill: 120, headshotKills: 1, assists: 1, weaponsAcquired: 4,
-                walkDistance: 1500, rideDistance: 200, swimDistance: 0,
-                heals: 2, boosts: 3, revives: 1, DBNOs: 3,
-                killPlace: 30, matchDuration: 1800, maxPlace: 100, numGroups: 50
-            },
-            'explorer': {
-                kills: 2, damageDealt: 250, longestKill: 80, headshotKills: 0, assists: 0, weaponsAcquired: 5,
-                walkDistance: 3000, rideDistance: 1500, swimDistance: 50,
-                heals: 1, boosts: 2, revives: 0, DBNOs: 2,
-                killPlace: 45, matchDuration: 1900, maxPlace: 100, numGroups: 50
-            },
-            'aggressive': {
-                kills: 8, damageDealt: 800, longestKill: 200, headshotKills: 3, assists: 2, weaponsAcquired: 6,
-                walkDistance: 1200, rideDistance: 300, swimDistance: 0,
-                heals: 1, boosts: 1, revives: 0, DBNOs: 8,
-                killPlace: 5, matchDuration: 1200, maxPlace: 100, numGroups: 50
-            }
-        };
+        // 초기화
+        this.initializeWithData();
+    }
 
+    /**
+     * 데이터와 함께 초기화
+     */
+    async initializeWithData() {
+        try {
+            // JSON 데이터 로드
+            await this.loadPredictionData();
+            
+            // 이벤트 리스너 및 차트 초기화
+            this.initializeEventListeners();
+            this.initializeCharts();
+            
+            console.log('✅ PlayerPredictor 초기화 완료');
+        } catch (error) {
+            console.error('❌ PlayerPredictor 초기화 중 오류:', error);
+            // 백업 데이터로 초기화
+            this.initializeWithFallbackData();
+        }
+    }
+
+    /**
+     * JSON 데이터 로드
+     */
+    async loadPredictionData() {
+        try {
+            const response = await fetch('./data/player-prediction.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            this.predictionData = await response.json();
+            this.isDataLoaded = true;
+            
+            console.log('✅ 플레이어 예측 데이터 로드 완료:', this.predictionData.metadata);
+        } catch (error) {
+            console.error('❌ JSON 데이터 로드 실패:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * 백업 데이터로 초기화
+     */
+    initializeWithFallbackData() {
+        console.warn('⚠️ 백업 데이터로 초기화');
+        this.isDataLoaded = false;
         this.initializeEventListeners();
         this.initializeCharts();
+    }
+
+    /**
+     * 클러스터 정보 가져오기
+     */
+    getClusterInfo() {
+        if (this.isDataLoaded && this.predictionData.clusterCenters) {
+            const clusterInfo = {};
+            const colors = ["#56ab2f", "#4CAF50", "#667eea", "#5A67D8", "#4299E1", "#3182CE", "#2B6CB0", "#dc3545"];
+            const icons = ["fas fa-shield-alt", "fas fa-user-shield", "fas fa-map-marked-alt", "fas fa-compass", 
+                          "fas fa-rocket", "fas fa-chess", "fas fa-mountain", "fas fa-fire"];
+            const percentages = [18.2, 31.2, 13.4, 19.9, 5.4, 5.1, 6.7, 0.1];
+            
+            Object.keys(this.predictionData.clusterCenters).forEach((key, index) => {
+                const cluster = this.predictionData.clusterCenters[key];
+                clusterInfo[key] = {
+                    name: cluster.name,
+                    description: `${cluster.name} 특성을 가진 플레이어`,
+                    color: colors[index] || "#666",
+                    icon: icons[index] || "fas fa-user",
+                    percentage: percentages[index] || 0,
+                    characteristics: ["실제 데이터 기반", "특성 분석 완료"]
+                };
+            });
+            
+            return clusterInfo;
+        }
+        
+        return this.fallbackClusterInfo;
+    }
+
+    /**
+     * 샘플 플레이어 데이터 가져오기
+     */
+    getSamplePlayers() {
+        if (this.isDataLoaded && this.predictionData.samplePlayers) {
+            const samplePlayers = {};
+            const featureNames = this.getFeatureNames();
+            
+            Object.keys(this.predictionData.samplePlayers).forEach(key => {
+                const sample = this.predictionData.samplePlayers[key];
+                const playerData = {};
+                
+                // 배열 데이터를 객체로 변환
+                featureNames.forEach((name, index) => {
+                    playerData[name] = sample.data[index] || 0;
+                });
+                
+                // 추가 기본값
+                playerData.headshotKills = 0;
+                playerData.swimDistance = 0;
+                playerData.revives = 0;
+                playerData.DBNOs = playerData.kills || 0;
+                playerData.matchDuration = 1800;
+                playerData.maxPlace = 100;
+                playerData.numGroups = 50;
+                
+                samplePlayers[key] = playerData;
+            });
+            
+            return samplePlayers;
+        }
+        
+        // 백업 샘플 데이터
+        return {
+            'conservative': {
+                kills: 1, damageDealt: 150, longestKill: 50, headshotKills: 0, assists: 0, weaponsAcquired: 2,
+                walkDistance: 800, rideDistance: 0, swimDistance: 0, heals: 3, boosts: 1, revives: 0, DBNOs: 1,
+                killPlace: 70, matchDuration: 2000, maxPlace: 100, numGroups: 50
+            }
+        };
+    }
+
+    /**
+     * 특성 이름 목록 가져오기
+     */
+    getFeatureNames() {
+        if (this.isDataLoaded && this.predictionData.featureDefinitions) {
+            return this.predictionData.featureDefinitions.map(feature => feature.name);
+        }
+        
+        return ['walkDistance', 'killPlace', 'boosts', 'weaponsAcquired', 'damageDealt', 
+                'kills', 'heals', 'longestKill', 'rideDistance', 'assists'];
     }
 
     /**

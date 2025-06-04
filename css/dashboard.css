@@ -1,15 +1,19 @@
 /* Dashboard Styles */
 .dashboard-content {
     max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem;
+    margin: 0;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-left: 0;
+    padding-right: 0;
     justify-content: center;
     display: flex;
     flex-direction: column;
     gap: 2rem;
     width: 100%;
-    margin-right: auto; 
+    margin-right: auto;
 }
+
 
 /* 네비게이션 링크 */
 .nav-links {

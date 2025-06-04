@@ -113,11 +113,18 @@
     background: var(--bg-primary);
     border-radius: 6px;
     padding: 16px;
-    text-align: center;
     border: 1px solid var(--border-color);
     transform: translateY(0);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    display: flex;              
+    flex-direction: column;     
+    justify-content: center;    
+    align-items: center;        
+    height: 150px;             
+    text-align: center;         
 }
+
 
 .stat-card:hover {
     transform: translateY(-4px);

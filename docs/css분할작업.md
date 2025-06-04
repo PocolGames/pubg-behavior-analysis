@@ -91,3 +91,133 @@ css/base/typography.css - 폰트 및 텍스트 스타일
 
 ✅ 완료된 작업: utilities/helpers.css 생성
 ✅ 완료된 작업: utilities/responsive.css 생성
+
+---
+
+네, `main.css` 파일을 정리하고 분리된 CSS 파일들을 import하는 구조로 변경하는 방법을 알려드리겠습니다.
+
+## 📋 main.css 수정 방법
+
+### 1. 현재 main.css에서 분리된 스타일들 제거
+
+다음 스타일들을 `main.css`에서 **삭제**하세요:
+
+**제거할 스타일들:**
+```css
+/* 헤더 관련 (layout/header.css로 이동됨) */
+.main-header { ... }
+.header-content { ... }
+.logo-section { ... }
+.logo-icon { ... }
+.site-title { ... }
+.main-nav .nav-list { ... }
+.nav-link { ... }
+
+/* 푸터 관련 (layout/footer.css로 이동됨) */
+.main-footer { ... }
+.footer-content { ... }
+.footer-info { ... }
+.footer-stats { ... }
+.footer-stat { ... }
+
+/* 히어로/그리드 관련 (layout/grid.css로 이동됨) */
+.hero-section { ... }
+.hero-title { ... }
+.hero-description { ... }
+.hero-stats { ... }
+.stat-item { ... }
+.stat-number { ... }
+.stat-label { ... }
+.main-dashboard { ... }
+.section-title { ... }
+
+/* 버튼 관련 (components/buttons.css로 이동됨) */
+.btn { ... }
+.btn-primary { ... }
+.btn-secondary { ... }
+.btn-success { ... }
+
+/* 카드 관련 (components/cards.css로 이동됨) */
+.card-base { ... }
+.card-header { ... }
+
+/* 유틸리티 클래스들 (utilities/helpers.css로 이동됨) */
+.mb-1, .mb-2, .mb-3 { ... }
+.mt-1, .mt-2, .mt-3 { ... }
+.d-flex, .align-items-center { ... }
+/* 기타 모든 유틸리티 클래스들 */
+
+/* 반응형 스타일들 (utilities/responsive.css로 이동됨) */
+@media (max-width: 768px) { ... }
+@media (max-width: 480px) { ... }
+```
+
+### 2. main.css 상단에 import 구문 추가
+
+`main.css` 파일의 **맨 상단**에 다음 import 구문들을 추가하세요:
+
+```css
+/* ===== PUBG 플레이어 행동 분석 - Main CSS ===== */
+
+/* Base Styles */
+@import 'base/reset.css';
+@import 'base/variables.css';
+@import 'base/typography.css';
+
+/* Layout Styles */
+@import 'layout/header.css';
+@import 'layout/footer.css';
+@import 'layout/grid.css';
+
+/* Component Styles */
+@import 'components/buttons.css';
+@import 'components/cards.css';
+@import 'components/forms.css';
+@import 'components/animations.css';
+
+/* Utility Styles */
+@import 'utilities/helpers.css';
+@import 'utilities/responsive.css';
+
+/* Page-specific styles remain here */
+```
+
+### 3. main.css에 남겨둘 내용
+
+다음과 같은 스타일들만 `main.css`에 남겨두세요:
+
+```css
+/* 페이지별 특별한 스타일들 */
+/* 다른 CSS 파일로 분류하기 어려운 특수한 스타일들 */
+/* 프로젝트 특화 스타일들 */
+```
+
+### 4. HTML 파일들의 CSS 링크 확인
+
+각 HTML 파일에서 CSS 링크가 올바른지 확인하세요:
+
+```html
+<!-- index.html 등에서 -->
+<link rel="stylesheet" href="css/main.css">
+```
+
+### 5. 수정 후 확인 사항
+
+1. **브라우저에서 확인** - 모든 스타일이 정상적으로 적용되는지 확인
+2. **개발자 도구에서 확인** - CSS 오류가 없는지 확인
+3. **반응형 동작 확인** - 다양한 화면 크기에서 정상 동작하는지 확인
+
+### 6. 선택적 최적화
+
+페이지별로 필요한 CSS만 로드하고 싶다면:
+
+```html
+<!-- 기본 스타일만 -->
+<link rel="stylesheet" href="css/base/variables.css">
+<link rel="stylesheet" href="css/base/reset.css">
+<link rel="stylesheet" href="css/layout/header.css">
+<link rel="stylesheet" href="css/components/buttons.css">
+<!-- 필요한 것만 선택적으로 로드 -->
+```
+
+이렇게 수정하시면 CSS가 모듈화되어 유지보수가 훨씬 쉬워집니다! 수정 중에 문제가 생기면 언제든 알려주세요.

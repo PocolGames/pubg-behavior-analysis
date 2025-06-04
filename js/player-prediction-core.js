@@ -38,8 +38,10 @@ class PlayerPredictor {
             // 이벤트 리스너 및 차트 초기화
             this.initializeEventListeners();
             this.initializeCharts();
+            this.updateFormLabels();
             
             console.log('✅ PlayerPredictor 초기화 완료');
+            this.showLoadingComplete();
         } catch (error) {
             console.error('❌ PlayerPredictor 초기화 중 오류:', error);
             // 백업 데이터로 초기화
@@ -52,6 +54,8 @@ class PlayerPredictor {
      */
     async loadPredictionData() {
         try {
+            this.showLoading('플레이어 예측 데이터 로딩 중...');
+            
             const response = await fetch('./data/player-prediction.json');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -61,10 +65,72 @@ class PlayerPredictor {
             this.isDataLoaded = true;
             
             console.log('✅ 플레이어 예측 데이터 로드 완료:', this.predictionData.metadata);
+            
+            // 메타데이터 업데이트
+            this.updateMetadataDisplay();
+            
         } catch (error) {
             console.error('❌ JSON 데이터 로드 실패:', error);
+            this.showError('데이터 로딩에 실패했습니다. 백업 데이터를 사용합니다.');
             throw error;
         }
+    }
+
+    /**
+     * 메타데이터 표시 업데이트
+     */
+    updateMetadataDisplay() {
+        if (!this.isDataLoaded) return;
+
+        const metadata = this.predictionData.metadata;
+        
+        // 모델 정보 카드 업데이트
+        const accuracyElement = document.querySelector('.model-accuracy');
+        if (accuracyElement) {
+            accuracyElement.textContent = `${(metadata.accuracy * 100).toFixed(2)}%`;
+        }
+
+        const featuresElement = document.querySelector('.model-features');
+        if (featuresElement) {
+            featuresElement.textContent = `${metadata.features}개`;
+        }
+
+        const classesElement = document.querySelector('.model-classes');
+        if (classesElement) {
+            classesElement.textContent = `${metadata.classes}개`;
+        }
+
+        const modelNameElement = document.querySelector('.model-name');
+        if (modelNameElement) {
+            modelNameElement.textContent = metadata.modelName;
+        }
+    }
+
+    /**
+     * 폼 라벨 업데이트 (JSON 데이터 기반)
+     */
+    updateFormLabels() {
+        if (!this.isDataLoaded) return;
+
+        const features = this.predictionData.featureDefinitions;
+        
+        features.forEach(feature => {
+            const input = document.querySelector(`input[name="${feature.name}"]`);
+            if (input) {
+                const label = input.closest('.form-group')?.querySelector('label');
+                if (label) {
+                    label.innerHTML = `
+                        ${feature.displayName} 
+                        <span class="feature-info">(${feature.min}-${feature.max}${feature.unit})</span>
+                    `;
+                }
+                
+                // 입력 제한 설정
+                input.min = feature.min;
+                input.max = feature.max;
+                input.title = feature.description;
+            }
+        });
     }
 
     /**
@@ -75,6 +141,7 @@ class PlayerPredictor {
         this.isDataLoaded = false;
         this.initializeEventListeners();
         this.initializeCharts();
+        this.showError('JSON 데이터를 로드할 수 없어 기본 데이터를 사용합니다.');
     }
 
     /**
@@ -96,7 +163,8 @@ class PlayerPredictor {
                     color: colors[index] || "#666",
                     icon: icons[index] || "fas fa-user",
                     percentage: percentages[index] || 0,
-                    characteristics: ["실제 데이터 기반", "특성 분석 완료"]
+                    features: cluster.features,
+                    characteristics: ["실제 PUBG 데이터 기반", "머신러닝 분석 완료"]
                 };
             });
             
@@ -107,15 +175,75 @@ class PlayerPredictor {
     }
 
     /**
-     * 특성 이름 목록 가져오기
+     * 특성 정의 가져오기
      */
-    getFeatureNames() {
+    getFeatureDefinitions() {
         if (this.isDataLoaded && this.predictionData.featureDefinitions) {
-            return this.predictionData.featureDefinitions.map(feature => feature.name);
+            return this.predictionData.featureDefinitions;
         }
         
-        return ['walkDistance', 'killPlace', 'boosts', 'weaponsAcquired', 'damageDealt', 
-                'kills', 'heals', 'longestKill', 'rideDistance', 'assists'];
+        // 백업 특성 정의
+        return [
+            { name: 'walkDistance', displayName: '보행 거리', min: 0, max: 10000, unit: 'm', weight: 0.075 },
+            { name: 'killPlace', displayName: '킬 순위', min: 1, max: 100, unit: '', weight: 0.057 },
+            { name: 'boosts', displayName: '부스트 아이템', min: 0, max: 20, unit: '개', weight: 0.040 },
+            { name: 'weaponsAcquired', displayName: '무기 획득', min: 0, max: 20, unit: '개', weight: 0.059 },
+            { name: 'damageDealt', displayName: '총 데미지', min: 0, max: 2000, unit: '', weight: 0.052 },
+            { name: 'kills', displayName: '킬 수', min: 0, max: 50, unit: '명', weight: 0.045 },
+            { name: 'heals', displayName: '치료 아이템', min: 0, max: 30, unit: '개', weight: 0.038 },
+            { name: 'longestKill', displayName: '최장 킬 거리', min: 0, max: 1000, unit: 'm', weight: 0.035 },
+            { name: 'rideDistance', displayName: '탑승 거리', min: 0, max: 20000, unit: 'm', weight: 0.051 },
+            { name: 'assists', displayName: '어시스트', min: 0, max: 20, unit: '회', weight: 0.032 }
+        ];
+    }
+
+    /**
+     * 샘플 플레이어 데이터 가져오기
+     */
+    getSamplePlayers() {
+        if (this.isDataLoaded && this.predictionData.samplePlayers) {
+            return this.predictionData.samplePlayers;
+        }
+        
+        // 백업 샘플 데이터
+        return {
+            conservative: { name: "보수적 생존형", data: [150, 60, 1, 2, 50, 0, 2, 0, 0, 1] },
+            active: { name: "적극적 생존형", data: [600, 40, 2, 3, 120, 2, 3, 15, 300, 2] },
+            explorer: { name: "탐험형", data: [2000, 25, 4, 5, 180, 3, 5, 25, 1000, 3] },
+            aggressive: { name: "공격형", data: [1500, 10, 6, 8, 400, 8, 8, 50, 800, 5] }
+        };
+    }
+
+    /**
+     * 로딩 상태 표시
+     */
+    showLoading(message = '로딩 중...') {
+        const loadingElement = document.querySelector('.loading-indicator');
+        if (loadingElement) {
+            loadingElement.textContent = message;
+            loadingElement.style.display = 'block';
+        }
+    }
+
+    /**
+     * 로딩 완료 표시
+     */
+    showLoadingComplete() {
+        const loadingElement = document.querySelector('.loading-indicator');
+        if (loadingElement) {
+            loadingElement.style.display = 'none';
+        }
+    }
+
+    /**
+     * 에러 메시지 표시
+     */
+    showError(message) {
+        if (window.App && window.App.showNotification) {
+            window.App.showNotification(message, 'warning');
+        } else {
+            console.warn('⚠️', message);
+        }
     }
 
     /**
@@ -176,16 +304,18 @@ class PlayerPredictor {
      * 플레이스홀더 차트 생성
      */
     createPlaceholderCharts() {
+        const clusterInfo = this.getClusterInfo();
+        
         // 확률 분포 차트
         const probabilityCanvas = document.getElementById('probabilityChart');
         if (probabilityCanvas && window.ChartUtils) {
             const placeholderData = {
-                labels: Object.values(this.getClusterInfo()).map(info => info.name),
+                labels: Object.values(clusterInfo).map(info => info.name),
                 datasets: [{
                     label: '예측 확률',
                     data: Array(8).fill(12.5), // 균등 분포
-                    backgroundColor: Object.values(this.getClusterInfo()).map(info => info.color + '80'),
-                    borderColor: Object.values(this.getClusterInfo()).map(info => info.color),
+                    backgroundColor: Object.values(clusterInfo).map(info => info.color + '80'),
+                    borderColor: Object.values(clusterInfo).map(info => info.color),
                     borderWidth: 1
                 }]
             };

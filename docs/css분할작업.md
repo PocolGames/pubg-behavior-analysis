@@ -82,3 +82,12 @@ css/base/typography.css - 폰트 및 텍스트 스타일
 ✅ 완료된 작업: components/cards.css 생성
 ✅ 완료된 작업: components/forms.css 생성
 ✅ 완료된 작업: components/animations.css 생성
+
+다음 작업: `utilities/` 폴더를 생성하고 `utilities/helpers.css` 파일을 만들어 유틸리티 클래스들을 분리하겠습니다.
+
+---
+
+## utilities 분리
+
+✅ 완료된 작업: utilities/helpers.css 생성
+✅ 완료된 작업: utilities/responsive.css 생성

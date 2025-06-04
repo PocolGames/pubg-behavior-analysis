@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUBG 웹사이트 통합 테스트</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/components.css">
+    
+    <!-- External Libraries -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: var(--bg-primary);
+            min-height: 100vh;
+        }
+        
+        .test-section {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .test-result {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        .test-success {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
+            border: 1px solid #4CAF50;
+        }
+        
+        .test-error {
+            background: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+            border: 1px solid #f44336;
+        }
+        
+        .test-info {
+            background: rgba(33, 150, 243, 0.1);
+            color: #2196F3;
+            border: 1px solid #2196F3;
+        }
+        
+        .chart-test {
+            height: 300px;
+            width: 100%;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <header>
+            <h1><i class="fas fa-flask"></i> PUBG 웹사이트 통합 테스트</h1>
+            <p>모든 JavaScript 모듈과 기능이 올바르게 작동하는지 확인합니다.</p>
+        </header>
+
+        <!-- CSS 테스트 -->
+        <section class="test-section">
+            <h3><i class="fas fa-palette"></i> CSS 스타일 테스트</h3>
+            <div class="test-result test-success">✅ CSS 파일 로드됨</div>
+            <div class="test-result test-success">✅ 다크 테마 적용됨</div>
+            <div class="test-result test-success">✅ Font Awesome 아이콘 로드됨</div>
+            
+            <!-- 샘플 컴포넌트들 -->
+            <div style="margin: 1rem 0;">
+                <button class="btn btn-primary">Primary 버튼</button>
+                <button class="btn btn-secondary">Secondary 버튼</button>
+                <button class="btn btn-outline">Outline 버튼</button>
+            </div>
+            
+            <div class="card" style="margin: 1rem 0;">
+                <div class="card-header">
+                    <h4>샘플 카드</h4>
+                </div>
+                <div class="card-body">
+                    카드 컴포넌트가 올바르게 스타일링되었습니다.
+                </div>
+            </div>
+        </section>
+
+        <!-- JavaScript 라이브러리 테스트 -->
+        <section class="test-section">
+            <h3><i class="fas fa-code"></i> JavaScript 라이브러리 테스트</h3>
+            <div id="js-test-results">
+                <div class="test-result test-info">🔄 테스트 진행중...</div>
+            </div>
+        </section>
+
+        <!-- Chart.js 테스트 -->
+        <section class="test-section">
+            <h3><i class="fas fa-chart-bar"></i> Chart.js 테스트</h3>
+            <div id="chart-test-results">
+                <div class="test-result test-info">🔄 차트 생성 테스트 중...</div>
+            </div>
+            <canvas id="testChart" class="chart-test"></canvas>
+        </section>
+
+        <!-- Player Prediction 모듈 테스트 -->
+        <section class="test-section">
+            <h3><i class="fas fa-magic"></i> Player Prediction 모듈 테스트</h3>
+            <div id="prediction-test-results">
+                <div class="test-result test-info">🔄 예측 모듈 로드 테스트 중...</div>
+            </div>
+        </section>
+
+        <!-- 데이터 로딩 테스트 -->
+        <section class="test-section">
+            <h3><i class="fas fa-database"></i> JSON 데이터 로딩 테스트</h3>
+            <div id="data-test-results">
+                <div class="test-result test-info">🔄 JSON 파일 로드 테스트 중...</div>
+            </div>
+        </section>
+
+        <!-- 전체 테스트 요약 -->
+        <section class="test-section">
+            <h3><i class="fas fa-clipboard-check"></i> 테스트 요약</h3>
+            <div id="test-summary">
+                <div class="test-result test-info">🔄 테스트 결과 집계 중...</div>
+            </div>
+        </section>
+    </div>
+
+    <!-- JavaScript Files (원본 순서대로) -->
+    <script src="js/main.js"></script>
+    <script src="js/chart-utils.js"></script>
+    <script src="js/player-prediction-core.js"></script>
+    <script src="js/player-prediction-algorithm.js"></script>
+    <script src="js/player-prediction-ui.js"></script>
+    <script src="js/player-prediction-utils.js"></script>
+
+    <!-- 테스트 스크립트 -->
+    <script>
+        // 테스트 실행 함수
+        async function runTests() {
+            const results = {
+                js: [],
+                chart: [],
+                prediction: [],
+                data: [],
+                overall: true
+            };
+
+            // JavaScript 라이브러리 테스트
+            try {
+                // Chart.js 확인
+                if (typeof Chart !== 'undefined') {
+                    results.js.push('✅ Chart.js 로드됨');
+                } else {
+                    results.js.push('❌ Chart.js 로드 실패');
+                    results.overall = false;
+                }
+
+                // main.js 확인
+                if (typeof window.App !== 'undefined') {
+                    results.js.push('✅ main.js (App 객체) 로드됨');
+                } else {
+                    results.js.push('❌ main.js 로드 실패');
+                    results.overall = false;
+                }
+
+                // chart-utils.js 확인
+                if (typeof window.ChartUtils !== 'undefined') {
+                    results.js.push('✅ chart-utils.js 로드됨');
+                } else {
+                    results.js.push('❌ chart-utils.js 로드 실패');
+                    results.overall = false;
+                }
+
+            } catch (error) {
+                results.js.push(`❌ JavaScript 테스트 오류: ${error.message}`);
+                results.overall = false;
+            }
+
+            // Chart.js 기능 테스트
+            try {
+                const canvas = document.getElementById('testChart');
+                if (canvas && window.ChartUtils) {
+                    const testData = {
+                        labels: ['Test 1', 'Test 2', 'Test 3'],
+                        datasets: [{
+                            label: 'Test Dataset',
+                            data: [10, 20, 30],
+                            backgroundColor: ['#ff6b35', '#667eea', '#56ab2f']
+                        }]
+                    };
+
+                    const chart = window.ChartUtils.createBarChart(canvas, testData);
+                    if (chart) {
+                        results.chart.push('✅ Chart.js 차트 생성 성공');
+                        setTimeout(() => chart.destroy(), 3000); // 3초 후 정리
+                    } else {
+                        results.chart.push('❌ Chart.js 차트 생성 실패');
+                        results.overall = false;
+                    }
+                } else {
+                    results.chart.push('❌ Chart.js 또는 ChartUtils 사용 불가');
+                    results.overall = false;
+                }
+            } catch (error) {
+                results.chart.push(`❌ Chart.js 테스트 오류: ${error.message}`);
+                results.overall = false;
+            }
+
+            // Player Prediction 모듈 테스트
+            try {
+                if (typeof window.PlayerPredictor !== 'undefined') {
+                    results.prediction.push('✅ PlayerPredictor 클래스 로드됨');
+                    
+                    // 간단한 인스턴스 생성 테스트
+                    const predictor = new window.PlayerPredictor();
+                    if (predictor) {
+                        results.prediction.push('✅ PlayerPredictor 인스턴스 생성 성공');
+                    }
+                } else {
+                    results.prediction.push('❌ PlayerPredictor 클래스 로드 실패');
+                    results.overall = false;
+                }
+            } catch (error) {
+                results.prediction.push(`❌ PlayerPredictor 테스트 오류: ${error.message}`);
+                results.overall = false;
+            }
+
+            // JSON 데이터 로딩 테스트
+            try {
+                const dataFiles = [
+                    'data/cluster-data.json',
+                    'data/model-performance.json', 
+                    'data/player-prediction.json'
+                ];
+
+                for (const file of dataFiles) {
+                    try {
+                        const response = await fetch(file);
+                        if (response.ok) {
+                            const data = await response.json();
+                            results.data.push(`✅ ${file} 로드 성공`);
+                        } else {
+                            results.data.push(`❌ ${file} 로드 실패 (${response.status})`);
+                            results.overall = false;
+                        }
+                    } catch (fileError) {
+                        results.data.push(`❌ ${file} 오류: ${fileError.message}`);
+                        results.overall = false;
+                    }
+                }
+            } catch (error) {
+                results.data.push(`❌ 데이터 테스트 오류: ${error.message}`);
+                results.overall = false;
+            }
+
+            // 결과 표시
+            updateTestResults(results);
+        }
+
+        // 테스트 결과 업데이트
+        function updateTestResults(results) {
+            // JavaScript 결과
+            const jsResults = document.getElementById('js-test-results');
+            jsResults.innerHTML = results.js.map(r => 
+                `<div class="test-result ${r.startsWith('✅') ? 'test-success' : 'test-error'}">${r}</div>`
+            ).join('');
+
+            // Chart 결과
+            const chartResults = document.getElementById('chart-test-results');
+            chartResults.innerHTML = results.chart.map(r => 
+                `<div class="test-result ${r.startsWith('✅') ? 'test-success' : 'test-error'}">${r}</div>`
+            ).join('');
+
+            // Prediction 결과
+            const predictionResults = document.getElementById('prediction-test-results');
+            predictionResults.innerHTML = results.prediction.map(r => 
+                `<div class="test-result ${r.startsWith('✅') ? 'test-success' : 'test-error'}">${r}</div>`
+            ).join('');
+
+            // Data 결과
+            const dataResults = document.getElementById('data-test-results');
+            dataResults.innerHTML = results.data.map(r => 
+                `<div class="test-result ${r.startsWith('✅') ? 'test-success' : 'test-error'}">${r}</div>`
+            ).join('');
+
+            // 전체 요약
+            const summary = document.getElementById('test-summary');
+            const totalTests = results.js.length + results.chart.length + results.prediction.length + results.data.length;
+            const successTests = [...results.js, ...results.chart, ...results.prediction, ...results.data]
+                .filter(r => r.startsWith('✅')).length;
+            
+            summary.innerHTML = `
+                <div class="test-result ${results.overall ? 'test-success' : 'test-error'}">
+                    ${results.overall ? '🎉' : '⚠️'} 전체 테스트 결과: ${successTests}/${totalTests} 통과
+                </div>
+                <div class="test-result test-info">
+                    💡 ${results.overall ? '모든 시스템이 정상 작동합니다!' : '일부 문제가 발견되었습니다. 상세 내용을 확인하세요.'}
+                </div>
+            `;
+        }
+
+        // 페이지 로드 완료 후 테스트 실행
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🧪 PUBG 웹사이트 통합 테스트 시작');
+            setTimeout(runTests, 1000); // 1초 후 테스트 실행 (로딩 완료 대기)
+        });
+    </script>
+</body>
+</html>

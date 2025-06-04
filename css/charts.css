@@ -5,7 +5,12 @@
     padding: 20px;
     border: 1px solid var(--border-color);
     margin-bottom: 20px;
+
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 1 / 1; /* 가로세로 비율 유지 */
 }
+
 
 .radar-chart-container h4 {
     color: var(--text-primary);

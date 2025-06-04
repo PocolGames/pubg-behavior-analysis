@@ -56,18 +56,20 @@ Object.assign(PlayerPredictor.prototype, {
     },
 
     /**
-     * 예측 알고리즘 실행 (시뮬레이션)
+     * 예측 알고리즘 실행 (실제 JSON 데이터 기반)
      */
     async runPredictionAlgorithm(formData) {
         // 시뮬레이션 지연
         await new Promise(resolve => setTimeout(resolve, 800));
 
-        // 특성 정규화 및 가중치 계산
-        const features = this.normalizeFeatures(formData);
-        const weights = this.calculateFeatureWeights();
+        // JSON 데이터 기반 특성 정규화
+        const normalizedFeatures = this.normalizeFeatures(formData);
         
-        // 각 클러스터에 대한 유사도 계산
-        const similarities = this.calculateClusterSimilarities(features, weights);
+        // 클러스터 중심점과의 거리 계산
+        const distances = this.calculateClusterDistances(normalizedFeatures);
+        
+        // 거리를 유사도로 변환
+        const similarities = this.distancesToSimilarities(distances);
         
         // 소프트맥스로 확률 변환
         const probabilities = this.softmax(similarities);
@@ -79,195 +81,310 @@ Object.assign(PlayerPredictor.prototype, {
         return {
             predictedCluster,
             confidence,
-            probabilities,
-            features,
-            analysis: this.generateAnalysis(features, predictedCluster)
+            probabilities: probabilities.map(p => p * 100), // 퍼센트로 변환
+            normalizedFeatures,
+            distances,
+            analysis: this.generateAnalysis(normalizedFeatures, predictedCluster, confidence)
         };
     },
 
     /**
-     * 특성 정규화
+     * 특성 정규화 (JSON 데이터 기반)
      */
     normalizeFeatures(formData) {
-        const normalized = {};
+        const features = this.getFeatureDefinitions();
+        const normalized = [];
         
-        // 각 특성별 정규화 (0-100 스케일)
-        normalized.combat = Math.min(100, (
-            formData.kills * 10 + 
-            formData.damageDealt * 0.05 + 
-            formData.headshotKills * 15 + 
-            formData.assists * 8
-        ) / 4);
+        features.forEach(feature => {
+            if (formData.hasOwnProperty(feature.name)) {
+                const value = formData[feature.name];
+                const range = feature.max - feature.min;
+                const normalizedValue = range > 0 ? (value - feature.min) / range : 0;
+                normalized.push(Math.max(0, Math.min(1, normalizedValue)) * 100);
+            }
+        });
         
-        normalized.movement = Math.min(100, (
-            formData.walkDistance * 0.01 + 
-            formData.rideDistance * 0.005 + 
-            formData.swimDistance * 0.1
-        ) / 3);
-        
-        normalized.survival = Math.min(100, (
-            formData.heals * 8 + 
-            formData.boosts * 10 + 
-            formData.revives * 12 +
-            (100 - formData.killPlace)
-        ) / 4);
-        
-        normalized.teamplay = Math.min(100, (
-            formData.assists * 15 + 
-            formData.revives * 20
-        ) / 2);
-        
-        normalized.weapons = Math.min(100, formData.weaponsAcquired * 10);
-        normalized.longevity = Math.min(100, formData.matchDuration * 0.05);
-        normalized.efficiency = Math.min(100, formData.longestKill * 0.1);
-        normalized.aggression = Math.min(100, formData.DBNOs * 8);
-
         return normalized;
     },
 
     /**
-     * 특성 가중치 계산 (실제 모델 중요도 기반)
+     * 클러스터 거리 계산 (실제 클러스터 중심점 사용)
      */
-    calculateFeatureWeights() {
-        if (this.isDataLoaded && this.predictionData.featureWeights) {
-            return this.predictionData.featureWeights;
-        }
+    calculateClusterDistances(normalizedFeatures) {
+        const clusterInfo = this.getClusterInfo();
+        const distances = [];
         
-        // 백업 가중치 (실제 PUBG 분석 결과 기반)
-        return {
-            combat: 0.32,      // has_kills 기반
-            movement: 0.22,    // walkDistance 기반
-            survival: 0.15,    // 생존 관련
-            teamplay: 0.10,    // assists 기반
-            weapons: 0.08,     // weaponsAcquired 기반
-            longevity: 0.05,   // 지속성
-            efficiency: 0.04,  // 효율성
-            aggression: 0.04   // 공격성
-        };
-    },
-
-    /**
-     * 클러스터 유사도 계산
-     */
-    calculateClusterSimilarities(features, weights) {
-        // 각 클러스터의 대표 특성 (실제 데이터 기반)
-        const clusterCentroids = this.getClusterCentroids();
-        const similarities = [];
-        
-        for (let i = 0; i < 8; i++) {
-            let similarity = 0;
-            const centroid = clusterCentroids[i];
-            
-            for (const [feature, weight] of Object.entries(weights)) {
-                const distance = Math.abs(features[feature] - centroid[feature]);
-                similarity += (100 - distance) * weight;
+        Object.keys(clusterInfo).forEach(clusterId => {
+            const cluster = clusterInfo[clusterId];
+            if (cluster.features) {
+                // 유클리드 거리 계산
+                let distance = 0;
+                for (let i = 0; i < normalizedFeatures.length && i < cluster.features.length; i++) {
+                    const diff = normalizedFeatures[i] - this.normalizeClusterFeature(cluster.features[i], i);
+                    distance += diff * diff;
+                }
+                distances.push(Math.sqrt(distance));
+            } else {
+                // 백업 거리 계산
+                distances.push(this.calculateFallbackDistance(normalizedFeatures, parseInt(clusterId)));
             }
-            
-            similarities.push(similarity);
-        }
+        });
         
-        return similarities;
+        return distances;
     },
 
     /**
-     * 클러스터 중심점 가져오기
+     * 클러스터 특성 정규화
      */
-    getClusterCentroids() {
-        if (this.isDataLoaded && this.predictionData.clusterCentroids) {
-            return this.predictionData.clusterCentroids;
+    normalizeClusterFeature(value, featureIndex) {
+        const features = this.getFeatureDefinitions();
+        if (featureIndex < features.length) {
+            const feature = features[featureIndex];
+            const range = feature.max - feature.min;
+            return range > 0 ? ((value - feature.min) / range) * 100 : 0;
+        }
+        return value;
+    },
+
+    /**
+     * 백업 거리 계산 (JSON 로드 실패 시)
+     */
+    calculateFallbackDistance(normalizedFeatures, clusterId) {
+        const clusterCentroids = this.getFallbackClusterCentroids();
+        const centroid = clusterCentroids[clusterId];
+        
+        if (!centroid) return 100; // 최대 거리
+        
+        let distance = 0;
+        const centroidValues = Object.values(centroid);
+        
+        for (let i = 0; i < normalizedFeatures.length && i < centroidValues.length; i++) {
+            const diff = normalizedFeatures[i] - centroidValues[i];
+            distance += diff * diff;
         }
         
-        // 백업 클러스터 중심점 (실제 PUBG 분석 결과 기반)
+        return Math.sqrt(distance);
+    },
+
+    /**
+     * 백업 클러스터 중심점
+     */
+    getFallbackClusterCentroids() {
         return {
-            0: { combat: 20, movement: 30, survival: 80, teamplay: 25, weapons: 40, longevity: 85, efficiency: 25, aggression: 15 },
-            1: { combat: 45, movement: 50, survival: 70, teamplay: 65, weapons: 60, longevity: 75, efficiency: 40, aggression: 35 },
-            2: { combat: 35, movement: 85, survival: 45, teamplay: 40, weapons: 65, longevity: 65, efficiency: 60, aggression: 30 },
-            3: { combat: 40, movement: 70, survival: 55, teamplay: 50, weapons: 70, longevity: 70, efficiency: 55, aggression: 40 },
-            4: { combat: 30, movement: 95, survival: 35, teamplay: 30, weapons: 75, longevity: 55, efficiency: 70, aggression: 25 },
-            5: { combat: 35, movement: 80, survival: 40, teamplay: 35, weapons: 85, longevity: 60, efficiency: 65, aggression: 30 },
-            6: { combat: 25, movement: 75, survival: 60, teamplay: 45, weapons: 70, longevity: 90, efficiency: 50, aggression: 20 },
-            7: { combat: 95, movement: 45, survival: 15, teamplay: 20, weapons: 80, longevity: 35, efficiency: 85, aggression: 95 }
+            0: [14.3, 40, 0.7, 15, 5.7, 3, 1.3, 5, 0, 8],      // Survivor 보수적
+            1: [55.0, 35, 4.0, 30, 9.5, 5.9, 6.9, 12, 20, 12], // Survivor 적극적
+            2: [165.9, 25, 14.0, 45, 14.2, 10, 19.6, 18, 80, 15], // Explorer 활발한
+            3: [165.9, 30, 14.0, 45, 14.2, 10, 19.6, 20, 60, 13], // Explorer 균형형
+            4: [165.9, 20, 14.0, 50, 14.2, 10, 19.6, 25, 120, 18], // Explorer 극한
+            5: [165.9, 22, 14.0, 60, 14.2, 10, 19.6, 22, 90, 14], // Explorer 전술적
+            6: [165.9, 28, 14.0, 48, 14.2, 10, 19.6, 19, 70, 16], // Explorer 지구력
+            7: [264.5, 15, 30.6, 80, 25.9, 20.6, 31.7, 35, 150, 25] // Aggressive
         };
     },
 
     /**
-     * 소프트맥스 함수
+     * 거리를 유사도로 변환
      */
-    softmax(similarities) {
-        const max = Math.max(...similarities);
-        const exponentials = similarities.map(x => Math.exp(x - max));
+    distancesToSimilarities(distances) {
+        const maxDistance = Math.max(...distances);
+        if (maxDistance === 0) {
+            return Array(distances.length).fill(1);
+        }
+        
+        // 거리가 작을수록 유사도가 높음
+        return distances.map(distance => 1 / (1 + distance));
+    },
+
+    /**
+     * 소프트맥스 함수 (확률 분포 생성)
+     */
+    softmax(similarities, temperature = 2.0) {
+        const adjustedSimilarities = similarities.map(s => s * temperature);
+        const max = Math.max(...adjustedSimilarities);
+        const exponentials = adjustedSimilarities.map(x => Math.exp(x - max));
         const sum = exponentials.reduce((a, b) => a + b, 0);
         return exponentials.map(x => x / sum);
     },
 
     /**
-     * 분석 결과 생성
+     * 분석 결과 생성 (JSON 데이터 기반)
      */
-    generateAnalysis(features, predictedCluster) {
-        const sortedFeatures = Object.entries(features)
-            .sort(([,a], [,b]) => b - a)
-            .map(([key]) => key);
-
-        const featureNames = {
-            combat: '전투력',
-            movement: '이동성',
-            survival: '생존력',
-            teamplay: '팀플레이',
-            weapons: '무기 활용',
-            longevity: '지속성',
-            efficiency: '효율성',
-            aggression: '공격성'
-        };
-
-        const playStyles = {
-            0: '매우 보수적', 1: '균형잡힌', 2: '탐험적', 3: '전략적',
-            4: '모험적', 5: '계획적', 6: '인내심 있는', 7: '극도로 공격적'
-        };
-
+    generateAnalysis(normalizedFeatures, predictedCluster, confidence) {
+        const features = this.getFeatureDefinitions();
         const clusterInfo = this.getClusterInfo();
+        
+        // 가장 강한 특성 찾기
+        const maxFeatureIndex = normalizedFeatures.indexOf(Math.max(...normalizedFeatures));
+        const strongestFeature = features[maxFeatureIndex] ? features[maxFeatureIndex].displayName : '알 수 없음';
+        
+        // 플레이 스타일 결정
+        const playStyles = {
+            0: '매우 신중하고 안전 지향적',
+            1: '균형잡힌 생존 중심',
+            2: '활발한 탐험형',
+            3: '전략적 탐험형',
+            4: '극도로 모험적',
+            5: '계획적 전술형',
+            6: '지구력 기반 지속형',
+            7: '극도로 공격적'
+        };
 
+        // 신뢰도 레벨 결정
+        const confidenceLevel = this.getConfidenceLevel(confidence);
+        
         return {
-            strongestFeature: featureNames[sortedFeatures[0]],
-            playStyle: playStyles[predictedCluster],
-            similarPlayers: clusterInfo[predictedCluster].percentage.toFixed(1) + '%'
+            strongestFeature,
+            playStyle: playStyles[predictedCluster] || '분석 중',
+            similarPlayers: clusterInfo[predictedCluster] ? clusterInfo[predictedCluster].percentage.toFixed(1) + '%' : '알 수 없음',
+            confidenceLevel,
+            recommendedActions: this.getRecommendedActions(predictedCluster),
+            technicalInsights: this.getTechnicalInsights(normalizedFeatures, predictedCluster)
         };
     },
 
     /**
-     * 폼 데이터 가져오기
+     * 신뢰도 레벨 결정
+     */
+    getConfidenceLevel(confidence) {
+        if (this.isDataLoaded && this.predictionData.predictionThresholds) {
+            const thresholds = this.predictionData.predictionThresholds;
+            if (confidence >= thresholds.highConfidence * 100) return 'high';
+            if (confidence >= thresholds.mediumConfidence * 100) return 'medium';
+            return 'low';
+        }
+        
+        if (confidence >= 80) return 'high';
+        if (confidence >= 60) return 'medium';
+        return 'low';
+    },
+
+    /**
+     * 추천 액션 생성
+     */
+    getRecommendedActions(clusterId) {
+        const recommendations = {
+            0: ['안전한 지역 선택', '생존 아이템 우선 수집', '후반 플레이 집중'],
+            1: ['균형잡힌 루팅', '적절한 교전 참여', '팀원과의 협력'],
+            2: ['맵 전체 탐험', '빠른 이동', '다양한 지역 경험'],
+            3: ['전략적 위치 선점', '계획적 이동', '상황 판단력 활용'],
+            4: ['고위험 지역 도전', '빠른 결정', '극한 상황 대응'],
+            5: ['무기 수집 최적화', '전술적 교전', '계획적 플레이'],
+            6: ['장기전 준비', '지속적 생존', '인내심 있는 플레이'],
+            7: ['적극적 교전', '킬 수 증대', '고위험 고수익 플레이']
+        };
+        
+        return recommendations[clusterId] || ['일반적인 플레이'];
+    },
+
+    /**
+     * 기술적 인사이트 생성
+     */
+    getTechnicalInsights(normalizedFeatures, clusterId) {
+        const features = this.getFeatureDefinitions();
+        const insights = [];
+        
+        // 특성별 강도 분석
+        normalizedFeatures.forEach((value, index) => {
+            if (features[index] && value > 70) {
+                insights.push(`${features[index].displayName} 특성이 매우 강함 (${value.toFixed(1)}%)`);
+            }
+        });
+        
+        // 클러스터 특성 분석
+        const clusterInfo = this.getClusterInfo();
+        if (clusterInfo[clusterId]) {
+            insights.push(`${clusterInfo[clusterId].name} 유형과 매칭`);
+            insights.push(`전체 플레이어 중 ${clusterInfo[clusterId].percentage}% 비율`);
+        }
+        
+        return insights.length > 0 ? insights : ['표준적인 플레이어 특성'];
+    },
+
+    /**
+     * 폼 데이터 가져오기 (JSON 특성 정의 기반)
      */
     getFormData() {
         const form = document.getElementById('playerForm');
         if (!form) return {};
         
-        const formData = new FormData(form);
+        const features = this.getFeatureDefinitions();
         const data = {};
         
-        for (let [key, value] of formData.entries()) {
-            data[key] = parseFloat(value) || 0;
-        }
+        features.forEach(feature => {
+            const input = form.querySelector(`input[name="${feature.name}"]`);
+            if (input) {
+                data[feature.name] = parseFloat(input.value) || 0;
+            }
+        });
         
         return data;
     },
 
     /**
-     * 모든 입력 검증
+     * 모든 입력 검증 (JSON 검증 규칙 적용)
      */
     validateAllInputs(formData) {
-        const inputs = document.querySelectorAll('#playerForm input[type="number"]');
+        const features = this.getFeatureDefinitions();
         let isValid = true;
         
-        inputs.forEach(input => {
-            if (!this.validateInput(input)) {
+        features.forEach(feature => {
+            const input = document.querySelector(`input[name="${feature.name}"]`);
+            if (input && !this.validateInput(input)) {
                 isValid = false;
             }
         });
+        
+        // JSON 논리적 검증 규칙 적용
+        if (this.isDataLoaded && this.predictionData.validationRules) {
+            isValid = isValid && this.validateLogicalRules(formData);
+        }
         
         return isValid;
     },
 
     /**
-     * 개별 입력 검증
+     * 논리적 검증 규칙 적용
+     */
+    validateLogicalRules(formData) {
+        if (!this.isDataLoaded) return true;
+        
+        let isValid = true;
+        const rules = this.predictionData.validationRules;
+        
+        // 킬 수 > 0이면 데미지 > 0
+        if (formData.kills > 0 && formData.damageDealt <= 0) {
+            this.showValidationError('킬이 있으면 데미지도 있어야 합니다.');
+            isValid = false;
+        }
+        
+        // 극도로 높은 이동 거리는 생존 시간과 연관
+        if (formData.walkDistance > 5000 && formData.matchDuration < 1000) {
+            this.showValidationError('높은 이동 거리는 충분한 게임 시간이 필요합니다.');
+            isValid = false;
+        }
+        
+        // 많은 무기 획득은 최소한의 활동 필요
+        if (formData.weaponsAcquired > 10 && formData.walkDistance < 500) {
+            this.showValidationError('많은 무기 획득은 충분한 활동이 필요합니다.');
+            isValid = false;
+        }
+        
+        return isValid;
+    },
+
+    /**
+     * 검증 오류 표시
+     */
+    showValidationError(message) {
+        if (window.App && window.App.showNotification) {
+            window.App.showNotification(message, 'warning');
+        } else {
+            console.warn('검증 오류:', message);
+        }
+    },
+
+    /**
+     * 개별 입력 검증 (JSON 제약 조건 적용)
      */
     validateInput(input) {
         const value = parseFloat(input.value);

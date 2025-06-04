@@ -90,8 +90,22 @@ ChartUtils.getBaseOptions = function(customOptions = {}) {
 };
 
 // ==================== 도넛 차트 생성 ====================
-ChartUtils.createDonutChart = function(canvasId, data, options = {}) {
-    const canvas = document.getElementById(canvasId);
+ChartUtils.createDonutChart = function(canvasIdOrElement, data, options = {}) {
+    // Canvas 요소 또는 ID 문자열 모두 처리
+    let canvas;
+    let canvasId;
+    
+    if (typeof canvasIdOrElement === 'string') {
+        canvas = document.getElementById(canvasIdOrElement);
+        canvasId = canvasIdOrElement;
+    } else if (canvasIdOrElement instanceof HTMLCanvasElement) {
+        canvas = canvasIdOrElement;
+        canvasId = canvas.id || 'chart_' + Math.random().toString(36).substr(2, 9);
+    } else {
+        console.error('Invalid canvas parameter:', canvasIdOrElement);
+        return null;
+    }
+    
     if (!canvas) {
         console.error(`Canvas with id '${canvasId}' not found`);
         return null;
@@ -159,8 +173,22 @@ ChartUtils.createDonutChart = function(canvasId, data, options = {}) {
 };
 
 // ==================== 레이더 차트 생성 ====================
-ChartUtils.createRadarChart = function(canvasId, data, options = {}) {
-    const canvas = document.getElementById(canvasId);
+ChartUtils.createRadarChart = function(canvasIdOrElement, data, options = {}) {
+    // Canvas 요소 또는 ID 문자열 모두 처리
+    let canvas;
+    let canvasId;
+    
+    if (typeof canvasIdOrElement === 'string') {
+        canvas = document.getElementById(canvasIdOrElement);
+        canvasId = canvasIdOrElement;
+    } else if (canvasIdOrElement instanceof HTMLCanvasElement) {
+        canvas = canvasIdOrElement;
+        canvasId = canvas.id || 'chart_' + Math.random().toString(36).substr(2, 9);
+    } else {
+        console.error('Invalid canvas parameter:', canvasIdOrElement);
+        return null;
+    }
+    
     if (!canvas) {
         console.error(`Canvas with id '${canvasId}' not found`);
         return null;
@@ -223,8 +251,22 @@ ChartUtils.createRadarChart = function(canvasId, data, options = {}) {
 };
 
 // ==================== 바 차트 생성 ====================
-ChartUtils.createBarChart = function(canvasId, data, options = {}) {
-    const canvas = document.getElementById(canvasId);
+ChartUtils.createBarChart = function(canvasIdOrElement, data, options = {}) {
+    // Canvas 요소 또는 ID 문자열 모두 처리
+    let canvas;
+    let canvasId;
+    
+    if (typeof canvasIdOrElement === 'string') {
+        canvas = document.getElementById(canvasIdOrElement);
+        canvasId = canvasIdOrElement;
+    } else if (canvasIdOrElement instanceof HTMLCanvasElement) {
+        canvas = canvasIdOrElement;
+        canvasId = canvas.id || 'chart_' + Math.random().toString(36).substr(2, 9);
+    } else {
+        console.error('Invalid canvas parameter:', canvasIdOrElement);
+        return null;
+    }
+    
     if (!canvas) {
         console.error(`Canvas with id '${canvasId}' not found`);
         return null;
@@ -286,8 +328,22 @@ ChartUtils.createBarChart = function(canvasId, data, options = {}) {
 };
 
 // ==================== 라인 차트 생성 ====================
-ChartUtils.createLineChart = function(canvasId, data, options = {}) {
-    const canvas = document.getElementById(canvasId);
+ChartUtils.createLineChart = function(canvasIdOrElement, data, options = {}) {
+    // Canvas 요소 또는 ID 문자열 모두 처리
+    let canvas;
+    let canvasId;
+    
+    if (typeof canvasIdOrElement === 'string') {
+        canvas = document.getElementById(canvasIdOrElement);
+        canvasId = canvasIdOrElement;
+    } else if (canvasIdOrElement instanceof HTMLCanvasElement) {
+        canvas = canvasIdOrElement;
+        canvasId = canvas.id || 'chart_' + Math.random().toString(36).substr(2, 9);
+    } else {
+        console.error('Invalid canvas parameter:', canvasIdOrElement);
+        return null;
+    }
+    
     if (!canvas) {
         console.error(`Canvas with id '${canvasId}' not found`);
         return null;

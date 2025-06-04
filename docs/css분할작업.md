@@ -32,11 +32,27 @@
    - `helpers.css` - 헬퍼 클래스
    - `responsive.css` - 반응형
 
-**dashboard.css 파일부터 분할을 시작하겠습니다. 이 파일이 가장 크고 여러 기능이 섞여있어 분할이 필요합니다.**
+---
 
-어떤 방식으로 진행하시겠습니까?
-1. dashboard.css를 먼저 기능별로 분할
-2. 전체 CSS 구조를 새롭게 재편성
-3. 특정 파일만 선택해서 분할
+## 현재 상황 설명:
 
-어떤 방향으로 진행하시길 원하시나요?
+### 🔄 **분할한 것 (base 스타일들)**
+- CSS Reset, 기본 설정 → `base/reset.css`
+- CSS 변수, 색상 정의 → `base/variables.css` 
+- 폰트, 타이포그래피 → `base/typography.css`
+
+### 🎯 **main.css에 남아있는 것들 (여전히 필요)**
+- 버튼 스타일 (`.btn`, `.btn-primary` 등)
+- 헤더 스타일 (`.main-header`, `.nav-link` 등)
+- 히어로 섹션 (`.hero-section`, `.hero-title` 등)
+- 카드 스타일 (`.card-base` 등)
+- 푸터 스타일 (`.main-footer` 등)
+- 유틸리티 클래스들
+
+### 📋 **앞으로 할 작업**
+다음 단계에서 `main.css`의 나머지 스타일들도 분할할 예정입니다:
+- `layout/header.css`, `layout/footer.css`
+- `components/buttons.css`, `components/cards.css`
+- `utilities/helpers.css`
+
+다음 단계로 `layout/` 폴더를 만들어서 헤더/푸터를 분리하시겠습니까?

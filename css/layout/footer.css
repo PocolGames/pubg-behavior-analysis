@@ -1,0 +1,62 @@
+/* ===== Footer Layout Styles ===== */
+
+/* Main Footer */
+.main-footer {
+    background: var(--bg-footer);
+    border-top: 1px solid var(--border-light);
+    padding: var(--footer-padding);
+    margin-top: var(--footer-margin-top);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-xl);
+}
+
+/* Footer Info Section */
+.footer-info h5 {
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.footer-info p {
+    color: var(--text-dark);
+    font-size: var(--font-size-sm);
+}
+
+/* Footer Stats */
+.footer-stats {
+    display: flex;
+    gap: var(--spacing-xl);
+}
+
+.footer-stat {
+    text-align: center;
+}
+
+.footer-stat .stat-label {
+    display: block;
+    color: var(--text-dark);
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--spacing-xs);
+}
+
+.footer-stat .stat-value {
+    color: var(--text-primary);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-stats {
+        justify-content: center;
+    }
+}

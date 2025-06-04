@@ -1,0 +1,241 @@
+/* ===== PUBG 플레이어 행동 분석 - CSS Variables ===== */
+
+:root {
+    /* ===== 색상 시스템 ===== */
+    
+    /* Primary Colors */
+    --color-primary: #ff6b35;
+    --color-primary-dark: #e55a2b;
+    --color-primary-light: #ff8252;
+    --color-secondary: #667eea;
+    --color-secondary-dark: #5a6fd8;
+    --color-secondary-light: #7d8ff0;
+    
+    /* Success & Status Colors */
+    --color-success: #56ab2f;
+    --color-success-light: #a8e6cf;
+    --color-warning: #f7931e;
+    --color-error: #e74c3c;
+    --color-info: #3498db;
+    
+    /* Background Colors */
+    --bg-primary: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+    --bg-card: rgba(255, 255, 255, 0.05);
+    --bg-card-hover: rgba(255, 255, 255, 0.08);
+    --bg-header: rgba(0, 0, 0, 0.95);
+    --bg-footer: rgba(0, 0, 0, 0.8);
+    --bg-overlay: rgba(0, 0, 0, 0.7);
+    
+    /* Text Colors */
+    --text-primary: #ffffff;
+    --text-secondary: #e0e0e0;
+    --text-muted: #b0b0b0;
+    --text-light: #c0c0c0;
+    --text-dark: #888888;
+    
+    /* Border Colors */
+    --border-light: rgba(255, 255, 255, 0.1);
+    --border-primary: rgba(255, 107, 53, 0.3);
+    --border-secondary: rgba(102, 126, 234, 0.3);
+    
+    /* ===== 그라디언트 ===== */
+    --gradient-primary: linear-gradient(45deg, #ff6b35, #f7931e);
+    --gradient-secondary: linear-gradient(45deg, #667eea, #764ba2);
+    --gradient-success: linear-gradient(45deg, #56ab2f, #a8e6cf);
+    --gradient-hero: linear-gradient(45deg, #ffffff, #ff6b35, #667eea);
+    --gradient-card-shine: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    
+    /* Hero Background */
+    --gradient-hero-bg: 
+        radial-gradient(circle at 20% 80%, rgba(120, 255, 214, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.1) 0%, transparent 50%);
+    
+    /* ===== 그림자 ===== */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 6px 20px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 10px 30px rgba(0, 0, 0, 0.4);
+    
+    /* Button Shadows */
+    --shadow-btn-primary: 0 4px 15px rgba(255, 107, 53, 0.3);
+    --shadow-btn-primary-hover: 0 6px 20px rgba(255, 107, 53, 0.4);
+    --shadow-btn-secondary: 0 4px 15px rgba(102, 126, 234, 0.3);
+    --shadow-btn-secondary-hover: 0 6px 20px rgba(102, 126, 234, 0.4);
+    --shadow-btn-success: 0 4px 15px rgba(86, 171, 47, 0.3);
+    --shadow-btn-success-hover: 0 6px 20px rgba(86, 171, 47, 0.4);
+    
+    /* ===== 타이포그래피 ===== */
+    
+    /* Font Families */
+    --font-primary: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'Fira Code', 'Monaco', 'Consolas', monospace;
+    
+    /* Font Sizes */
+    --font-size-xs: 0.75rem;    /* 12px */
+    --font-size-sm: 0.875rem;   /* 14px */
+    --font-size-base: 1rem;     /* 16px */
+    --font-size-lg: 1.125rem;   /* 18px */
+    --font-size-xl: 1.25rem;    /* 20px */
+    --font-size-2xl: 1.5rem;    /* 24px */
+    --font-size-3xl: 1.875rem;  /* 30px */
+    --font-size-4xl: 2.25rem;   /* 36px */
+    --font-size-5xl: 3rem;      /* 48px */
+    
+    /* Heading Sizes */
+    --font-h1: 2.5rem;
+    --font-h2: 2.2rem;
+    --font-h3: 1.8rem;
+    --font-h4: 1.4rem;
+    --font-h5: 1.2rem;
+    --font-h6: 1rem;
+    
+    /* Font Weights */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+    
+    /* Line Heights */
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.6;
+    --line-height-loose: 2;
+    
+    /* ===== 스페이싱 ===== */
+    --spacing-xs: 0.25rem;   /* 4px */
+    --spacing-sm: 0.5rem;    /* 8px */
+    --spacing-md: 1rem;      /* 16px */
+    --spacing-lg: 1.5rem;    /* 24px */
+    --spacing-xl: 2rem;      /* 32px */
+    --spacing-2xl: 2.5rem;   /* 40px */
+    --spacing-3xl: 3rem;     /* 48px */
+    --spacing-4xl: 4rem;     /* 64px */
+    --spacing-5xl: 5rem;     /* 80px */
+    
+    /* ===== 레이아웃 ===== */
+    
+    /* Container */
+    --container-max-width: 1200px;
+    --container-padding: 20px;
+    --container-padding-mobile: 15px;
+    
+    /* Border Radius */
+    --border-radius-sm: 4px;
+    --border-radius-md: 6px;
+    --border-radius-lg: 8px;
+    --border-radius-xl: 12px;
+    --border-radius-2xl: 16px;
+    --border-radius-full: 50%;
+    
+    /* Z-index */
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-tooltip: 1070;
+    
+    /* ===== 트랜지션 ===== */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    --transition-slower: 0.75s ease;
+    
+    /* Common Transitions */
+    --transition-all: all 0.3s ease;
+    --transition-colors: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    --transition-transform: transform 0.3s ease;
+    --transition-opacity: opacity 0.3s ease;
+    
+    /* ===== 반응형 브레이크포인트 ===== */
+    --breakpoint-xs: 320px;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --breakpoint-2xl: 1400px;
+    
+    /* ===== 효과 ===== */
+    
+    /* Backdrop Filter */
+    --backdrop-blur-sm: blur(4px);
+    --backdrop-blur-md: blur(8px);
+    --backdrop-blur-lg: blur(10px);
+    --backdrop-blur-xl: blur(16px);
+    
+    /* Animation Duration */
+    --animation-fast: 0.2s;
+    --animation-normal: 0.5s;
+    --animation-slow: 1s;
+    --animation-slower: 2s;
+    
+    /* ===== 컴포넌트별 변수 ===== */
+    
+    /* Button */
+    --btn-padding-sm: 8px 16px;
+    --btn-padding-md: 12px 24px;
+    --btn-padding-lg: 16px 32px;
+    --btn-font-size: 0.9rem;
+    --btn-border-radius: var(--border-radius-lg);
+    
+    /* Card */
+    --card-padding: 1.5rem;
+    --card-border-radius: var(--border-radius-2xl);
+    --card-border: 1px solid var(--border-light);
+    
+    /* Header */
+    --header-height: 80px;
+    --header-padding: 1rem 0;
+    
+    /* Navigation */
+    --nav-gap: 2rem;
+    --nav-gap-mobile: 1rem;
+    --nav-link-padding: 0.5rem 1rem;
+    
+    /* Hero Section */
+    --hero-padding: 80px 0;
+    --hero-title-size: 3.2rem;
+    --hero-title-size-mobile: 2.5rem;
+    --hero-title-size-small: 2rem;
+    
+    /* Dashboard */
+    --dashboard-padding: 60px 0;
+    --section-title-margin: 3rem;
+    
+    /* Footer */
+    --footer-padding: 2rem 0;
+    --footer-margin-top: 4rem;
+}
+
+/* ===== 다크 테마 변수 (선택적) ===== */
+[data-theme="dark"] {
+    /* 다크 테마 전용 색상 오버라이드 */
+    --bg-primary: linear-gradient(135deg, #000000 0%, #111111 50%, #222222 100%);
+    --text-secondary: #cccccc;
+    --text-muted: #999999;
+}
+
+/* ===== 모바일 전용 변수 ===== */
+@media (max-width: 768px) {
+    :root {
+        --container-padding: var(--container-padding-mobile);
+        --nav-gap: var(--nav-gap-mobile);
+        --hero-title-size: var(--hero-title-size-mobile);
+        --font-h1: 2rem;
+        --font-h2: 1.8rem;
+        --font-h3: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --hero-title-size: var(--hero-title-size-small);
+        --font-h1: 1.8rem;
+        --font-h2: 1.6rem;
+        --font-h3: 1.4rem;
+        --card-padding: 1rem;
+    }
+}

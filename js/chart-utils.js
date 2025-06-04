@@ -1,5 +1,5 @@
 /**
- * PUBG 플레이어 행동 분석 웹사이트 - Chart.js 유틸리티
+ * PUBG 플레이어 행동 분석 웹사이트 - Chart.js 유틸리티 (수정된 버전)
  * Chart.js 기반 차트 생성 및 관리 함수들
  */
 
@@ -512,9 +512,15 @@ ChartUtils.createFeatureImportanceChart = function(canvasId, featuresData) {
 // ==================== 색상 유틸리티 ====================
 ChartUtils.getPlayerTypeColor = function(type) {
     if (typeof type === 'string') {
-        if (type.includes('Survivor')) return this.playerTypeColors.Survivor;
-        if (type.includes('Explorer')) return this.playerTypeColors.Explorer;
-        if (type.includes('Aggressive')) return this.playerTypeColors.Aggressive;
+        if (type.includes('Survivor')) {
+            return this.playerTypeColors.Survivor;
+        }
+        if (type.includes('Explorer')) {
+            return this.playerTypeColors.Explorer;
+        }
+        if (type.includes('Aggressive')) {
+            return this.playerTypeColors.Aggressive;
+        }
     }
     return this.defaultColors.primary;
 };

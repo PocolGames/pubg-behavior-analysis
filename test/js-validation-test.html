@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript 실행 오류 검증 테스트</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .test-result {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .status-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .success { background: #22c55e; }
+        .error { background: #ef4444; }
+        .warning { background: #f59e0b; }
+        
+        .error-details {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .console-output {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #22c55e, #16a34a);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 JavaScript 실행 오류 검증 테스트</h1>
+            <p>PUBG 플레이어 행동 분석 웹사이트의 JavaScript 파일들을 검증합니다.</p>
+        </div>
+        
+        <div class="test-section">
+            <h2>📋 테스트 진행 상황</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div id="progressText">준비 중...</div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🧪 JavaScript 파일 검증 결과</h2>
+            <button class="btn" onclick="startValidation()">테스트 시작</button>
+            <button class="btn" onclick="clearResults()">결과 지우기</button>
+            <div id="testResults"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📊 콘솔 출력</h2>
+            <div id="consoleOutput" class="console-output"></div>
+        </div>
+    </div>
+
+    <script>
+        // 전역 변수
+        let testProgress = 0;
+        let totalTests = 0;
+        let testResults = [];
+        
+        // JavaScript 파일 목록
+        const jsFiles = [
+            '../js/main.js',
+            '../js/chart-utils.js',
+            '../js/cluster-analysis.js',
+            '../js/model-dashboard.js',
+            '../js/player-prediction-algorithm.js',
+            '../js/player-prediction-core.js',
+            '../js/player-prediction-ui.js',
+            '../js/player-prediction-utils.js'
+        ];
+        
+        // 콘솔 출력 캡처
+        const originalConsole = {
+            log: console.log,
+            error: console.error,
+            warn: console.warn,
+            info: console.info
+        };
+        
+        function captureConsole() {
+            const output = document.getElementById('consoleOutput');
+            
+            console.log = function(...args) {
+                originalConsole.log(...args);
+                appendToConsole('LOG', args.join(' '), '#22c55e');
+            };
+            
+            console.error = function(...args) {
+                originalConsole.error(...args);
+                appendToConsole('ERROR', args.join(' '), '#ef4444');
+            };
+            
+            console.warn = function(...args) {
+                originalConsole.warn(...args);
+                appendToConsole('WARN', args.join(' '), '#f59e0b');
+            };
+            
+            console.info = function(...args) {
+                originalConsole.info(...args);
+                appendToConsole('INFO', args.join(' '), '#3b82f6');
+            };
+        }
+        
+        function appendToConsole(type, message, color) {
+            const output = document.getElementById('consoleOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `<span style="color: ${color}">[${timestamp}] ${type}:</span> ${message}`;
+            output.appendChild(logEntry);
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        // 테스트 시작
+        async function startValidation() {
+            console.log('🚀 JavaScript 검증 테스트 시작');
+            
+            testProgress = 0;
+            totalTests = jsFiles.length;
+            testResults = [];
+            
+            document.getElementById('testResults').innerHTML = '';
+            document.getElementById('consoleOutput').innerHTML = '';
+            
+            captureConsole();
+            
+            for (let i = 0; i < jsFiles.length; i++) {
+                const fileName = jsFiles[i];
+                await validateJSFile(fileName);
+                
+                testProgress++;
+                updateProgress();
+                
+                // 각 테스트 간격
+                await sleep(500);
+            }
+            
+            showSummary();
+            console.log('✅ 모든 JavaScript 검증 완료');
+        }
+        
+        // JavaScript 파일 검증
+        async function validateJSFile(fileName) {
+            const testResult = {
+                file: fileName,
+                status: 'unknown',
+                errors: [],
+                warnings: [],
+                loadTime: 0
+            };
+            
+            console.log(`📁 검증 중: ${fileName}`);
+            
+            try {
+                const startTime = performance.now();
+                
+                // 파일 로드 시도
+                await loadScript(fileName);
+                
+                const endTime = performance.now();
+                testResult.loadTime = Math.round(endTime - startTime);
+                testResult.status = 'success';
+                
+                console.log(`✅ ${fileName} 로드 성공 (${testResult.loadTime}ms)`);
+                
+            } catch (error) {
+                testResult.status = 'error';
+                testResult.errors.push(error.message);
+                
+                console.error(`❌ ${fileName} 로드 실패:`, error.message);
+            }
+            
+            // 구문 오류 체크
+            await checkSyntaxErrors(fileName, testResult);
+            
+            // 결과 표시
+            displayTestResult(testResult);
+            testResults.push(testResult);
+        }
+        
+        // 스크립트 로드
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                // 기존 스크립트 태그 제거
+                const existingScript = document.querySelector(`script[src="${src}"]`);
+                if (existingScript) {
+                    existingScript.remove();
+                }
+                
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = resolve;
+                script.onerror = () => reject(new Error(`파일을 찾을 수 없습니다: ${src}`));
+                
+                // 에러 캐치
+                window.addEventListener('error', function(e) {
+                    if (e.filename && e.filename.includes(src)) {
+                        reject(new Error(`구문 오류: ${e.message} (라인 ${e.lineno})`));
+                    }
+                });
+                
+                document.head.appendChild(script);
+            });
+        }
+        
+        // 구문 오류 체크
+        async function checkSyntaxErrors(fileName, testResult) {
+            try {
+                // fetch로 파일 내용 가져오기
+                const response = await fetch(fileName);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: 파일을 가져올 수 없습니다`);
+                }
+                
+                const content = await response.text();
+                
+                // 기본적인 구문 검사
+                checkBasicSyntax(content, testResult);
+                
+            } catch (error) {
+                testResult.warnings.push(`파일 내용 검사 실패: ${error.message}`);
+            }
+        }
+        
+        // 기본 구문 검사
+        function checkBasicSyntax(content, testResult) {
+            // 중괄호 매칭
+            const openBraces = (content.match(/\{/g) || []).length;
+            const closeBraces = (content.match(/\}/g) || []).length;
+            
+            if (openBraces !== closeBraces) {
+                testResult.errors.push(`중괄호 불일치: 열림 ${openBraces}개, 닫힘 ${closeBraces}개`);
+            }
+            
+            // 소괄호 매칭
+            const openParens = (content.match(/\(/g) || []).length;
+            const closeParens = (content.match(/\)/g) || []).length;
+            
+            if (openParens !== closeParens) {
+                testResult.errors.push(`소괄호 불일치: 열림 ${openParens}개, 닫힘 ${closeParens}개`);
+            }
+            
+            // 대괄호 매칭
+            const openBrackets = (content.match(/\[/g) || []).length;
+            const closeBrackets = (content.match(/\]/g) || []).length;
+            
+            if (openBrackets !== closeBrackets) {
+                testResult.errors.push(`대괄호 불일치: 열림 ${openBrackets}개, 닫힘 ${closeBrackets}개`);
+            }
+            
+            // 기본적인 키워드 체크
+            const commonErrors = [
+                { pattern: /console\.log\s*\([^)]*\)\s*(?!;)/g, message: 'console.log 세미콜론 누락 가능성' },
+                { pattern: /function\s+\w+\s*\([^)]*\)\s*(?!{)/g, message: '함수 정의에서 중괄호 누락 가능성' },
+                { pattern: /if\s*\([^)]*\)\s*(?!{)/g, message: 'if문에서 중괄호 누락 가능성' }
+            ];
+            
+            commonErrors.forEach(errorCheck => {
+                const matches = content.match(errorCheck.pattern);
+                if (matches && matches.length > 0) {
+                    testResult.warnings.push(`${errorCheck.message} (${matches.length}건 발견)`);
+                }
+            });
+        }
+        
+        // 테스트 결과 표시
+        function displayTestResult(result) {
+            const resultsContainer = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = 'test-result';
+            
+            let statusClass = result.status;
+            if (result.errors.length > 0) statusClass = 'error';
+            else if (result.warnings.length > 0) statusClass = 'warning';
+            
+            let statusIcon = '';
+            if (statusClass === 'success') statusIcon = '✅';
+            else if (statusClass === 'error') statusIcon = '❌';
+            else if (statusClass === 'warning') statusIcon = '⚠️';
+            
+            resultDiv.innerHTML = `
+                <div class="status-icon ${statusClass}"></div>
+                <div style="flex: 1;">
+                    <strong>${statusIcon} ${result.file}</strong>
+                    <div style="font-size: 0.9em; opacity: 0.8;">
+                        로드 시간: ${result.loadTime}ms | 
+                        오류: ${result.errors.length}개 | 
+                        경고: ${result.warnings.length}개
+                    </div>
+                </div>
+            `;
+            
+            if (result.errors.length > 0 || result.warnings.length > 0) {
+                const detailsDiv = document.createElement('div');
+                detailsDiv.className = 'error-details';
+                
+                let details = '';
+                if (result.errors.length > 0) {
+                    details += '<strong>오류:</strong><br>' + result.errors.join('<br>') + '<br><br>';
+                }
+                if (result.warnings.length > 0) {
+                    details += '<strong>경고:</strong><br>' + result.warnings.join('<br>');
+                }
+                
+                detailsDiv.innerHTML = details;
+                resultDiv.appendChild(detailsDiv);
+            }
+            
+            resultsContainer.appendChild(resultDiv);
+        }
+        
+        // 진행률 업데이트
+        function updateProgress() {
+            const percentage = (testProgress / totalTests) * 100;
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = 
+                `진행률: ${testProgress}/${totalTests} (${Math.round(percentage)}%)`;
+        }
+        
+        // 요약 표시
+        function showSummary() {
+            const successCount = testResults.filter(r => r.status === 'success' && r.errors.length === 0).length;
+            const errorCount = testResults.filter(r => r.errors.length > 0).length;
+            const warningCount = testResults.filter(r => r.warnings.length > 0 && r.errors.length === 0).length;
+            
+            console.log('📊 검증 결과 요약:');
+            console.log(`✅ 성공: ${successCount}개`);
+            console.log(`❌ 오류: ${errorCount}개`);
+            console.log(`⚠️ 경고: ${warningCount}개`);
+            
+            const resultsContainer = document.getElementById('testResults');
+            const summaryDiv = document.createElement('div');
+            summaryDiv.style.cssText = 'margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px;';
+            summaryDiv.innerHTML = `
+                <h3>📊 검증 결과 요약</h3>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div>✅ 성공: <strong>${successCount}개</strong></div>
+                    <div>❌ 오류: <strong>${errorCount}개</strong></div>
+                    <div>⚠️ 경고: <strong>${warningCount}개</strong></div>
+                </div>
+            `;
+            resultsContainer.appendChild(summaryDiv);
+        }
+        
+        // 결과 지우기
+        function clearResults() {
+            document.getElementById('testResults').innerHTML = '';
+            document.getElementById('consoleOutput').innerHTML = '';
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('progressText').textContent = '준비 중...';
+            testProgress = 0;
+            testResults = [];
+        }
+        
+        // 유틸리티 함수
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 JavaScript 검증 테스트 도구가 준비되었습니다.');
+            console.log('📋 검증할 파일 목록:', jsFiles);
+        });
+    </script>
+</body>
+</html>

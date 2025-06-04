@@ -34,6 +34,15 @@
 
 ---
 
+## base 분리
+
+✅ 완료된 작업:
+css/base/variables.css - CSS 변수 정의 (색상, 폰트, 스페이싱 등)
+css/base/reset.css - CSS 리셋 및 기본 설정
+css/base/typography.css - 폰트 및 텍스트 스타일
+
+---
+
 ## 현재 상황 설명:
 
 ### 🔄 **분할한 것 (base 스타일들)**
@@ -56,3 +65,20 @@
 - `utilities/helpers.css`
 
 다음 단계로 `layout/` 폴더를 만들어서 헤더/푸터를 분리하시겠습니까?
+
+---
+
+## Layout 분리리
+
+✅ 완료된 작업: layout/header.css 생성
+✅ 완료된 작업: layout/footer.css 생성
+✅ 완료된 작업: layout/grid.css 생성
+
+---
+
+## Components 분리
+
+✅ 완료된 작업: components/buttons.css 생성
+✅ 완료된 작업: components/cards.css 생성
+✅ 완료된 작업: components/forms.css 생성
+✅ 완료된 작업: components/animations.css 생성

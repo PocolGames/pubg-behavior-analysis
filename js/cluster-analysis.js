@@ -1,705 +1,560 @@
 /**
- * PUBG 플레이어 행동 분석 웹사이트 - 클러스터 분석 페이지 (수정된 버전)
- * 실제 JSON 데이터를 활용한 클러스터 분석 로직
+ * PUBG Cluster Analysis Page JavaScript
+ * 클러스터 분석 페이지의 모든 인터랙티브 기능 관리
  */
 
-// ==================== 클러스터 분석 객체 ====================
-const ClusterAnalysis = {
-    data: {
-        clusters: {},
-        selectedClusters: new Set(),
-        currentTab: 'features',
-        charts: new Map(),
-        rawData: null // 로드된 JSON 데이터
-    }
-};
-
-// ==================== 데이터 로딩 ====================
-ClusterAnalysis.loadData = async function() {
-    try {
-        console.log('📊 클러스터 데이터 로딩 중...');
-        
-        const response = await fetch('../data/cluster-data.json');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        this.data.rawData = await response.json();
-        this.data.clusters = this.data.rawData.clusters;
-        
-        console.log('✅ 클러스터 데이터 로딩 완료:', Object.keys(this.data.clusters).length + '개 클러스터');
-        return true;
-        
-    } catch (error) {
-        console.error('❌ 클러스터 데이터 로딩 실패:', error);
-        
-        // 백업 데이터 사용
-        this.data.clusters = this.getFallbackData();
-        console.log('🔄 백업 데이터 사용');
-        return false;
-    }
-};
-
-// ==================== 백업 데이터 ====================
-ClusterAnalysis.getFallbackData = function() {
-    return {
-        "0": {
-            "id": 0,
-            "name": "Survivor (보수적)",
-            "type": "Survivor",
-            "count": 14527,
-            "percentage": 18.2,
-            "color": "#56ab2f",
-            "icon": "fa-shield-alt",
-            "characteristics": {
-                "killRate": 0.3,
-                "damageDealt": 57,
-                "walkDistance": 143,
-                "healUsage": 0.13,
-                "boostUsage": 0.07,
-                "survivalTime": 85,
-                "aggressiveness": 15,
-                "teamwork": 90
+// ===============================
+// 클러스터 데이터 정의
+// ===============================
+const CLUSTER_DATA = {
+    clusters: [
+        {
+            id: 0,
+            name: "Survivor (보수적)",
+            type: "survivor",
+            count: 14527,
+            percentage: 18.2,
+            color: "#4CAF50",
+            icon: "fas fa-shield-alt",
+            description: "치료 아이템을 많이 사용하는 보수적인 생존형 플레이어",
+            features: {
+                heal_boost_ratio: 775.29,
+                assists: 479.86,
+                has_swimDistance: 294.02,
+                walkDistance: 1.2,
+                kills: 0.8
             },
-            "description": "생존을 최우선으로 하는 신중한 플레이어",
-            "topFeatures": ["heal_boost_ratio", "assists", "has_swimDistance"]
+            characteristics: [
+                "치료 아이템 사용 빈도 매우 높음",
+                "팀플레이 지향적 (어시스트 높음)",
+                "안전한 플레이 스타일",
+                "수영 거리 상대적으로 높음"
+            ]
         },
-        "1": {
-            "id": 1,
-            "name": "Survivor (적극적)",
-            "type": "Survivor",
-            "count": 24981,
-            "percentage": 31.2,
-            "color": "#7cb342",
-            "icon": "fa-heart",
-            "characteristics": {
-                "killRate": 0.59,
-                "damageDealt": 95,
-                "walkDistance": 550,
-                "healUsage": 0.69,
-                "boostUsage": 0.40,
-                "survivalTime": 75,
-                "aggressiveness": 35,
-                "teamwork": 85
+        {
+            id: 1,
+            name: "Survivor (적극적)",
+            type: "survivor",
+            count: 24981,
+            percentage: 31.2,
+            color: "#8BC34A",
+            icon: "fas fa-heart",
+            description: "더 적극적이면서도 생존을 중시하는 플레이어",
+            features: {
+                heal_boost_ratio: 1861.49,
+                assists: 964.62,
+                damage_per_kill: 864.65,
+                walkDistance: 1.5,
+                kills: 1.2
             },
-            "description": "적극적이지만 신중한 생존 전략을 구사하는 플레이어",
-            "topFeatures": ["heal_boost_ratio", "assists", "damage_per_kill"]
+            characteristics: [
+                "치료 아이템 사용 최고 수준",
+                "킬당 데미지 효율성 높음",
+                "어시스트 비율 최상위",
+                "전체 플레이어의 1/3 차지"
+            ]
         },
-        "7": {
-            "id": 7,
-            "name": "Aggressive (공격형)",
-            "type": "Aggressive",
-            "count": 89,
-            "percentage": 0.1,
-            "color": "#dc3545",
-            "icon": "fa-fire",
-            "characteristics": {
-                "killRate": 2.06,
-                "damageDealt": 259,
-                "walkDistance": 2645,
-                "healUsage": 3.17,
-                "boostUsage": 3.06,
-                "survivalTime": 40,
-                "aggressiveness": 95,
-                "teamwork": 60
+        {
+            id: 2,
+            name: "Explorer (Type 1)",
+            type: "explorer",
+            count: 10756,
+            percentage: 13.4,
+            color: "#FF9800",
+            icon: "fas fa-route",
+            description: "이동과 탐색을 중시하는 플레이어",
+            features: {
+                walkDistance_log: 3743.08,
+                walkDistance: 1179.09,
+                revives: 626.25,
+                kills: 1.0,
+                heal_boost_ratio: 2.0
             },
-            "description": "극도로 공격적인 고위험 고수익 플레이어",
-            "topFeatures": ["kill_efficiency", "damage_per_kill", "assists"]
+            characteristics: [
+                "높은 이동거리",
+                "맵 탐색 중시",
+                "팀원 부활 적극적",
+                "안정적인 플레이"
+            ]
+        },
+        {
+            id: 3,
+            name: "Explorer (Type 2)",
+            type: "explorer",
+            count: 15898,
+            percentage: 19.9,
+            color: "#FF7043",
+            icon: "fas fa-route",
+            description: "전투와 탐색을 병행하는 플레이어",
+            features: {
+                walkDistance_log: 2245.80,
+                longestKill: 610.84,
+                has_kills: 501.94,
+                kills: 1.8,
+                heal_boost_ratio: 1.5
+            },
+            characteristics: [
+                "중거리 이동 선호",
+                "장거리 저격 능력",
+                "킬 참여도 높음",
+                "균형잡힌 플레이"
+            ]
+        },
+        {
+            id: 4,
+            name: "Explorer (Type 3)",
+            type: "explorer",
+            count: 4312,
+            percentage: 5.4,
+            color: "#FB8C00",
+            icon: "fas fa-route",
+            description: "극한의 이동과 부활을 중시하는 플레이어",
+            features: {
+                walkDistance_log: 4451.52,
+                walkDistance: 1845.04,
+                revives: 1551.02,
+                kills: 0.9,
+                heal_boost_ratio: 3.0
+            },
+            characteristics: [
+                "최대 이동거리",
+                "팀원 부활 최우선",
+                "안전한 포지셔닝",
+                "서포터 역할"
+            ]
+        },
+        {
+            id: 5,
+            name: "Explorer (Type 4)",
+            type: "explorer",
+            count: 4046,
+            percentage: 5.1,
+            color: "#FF8F00",
+            icon: "fas fa-route",
+            description: "무기 수집과 이동을 중시하는 플레이어",
+            features: {
+                walkDistance_log: 4139.77,
+                walkDistance: 1544.91,
+                weaponsAcquired: 451.79,
+                kills: 1.1,
+                heal_boost_ratio: 2.2
+            },
+            characteristics: [
+                "높은 이동거리",
+                "무기 수집 적극적",
+                "장비 최적화",
+                "준비성 높음"
+            ]
+        },
+        {
+            id: 6,
+            name: "Explorer (Type 5)",
+            type: "explorer",
+            count: 5391,
+            percentage: 6.7,
+            color: "#FFA726",
+            icon: "fas fa-route",
+            description: "지구력과 이동을 중시하는 플레이어",
+            features: {
+                walkDistance_log: 3995.30,
+                matchDuration: 1400.69,
+                walkDistance: 1327.73,
+                kills: 1.0,
+                heal_boost_ratio: 2.1
+            },
+            characteristics: [
+                "긴 게임 지속시간",
+                "꾸준한 이동",
+                "인내심 강함",
+                "후반 생존력"
+            ]
+        },
+        {
+            id: 7,
+            name: "Aggressive",
+            type: "aggressive",
+            count: 89,
+            percentage: 0.1,
+            color: "#F44336",
+            icon: "fas fa-crosshairs",
+            description: "극도로 공격적인 플레이를 하는 희귀한 플레이어",
+            features: {
+                kill_efficiency: 23396.88,
+                damage_per_kill: 1435.73,
+                assists: 920.03,
+                kills: 8.5,
+                heal_boost_ratio: 0.5
+            },
+            characteristics: [
+                "킬 효율성 극상위 (23,000배 이상)",
+                "공격적 플레이 스타일",
+                "매우 희귀한 플레이어 유형",
+                "높은 데미지 산출 능력"
+            ]
         }
-    };
+    ]
 };
 
-// ==================== 페이지 초기화 ====================
-ClusterAnalysis.init = function() {
-    console.log('🎯 클러스터 분석 페이지 초기화...');
-    
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => this.initPage());
-    } else {
-        this.initPage();
-    }
-};
+// ===============================
+// DOM 요소 및 차트 변수
+// ===============================
+let clusterDistributionChart = null;
+let comparisonChart = null;
+let correlationChart = null;
+let radarCharts = {};
 
-ClusterAnalysis.initPage = async function() {
-    this.showLoading(true);
+// ===============================
+// 페이지 초기화
+// ===============================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎯 클러스터 분석 페이지 초기화 시작');
     
     try {
-        await this.loadData();
-        
-        Object.keys(this.data.clusters).forEach(id => {
-            this.data.selectedClusters.add(parseInt(id));
-        });
-        
-        this.initTabs();
-        this.initFilters();
-        this.initCharts();
-        this.initEventListeners();
-        
-        // DOM이 완전히 준비된 후 차트 렌더링
-        setTimeout(() => {
-            this.renderOverviewCharts();
-            this.renderFeatureTab();
-        }, 200);
-        
-        console.log('✅ 클러스터 분석 페이지 준비 완료');
-        
+        initializeClusterAnalysis();
+        console.log('✅ 클러스터 분석 페이지 초기화 완료');
     } catch (error) {
-        console.error('❌ 페이지 초기화 실패:', error);
-        this.showError('데이터 로딩에 실패했습니다.');
-    } finally {
-        this.showLoading(false);
+        console.error('❌ 초기화 오류:', error);
+        showErrorMessage('페이지 초기화 중 오류가 발생했습니다.');
     }
-};
+});
 
-// ==================== 로딩 및 오류 표시 ====================
-ClusterAnalysis.showLoading = function(show) {
-    const loader = document.querySelector('.page-loader');
-    if (loader) {
-        loader.style.display = show ? 'flex' : 'none';
-    }
-};
-
-ClusterAnalysis.showError = function(message) {
-    if (typeof App !== 'undefined' && App.showNotification) {
-        App.showNotification(message, 'error');
-    } else {
-        console.warn('Error:', message);
-    }
-};
-
-// ==================== 탭 시스템 ====================
-ClusterAnalysis.initTabs = function() {
-    const tabs = document.querySelectorAll('.tab-btn, .tab-link');
-    const contents = document.querySelectorAll('.tab-content');
-    
-    tabs.forEach(tab => {
-        tab.addEventListener('click', (e) => {
-            e.preventDefault();
-            let targetTab = tab.getAttribute('data-tab');
-            
-            // href 속성에서 탭 이름 추출 (예: #characteristics)
-            if (!targetTab && tab.getAttribute('href')) {
-                targetTab = tab.getAttribute('href').replace('#', '');
-            }
-            
-            if (!targetTab) {
-                return;
-            }
-            
-            tabs.forEach(t => t.classList.remove('active'));
-            contents.forEach(c => c.classList.remove('active'));
-            
-            tab.classList.add('active');
-            const targetContent = document.getElementById(targetTab);
-            if (targetContent) {
-                targetContent.classList.add('active');
-            }
-            
-            this.data.currentTab = targetTab;
-            this.renderCurrentTab();
-        });
-    });
-};
-
-// ==================== 필터 시스템 ====================
-ClusterAnalysis.initFilters = function() {
-    const filterContainer = document.querySelector('.cluster-filters');
-    if (!filterContainer) {
-        // 기존 HTML 필터를 사용
-        this.initExistingFilters();
+/**
+ * 클러스터 분석 페이지 초기화
+ */
+function initializeClusterAnalysis() {
+    // 데이터 검증
+    if (!validateClusterData()) {
+        showErrorMessage('클러스터 데이터를 로딩할 수 없습니다.');
         return;
     }
     
-    let filtersHTML = '<div class="filter-controls">';
-    filtersHTML += '<button class="btn btn-sm btn-secondary" id="selectAllClusters">전체 선택</button>';
-    filtersHTML += '<button class="btn btn-sm btn-outline" id="deselectAllClusters">전체 해제</button>';
-    filtersHTML += '</div><div class="cluster-checkboxes">';
-    
-    Object.entries(this.data.clusters).forEach(([id, cluster]) => {
-        filtersHTML += `
-            <label class="cluster-checkbox">
-                <input type="checkbox" value="${id}" checked>
-                <span class="checkmark" style="border-color: ${cluster.color}"></span>
-                <span class="cluster-name" style="color: ${cluster.color}">
-                    ${cluster.name} (${cluster.percentage}%)
-                </span>
-            </label>
-        `;
-    });
-    
-    filtersHTML += '</div>';
-    filterContainer.innerHTML = filtersHTML;
-    
-    this.initFilterEvents();
-};
-
-ClusterAnalysis.initExistingFilters = function() {
-    // 기존 HTML의 필터 요소들 활용
-    const existingCheckboxes = document.querySelectorAll('.cluster-filter');
-    existingCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', (e) => {
-            const clusterId = parseInt(e.target.value);
-            
-            if (e.target.checked) {
-                this.data.selectedClusters.add(clusterId);
-            } else {
-                this.data.selectedClusters.delete(clusterId);
-            }
-            
-            this.updateCharts();
-        });
-    });
-    
-    // 기존 버튼 이벤트
-    const selectAllBtn = document.getElementById('selectAllClusters');
-    if (selectAllBtn) {
-        selectAllBtn.addEventListener('click', () => this.selectAllClusters(true));
+    // 고급 기능 초기화
+    if (typeof initializeAdvancedFeatures === 'function') {
+        initializeAdvancedFeatures();
     }
     
-    const clearAllBtn = document.getElementById('clearAllClusters');
-    if (clearAllBtn) {
-        clearAllBtn.addEventListener('click', () => this.selectAllClusters(false));
-    }
-};
+    // 차트 초기화
+    initializeCharts();
+    
+    // 이벤트 리스너 설정
+    setupEventListeners();
+    
+    // 탭 기능 초기화
+    initializeTabs();
+    
+    // 통계 테이블 생성
+    generateStatisticsTable();
+    
+    // 애니메이션 시작
+    startAnimations();
+    
+    console.log('✅ 클러스터 분석 페이지 초기화 완료 - 모든 기능 활성화');
+}
 
-ClusterAnalysis.initFilterEvents = function() {
-    document.querySelectorAll('.cluster-checkbox input').forEach(checkbox => {
-        checkbox.addEventListener('change', (e) => {
-            const clusterId = parseInt(e.target.value);
-            
-            if (e.target.checked) {
-                this.data.selectedClusters.add(clusterId);
-            } else {
-                this.data.selectedClusters.delete(clusterId);
-            }
-            
-            this.updateCharts();
-        });
-    });
-    
-    const selectAllBtn = document.getElementById('selectAllClusters');
-    if (selectAllBtn) {
-        selectAllBtn.addEventListener('click', () => this.selectAllClusters(true));
+/**
+ * 모든 차트 초기화
+ */
+function initializeCharts() {
+    try {
+        createClusterDistributionChart();
+        createRadarCharts();
+        createComparisonChart();
+        createCorrelationChart();
+        console.log('✅ 모든 차트 초기화 완료');
+    } catch (error) {
+        console.error('❌ 차트 초기화 오류:', error);
     }
-    
-    const deselectAllBtn = document.getElementById('deselectAllClusters');
-    if (deselectAllBtn) {
-        deselectAllBtn.addEventListener('click', () => this.selectAllClusters(false));
-    }
-};
+}
 
-ClusterAnalysis.selectAllClusters = function(select) {
-    const checkboxes = document.querySelectorAll('.cluster-checkbox input, .cluster-filter');
-    
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = select;
-        const clusterId = parseInt(checkbox.value);
-        
-        if (select) {
-            this.data.selectedClusters.add(clusterId);
-        } else {
-            this.data.selectedClusters.delete(clusterId);
-        }
-    });
-    
-    this.updateCharts();
-};
+/**
+ * 클러스터 분포 도넛 차트 생성
+ */
+function createClusterDistributionChart() {
+    const ctx = document.getElementById('clusterDistributionChart');
+    if (!ctx) return;
 
-// ==================== 차트 초기화 ====================
-ClusterAnalysis.initCharts = function() {
-    if (typeof ChartUtils === 'undefined') {
-        console.warn('⚠️ ChartUtils가 로드되지 않았습니다.');
-        return;
-    }
-    
-    this.data.charts.clear();
-};
-
-// ==================== 개요 차트 ====================
-ClusterAnalysis.renderOverviewCharts = function() {
-    this.renderDistributionChart();
-    this.updateStatistics();
-};
-
-ClusterAnalysis.renderDistributionChart = function() {
-    const canvas = document.getElementById('clusterDistributionChart');
-    
-    // Canvas 요소가 없으면 경고 메시지만 출력하고 넘어감
-    if (!canvas) {
-        console.warn('⚠️ clusterDistributionChart Canvas를 찾을 수 없습니다.');
-        return;
-    }
-    
-    const selectedData = {};
-    
-    this.data.selectedClusters.forEach(clusterId => {
-        if (this.data.clusters[clusterId]) {
-            selectedData[clusterId] = this.data.clusters[clusterId];
-        }
-    });
-    
-    if (typeof ChartUtils !== 'undefined') {
-        const chart = ChartUtils.createClusterDistributionChart('clusterDistributionChart', selectedData);
-        if (chart) {
-            this.data.charts.set('distribution', chart);
-        }
-    }
-};
-
-ClusterAnalysis.updateStatistics = function() {
-    const totalPlayers = Array.from(this.data.selectedClusters)
-        .reduce((sum, clusterId) => {
-            const cluster = this.data.clusters[clusterId];
-            return sum + (cluster ? cluster.count : 0);
-        }, 0);
-    
-    const selectedCount = this.data.selectedClusters.size;
-    const totalClusters = Object.keys(this.data.clusters).length;
-    
-    const metadata = this.data.rawData?.metadata || {
-        totalPlayers: 80000,
-        silhouetteScore: 0.1391
-    };
-    
-    const playerCountEl = document.querySelector('.stat-value[data-stat="players"]');
-    const clusterCountEl = document.querySelector('.stat-value[data-stat="clusters"]');
-    const qualityScoreEl = document.querySelector('.stat-value[data-stat="quality"]');
-    
-    if (playerCountEl && typeof ChartUtils !== 'undefined') {
-        ChartUtils.animateCounter(playerCountEl, 0, totalPlayers);
-    }
-    
-    if (clusterCountEl) {
-        clusterCountEl.textContent = `${selectedCount}/${totalClusters}`;
-    }
-    
-    if (qualityScoreEl) {
-        qualityScoreEl.textContent = metadata.silhouetteScore.toFixed(3);
-    }
-};
-
-// ==================== 탭별 렌더링 ====================
-ClusterAnalysis.renderCurrentTab = function() {
-    switch(this.data.currentTab) {
-        case 'features':
-        case 'characteristics':
-            this.renderFeatureTab();
-            break;
-        case 'comparison':
-            this.renderComparisonTab();
-            break;
-        case 'statistics':
-            this.renderStatisticsTab();
-            break;
-    }
-};
-
-// ==================== 특성 탭 ====================
-ClusterAnalysis.renderFeatureTab = function() {
-    // 기존 HTML 구조를 활용하고 레이더 차트만 생성
-    setTimeout(() => {
-        this.createRadarCharts();
-    }, 100);
-};
-
-ClusterAnalysis.getFeatureDisplayName = function(feature) {
-    const featureNames = {
-        'heal_boost_ratio': '치료/부스트 비율',
-        'assists': '어시스트',
-        'has_swimDistance': '수영 활동',
-        'damage_per_kill': '킬당 데미지',
-        'walkDistance_log': '이동거리(로그)',
-        'walkDistance': '보행거리',
-        'revives': '소생',
-        'longestKill': '최장킬거리',
-        'has_kills': '킬 기록',
-        'weaponsAcquired': '무기획득',
-        'matchDuration': '게임시간',
-        'kill_efficiency': '킬 효율성'
-    };
-    
-    return featureNames[feature] || feature;
-};
-
-ClusterAnalysis.createRadarCharts = function() {
-    // 기존 HTML에 있는 레이더 차트 Canvas들에 차트 생성
-    const radarCanvases = ['radarChart0', 'radarChart1', 'radarChart7', 'radarChartExplorer'];
-    
-    radarCanvases.forEach(canvasId => {
-        const canvas = document.getElementById(canvasId);
-        if (!canvas) {
-            console.warn(`⚠️ ${canvasId} Canvas를 찾을 수 없습니다.`);
-            return;
-        }
-        
-        let clusterId, clusterData;
-        
-        if (canvasId === 'radarChart0') {
-            clusterId = 0;
-            clusterData = this.data.clusters[0];
-        } else if (canvasId === 'radarChart1') {
-            clusterId = 1;
-            clusterData = this.data.clusters[1];
-        } else if (canvasId === 'radarChart7') {
-            clusterId = 7;
-            clusterData = this.data.clusters[7];
-        } else if (canvasId === 'radarChartExplorer') {
-            // Explorer 클러스터들의 평균값 사용
-            clusterData = {
-                name: 'Explorer (평균)',
-                characteristics: {
-                    killRate: 1.0,
-                    damageDealt: 150,
-                    walkDistance: 2000,
-                    healUsage: 2.0,
-                    boostUsage: 1.5,
-                    survivalTime: 60,
-                    aggressiveness: 50,
-                    teamwork: 70
-                }
-            };
-        }
-        
-        if (clusterData && clusterData.characteristics) {
-            const characteristics = Object.values(clusterData.characteristics);
-            
-            if (typeof ChartUtils !== 'undefined') {
-                const chart = ChartUtils.createPlayerRadarChart(
-                    canvasId,
-                    characteristics,
-                    clusterData.name
-                );
-                if (chart) {
-                    this.data.charts.set(`radar${clusterId || 'explorer'}`, chart);
-                }
-            }
-        }
-    });
-};
-
-// ==================== 비교 탭 ====================
-ClusterAnalysis.renderComparisonTab = function() {
-    if (this.data.selectedClusters.size < 2) {
-        const container = document.getElementById('comparison');
-        if (container) {
-            container.innerHTML = `
-                <div class="comparison-message">
-                    <i class="fas fa-info-circle"></i>
-                    <p>비교를 위해 2개 이상의 클러스터를 선택해주세요.</p>
-                </div>
-            `;
-        }
-        return;
-    }
-    
-    setTimeout(() => {
-        this.createComparisonChart();
-        this.generateComparisonInsights();
-    }, 100);
-};
-
-ClusterAnalysis.createComparisonChart = function() {
-    const canvas = document.getElementById('comparisonChart');
-    if (!canvas) {
-        console.warn('⚠️ comparisonChart Canvas를 찾을 수 없습니다.');
-        return;
-    }
-    
-    const features = ['킬 수', '데미지', '이동거리', '생존력', '어시스트', '무기획득', '부스트', '치료'];
-    const datasets = [];
-    
-    this.data.selectedClusters.forEach(clusterId => {
-        const cluster = this.data.clusters[clusterId];
-        if (!cluster || !cluster.characteristics) {
-            return;
-        }
-        
-        const data = Object.values(cluster.characteristics);
-        
-        datasets.push({
-            label: cluster.name,
-            data: data,
-            borderColor: cluster.color,
-            backgroundColor: this.adjustColorOpacity(cluster.color, 0.2),
+    const data = {
+        labels: CLUSTER_DATA.clusters.map(cluster => cluster.name),
+        datasets: [{
+            data: CLUSTER_DATA.clusters.map(cluster => cluster.percentage),
+            backgroundColor: CLUSTER_DATA.clusters.map(cluster => cluster.color),
+            borderColor: '#ffffff',
             borderWidth: 2,
-            pointBackgroundColor: cluster.color,
-            pointBorderColor: '#fff',
-            pointBorderWidth: 2
-        });
-    });
-    
-    if (typeof ChartUtils !== 'undefined') {
-        const chart = ChartUtils.createRadarChart('comparisonChart', {
-            labels: features,
-            datasets: datasets
-        }, { maxValue: 100 });
-        
-        if (chart) {
-            this.data.charts.set('comparison', chart);
-        }
-    }
-};
-
-ClusterAnalysis.adjustColorOpacity = function(color, opacity) {
-    if (color.startsWith('#')) {
-        const r = parseInt(color.slice(1, 3), 16);
-        const g = parseInt(color.slice(3, 5), 16);
-        const b = parseInt(color.slice(5, 7), 16);
-        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
-    }
-    return color;
-};
-
-ClusterAnalysis.generateComparisonInsights = function() {
-    // 기존 HTML의 인사이트 사용 또는 동적 생성
-    console.log('🔍 비교 인사이트 생성됨');
-};
-
-// ==================== 통계 탭 ====================
-ClusterAnalysis.renderStatisticsTab = function() {
-    this.populateStatsTable();
-};
-
-ClusterAnalysis.populateStatsTable = function() {
-    const tbody = document.getElementById('statisticsTableBody');
-    if (!tbody) {
-        console.warn('⚠️ statisticsTableBody를 찾을 수 없습니다.');
-        return;
-    }
-    
-    let html = '';
-    this.data.selectedClusters.forEach(clusterId => {
-        const cluster = this.data.clusters[clusterId];
-        if (!cluster) {
-            return;
-        }
-        
-        html += `
-            <tr>
-                <td>
-                    <span class="cluster-indicator" style="background-color: ${cluster.color}"></span>
-                    ${cluster.name}
-                </td>
-                <td>${cluster.count.toLocaleString()}</td>
-                <td>${cluster.percentage}%</td>
-                <td>${cluster.characteristics?.killRate || 'N/A'}</td>
-                <td>${cluster.characteristics?.damageDealt || 'N/A'}</td>
-                <td>${cluster.characteristics?.walkDistance || 'N/A'}</td>
-                <td>${cluster.characteristics?.survivalTime || 'N/A'}</td>
-            </tr>
-        `;
-    });
-    
-    tbody.innerHTML = html;
-};
-
-// ==================== 데이터 내보내기 ====================
-ClusterAnalysis.exportData = function(format) {
-    const selectedData = {};
-    this.data.selectedClusters.forEach(clusterId => {
-        selectedData[clusterId] = this.data.clusters[clusterId];
-    });
-    
-    if (format === 'csv') {
-        this.exportAsCSV(selectedData);
-    } else if (format === 'json') {
-        this.exportAsJSON(selectedData);
-    }
-    
-    if (typeof App !== 'undefined' && App.showNotification) {
-        App.showNotification(`${format.toUpperCase()} 파일이 다운로드되었습니다.`, 'success');
-    }
-};
-
-ClusterAnalysis.exportAsCSV = function(data) {
-    const headers = ['클러스터명', '유형', '인원', '비율(%)', '공격성', '생존력', '이동성', '팀워크'];
-    let csv = headers.join(',') + '\n';
-    
-    Object.values(data).forEach(cluster => {
-        const row = [
-            `"${cluster.name}"`,
-            cluster.type,
-            cluster.count,
-            cluster.percentage,
-            cluster.characteristics.aggressiveness || 0,
-            cluster.characteristics.survivalTime || 0,
-            cluster.characteristics.walkDistance || 0,
-            cluster.characteristics.teamwork || 0
-        ];
-        csv += row.join(',') + '\n';
-    });
-    
-    this.downloadFile(csv, 'pubg-cluster-analysis.csv', 'text/csv');
-};
-
-ClusterAnalysis.exportAsJSON = function(data) {
-    const exportData = {
-        exportDate: new Date().toISOString(),
-        selectedClusters: Object.keys(data),
-        totalSelected: Object.keys(data).length,
-        data: data
+            hoverOffset: 10
+        }]
     };
-    
-    const json = JSON.stringify(exportData, null, 2);
-    this.downloadFile(json, 'pubg-cluster-analysis.json', 'application/json');
-};
 
-ClusterAnalysis.downloadFile = function(content, filename, contentType) {
-    const blob = new Blob([content], { type: contentType });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-};
-
-// ==================== 차트 업데이트 ====================
-ClusterAnalysis.updateCharts = function() {
-    this.renderDistributionChart();
-    this.updateStatistics();
-    this.renderCurrentTab();
-};
-
-// ==================== 이벤트 리스너 ====================
-ClusterAnalysis.initEventListeners = function() {
-    window.addEventListener('resize', this.debounce(() => {
-        this.data.charts.forEach(chart => {
-            if (chart && typeof chart.resize === 'function') {
-                chart.resize();
+    clusterDistributionChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 20,
+                        usePointStyle: true,
+                        font: {
+                            size: 12,
+                            family: "'Noto Sans KR', sans-serif"
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const cluster = CLUSTER_DATA.clusters[context.dataIndex];
+                            return `${cluster.name}: ${cluster.percentage}% (${cluster.count.toLocaleString()}명)`;
+                        }
+                    }
+                }
+            },
+            animation: {
+                animateRotate: true,
+                duration: 2000
             }
-        });
-    }, 250));
-    
-    // 내보내기 버튼 이벤트
-    const exportCSVBtn = document.getElementById('exportCSV');
-    if (exportCSVBtn) {
-        exportCSVBtn.addEventListener('click', () => this.exportData('csv'));
+        }
+    });
+}
+
+/**
+ * 레이더 차트들 생성
+ */
+function createRadarCharts() {
+    CLUSTER_DATA.clusters.forEach(cluster => {
+        const canvasId = `radarChart${cluster.id}`;
+        const ctx = document.getElementById(canvasId);
+        
+        if (ctx) {
+            createSingleRadarChart(ctx, cluster);
+        }
+    });
+
+    // Explorer 통합 레이더 차트
+    const explorerCtx = document.getElementById('radarChartExplorer');
+    if (explorerCtx) {
+        createExplorerRadarChart(explorerCtx);
     }
+}
+
+/**
+ * 개별 레이더 차트 생성
+ */
+function createSingleRadarChart(ctx, cluster) {
+    const features = Object.keys(cluster.features);
+    const values = Object.values(cluster.features).map(val => Math.log10(val + 1)); // 로그 스케일
+
+    radarCharts[cluster.id] = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: features.map(feature => feature.replace(/_/g, ' ')),
+            datasets: [{
+                label: cluster.name,
+                data: values,
+                backgroundColor: cluster.color + '30',
+                borderColor: cluster.color,
+                borderWidth: 2,
+                pointBackgroundColor: cluster.color,
+                pointBorderColor: '#fff',
+                pointRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 5,
+                    ticks: {
+                        stepSize: 1,
+                        display: false
+                    },
+                    grid: {
+                        color: '#e0e0e0'
+                    },
+                    pointLabels: {
+                        font: {
+                            size: 10
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+/**
+ * Explorer 통합 레이더 차트 생성
+ */
+function createExplorerRadarChart(ctx) {
+    const explorerClusters = CLUSTER_DATA.clusters.filter(c => c.type === 'explorer');
+    const features = ['walkDistance', 'longestKill', 'revives', 'weaponsAcquired', 'kills'];
     
-    const exportJSONBtn = document.getElementById('exportJSON');
-    if (exportJSONBtn) {
-        exportJSONBtn.addEventListener('click', () => this.exportData('json'));
+    const datasets = explorerClusters.map(cluster => ({
+        label: cluster.name,
+        data: features.map(feature => {
+            const value = cluster.features[feature] || cluster.features[feature + '_log'] || 1;
+            return Math.log10(value + 1);
+        }),
+        backgroundColor: cluster.color + '20',
+        borderColor: cluster.color,
+        borderWidth: 1,
+        pointRadius: 3
+    }));
+
+    radarCharts['explorer'] = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: features.map(f => f.replace(/([A-Z])/g, ' $1').toLowerCase()),
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            size: 10
+                        }
+                    }
+                }
+            },
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 5,
+                    ticks: {
+                        stepSize: 1,
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+}
+
+/**
+ * 비교 바 차트 생성
+ */
+function createComparisonChart() {
+    const ctx = document.getElementById('comparisonChart');
+    if (!ctx) return;
+
+    const features = ['kills', 'walkDistance', 'heal_boost_ratio', 'assists'];
+    const datasets = features.map((feature, index) => ({
+        label: feature.replace(/_/g, ' '),
+        data: CLUSTER_DATA.clusters.map(cluster => {
+            const value = cluster.features[feature] || 1;
+            return Math.log10(value + 1);
+        }),
+        backgroundColor: `hsl(${index * 60}, 70%, 60%)`,
+        borderWidth: 1
+    }));
+
+    comparisonChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: CLUSTER_DATA.clusters.map(c => c.name.split(' ')[0]),
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Log Scale Values'
+                    }
+                }
+            }
+        }
+    });
+}
+
+/**
+ * 상관관계 매트릭스 차트 생성
+ */
+function createCorrelationChart() {
+    const ctx = document.getElementById('correlationChart');
+    if (!ctx) return;
+
+    // 간단한 상관관계 히트맵 시뮬레이션
+    const clusterNames = CLUSTER_DATA.clusters.map(c => c.name.split(' ')[0]);
+    const correlationData = [];
+
+    for (let i = 0; i < clusterNames.length; i++) {
+        for (let j = 0; j < clusterNames.length; j++) {
+            const correlation = i === j ? 1 : Math.random() * 0.8;
+            correlationData.push({
+                x: j,
+                y: i,
+                v: correlation
+            });
+        }
     }
-};
 
-// ==================== 유틸리티 ====================
-ClusterAnalysis.debounce = function(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-};
-
-// ==================== 초기화 실행 ====================
-ClusterAnalysis.init();
-
-// ==================== 전역 접근 ====================
-window.ClusterAnalysis = ClusterAnalysis;
+    correlationChart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Correlation',
+                data: correlationData,
+                backgroundColor: function(context) {
+                    const value = context.parsed.v;
+                    const alpha = Math.abs(value);
+                    return value > 0 ? `rgba(76, 175, 80, ${alpha})` : `rgba(244, 67, 54, ${alpha})`;
+                },
+                pointRadius: 15
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom',
+                    min: -0.5,
+                    max: clusterNames.length - 0.5,
+                    ticks: {
+                        callback: function(value) {
+                            return clusterNames[Math.round(value)] || '';
+                        }
+                    }
+                },
+                y: {
+                    type: 'linear',
+                    min: -0.5,
+                    max: clusterNames.length - 0.5,
+                    ticks: {
+                        callback: function(value) {
+                            return clusterNames[Math.round(value)] || '';
+                        }
+                    }
+                }
+            }
+        }
+    });
+}

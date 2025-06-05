@@ -1,0 +1,726 @@
+/* ============================================================================
+   PUBG 플레이어 행동 분석 - 클러스터 분석 반응형
+   cluster-analysis-responsive.css
+   
+   반응형 디자인 및 접근성 향상 스타일
+   ============================================================================ */
+
+/* =============================================================================
+   반응형 브레이크포인트 변수
+   ============================================================================= */
+
+:root {
+    --breakpoint-xs: 480px;
+    --breakpoint-sm: 768px;
+    --breakpoint-md: 1024px;
+    --breakpoint-lg: 1280px;
+    --breakpoint-xl: 1440px;
+}
+
+/* =============================================================================
+   모바일 우선 기본 스타일
+   ============================================================================= */
+
+.cluster-analysis-page {
+    padding: 1rem;
+    min-height: 100vh;
+}
+
+.page-header {
+    margin-bottom: 1.5rem;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+/* =============================================================================
+   개요 섹션 반응형
+   ============================================================================= */
+
+.overview-section {
+    margin-bottom: 2rem;
+}
+
+.overview-stats {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    padding: 1rem;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+}
+
+/* =============================================================================
+   필터 섹션 반응형
+   ============================================================================= */
+
+.filters-section {
+    margin-bottom: 2rem;
+}
+
+.cluster-filters {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.filter-checkbox {
+    padding: 0.75rem;
+}
+
+.filter-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filter-btn {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+}
+
+/* =============================================================================
+   클러스터 카드 반응형
+   ============================================================================= */
+
+.clusters-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.cluster-card {
+    padding: 1rem;
+}
+
+.cluster-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.cluster-title {
+    font-size: 1.125rem;
+}
+
+.cluster-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.cluster-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.cluster-action-btn {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+}
+
+/* =============================================================================
+   탭 시스템 반응형
+   ============================================================================= */
+
+.tabs-container {
+    margin-bottom: 1.5rem;
+}
+
+.tabs-header {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.tabs-header::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-button {
+    flex-shrink: 0;
+    min-width: 100px;
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+}
+
+.tab-button .tab-icon {
+    display: none;
+}
+
+.tabs-content {
+    padding: 1rem;
+}
+
+.tab-pane-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.tab-pane-title {
+    font-size: 1.25rem;
+}
+
+.tab-pane-actions {
+    width: 100%;
+    justify-content: stretch;
+}
+
+.tab-action-btn {
+    flex: 1;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+}
+
+/* =============================================================================
+   테이블 반응형
+   ============================================================================= */
+
+.table-header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.table-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.table-search-input {
+    width: 100%;
+}
+
+.data-table {
+    font-size: 0.75rem;
+}
+
+.data-table th,
+.data-table td {
+    padding: 0.5rem 0.75rem;
+}
+
+.data-table th {
+    font-size: 0.75rem;
+}
+
+.table-cell-actions {
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.table-action-btn {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.7rem;
+}
+
+.table-footer {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+.pagination {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+.pagination-btn {
+    min-width: 36px;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+}
+
+/* =============================================================================
+   Small Mobile (480px 이상)
+   ============================================================================= */
+
+@media (min-width: 480px) {
+    .cluster-analysis-page {
+        padding: 1.25rem;
+    }
+
+    .page-title {
+        font-size: 1.75rem;
+    }
+
+    .page-subtitle {
+        font-size: 1rem;
+    }
+
+    .overview-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cluster-filters {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .filter-actions {
+        flex-direction: row;
+    }
+
+    .filter-btn {
+        width: auto;
+        flex: 1;
+    }
+
+    .cluster-header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .cluster-actions {
+        flex-direction: row;
+        width: auto;
+    }
+
+    .cluster-action-btn {
+        width: auto;
+        padding: 0.5rem 1rem;
+    }
+
+    .tab-button .tab-icon {
+        display: inline;
+    }
+
+    .tab-pane-header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .tab-pane-actions {
+        width: auto;
+    }
+
+    .tab-action-btn {
+        flex: none;
+        width: auto;
+    }
+}
+
+/* =============================================================================
+   Tablet (768px 이상)
+   ============================================================================= */
+
+@media (min-width: 768px) {
+    .cluster-analysis-page {
+        padding: 1.5rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+    }
+
+    .overview-stats {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .stat-value {
+        font-size: 2rem;
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+    }
+
+    .cluster-filters {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+
+    .clusters-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .cluster-card {
+        padding: 1.5rem;
+    }
+
+    .cluster-title {
+        font-size: 1.25rem;
+    }
+
+    .cluster-stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .tab-button {
+        min-width: 120px;
+        padding: 1rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .tabs-content {
+        padding: 2rem;
+    }
+
+    .table-header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 2rem;
+    }
+
+    .table-actions {
+        width: auto;
+        flex-direction: row;
+    }
+
+    .table-search-input {
+        width: 250px;
+    }
+
+    .data-table {
+        font-size: 0.875rem;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 1rem 1.5rem;
+    }
+
+    .table-cell-actions {
+        flex-direction: row;
+    }
+
+    .table-action-btn {
+        width: auto;
+        padding: 0.375rem 0.75rem;
+        font-size: 0.75rem;
+    }
+
+    .table-footer {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+    }
+
+    .pagination {
+        justify-content: flex-end;
+        flex-wrap: nowrap;
+    }
+}
+
+/* =============================================================================
+   Desktop (1024px 이상)
+   ============================================================================= */
+
+@media (min-width: 1024px) {
+    .cluster-analysis-page {
+        padding: 2rem;
+    }
+
+    .page-header {
+        margin-bottom: 2rem;
+    }
+
+    .page-title {
+        font-size: 2.25rem;
+    }
+
+    .cluster-filters {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .clusters-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .cluster-stats {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .analysis-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    .stats-summary-table {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* =============================================================================
+   Large Desktop (1280px 이상)
+   ============================================================================= */
+
+@media (min-width: 1280px) {
+    .cluster-analysis-page {
+        padding: 2.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+    }
+
+    .overview-stats {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .cluster-filters {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .clusters-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .analysis-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* =============================================================================
+   Extra Large Desktop (1440px 이상)
+   ============================================================================= */
+
+@media (min-width: 1440px) {
+    .cluster-analysis-page {
+        max-width: 1400px;
+        padding: 3rem;
+    }
+
+    .clusters-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .analysis-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* =============================================================================
+   접근성 향상
+   ============================================================================= */
+
+/* 포커스 가시성 향상 */
+*:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* 고대비 모드 지원 */
+@media (prefers-contrast: high) {
+    :root {
+        --text-primary: #000000;
+        --text-secondary: #333333;
+        --border-color: #666666;
+        --primary-color: #0066cc;
+        --background-primary: #ffffff;
+        --surface-color: #ffffff;
+    }
+}
+
+/* 축소된 모션 선호 */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* 다크 모드 선호 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-primary: #0a0a0a;
+        --background-secondary: #111111;
+        --surface-color: #1a1a1a;
+        --text-primary: #ffffff;
+        --text-secondary: #cccccc;
+        --border-color: #333333;
+        --border-light: #2a2a2a;
+    }
+}
+
+/* 키보드 네비게이션 지원 */
+.keyboard-navigation *:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(var(--primary-color-rgb), 0.3);
+}
+
+/* 스크린 리더 전용 텍스트 */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* 스킵 링크 */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--primary-color);
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    border-radius: 4px;
+    z-index: 2000;
+    transition: top 0.3s;
+}
+
+.skip-link:focus {
+    top: 6px;
+}
+
+/* 터치 친화적 크기 */
+@media (pointer: coarse) {
+    .tab-button,
+    .filter-btn,
+    .cluster-action-btn,
+    .table-action-btn,
+    .notification-close,
+    .modal-close-btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    .pagination-btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* 인쇄 스타일 */
+@media print {
+    .cluster-analysis-page {
+        padding: 0;
+    }
+
+    .filters-section,
+    .tab-pane-actions,
+    .cluster-actions,
+    .table-actions,
+    .notification-container,
+    .modal-overlay {
+        display: none !important;
+    }
+
+    .clusters-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cluster-card {
+        border: 1px solid #000;
+        margin-bottom: 1rem;
+        break-inside: avoid;
+    }
+
+    .data-table {
+        font-size: 10px;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 0.25rem;
+        border: 1px solid #000;
+    }
+}
+
+/* =============================================================================
+   유틸리티 클래스
+   ============================================================================= */
+
+/* 반응형 표시/숨김 */
+.hide-mobile {
+    display: none;
+}
+
+.hide-tablet {
+    display: block;
+}
+
+.hide-desktop {
+    display: block;
+}
+
+@media (min-width: 768px) {
+    .hide-mobile {
+        display: block;
+    }
+    
+    .hide-tablet {
+        display: none;
+    }
+    
+    .show-tablet {
+        display: block;
+    }
+}
+
+@media (min-width: 1024px) {
+    .hide-desktop {
+        display: none;
+    }
+    
+    .show-desktop {
+        display: block;
+    }
+}
+
+/* 텍스트 정렬 */
+.text-center-mobile {
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .text-center-mobile {
+        text-align: left;
+    }
+}
+
+/* 여백 조정 */
+.mb-mobile {
+    margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+    .mb-mobile {
+        margin-bottom: 0;
+    }
+}

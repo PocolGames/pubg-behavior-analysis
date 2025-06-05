@@ -1,0 +1,537 @@
+/* ============================================================================
+   PUBG 플레이어 행동 분석 - 클러스터 분석 테이블
+   cluster-analysis-tables.css
+   
+   통계 테이블 및 고급 테이블 컴포넌트 스타일
+   ============================================================================ */
+
+/* =============================================================================
+   기본 테이블 구조
+   ============================================================================= */
+
+.table-container {
+    background: var(--surface-color);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    margin: 1.5rem 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.table-header {
+    padding: 1.5rem 2rem;
+    background: var(--background-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.table-title-icon {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+.table-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.table-search {
+    position: relative;
+}
+
+.table-search-input {
+    padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--surface-color);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    width: 250px;
+    transition: all var(--transition-smooth);
+}
+
+.table-search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.table-search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.table-filter-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    background: var(--surface-color);
+    color: var(--text-secondary);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.table-filter-btn:hover {
+    background: var(--primary-light);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.table-export-btn {
+    padding: 0.5rem 1rem;
+    background: var(--primary-color);
+    color: white;
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.table-export-btn:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+/* =============================================================================
+   테이블 본체
+   ============================================================================= */
+
+.table-wrapper {
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+}
+
+.table-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: var(--background-secondary);
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    background: var(--surface-color);
+}
+
+.data-table th {
+    background: var(--background-secondary);
+    color: var(--text-primary);
+    font-weight: 600;
+    text-align: left;
+    padding: 1rem 1.5rem;
+    border-bottom: 2px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    white-space: nowrap;
+    user-select: none;
+    cursor: pointer;
+    transition: background-color var(--transition-smooth);
+}
+
+.data-table th:hover {
+    background: var(--primary-light);
+}
+
+.data-table th.sortable {
+    position: relative;
+}
+
+.data-table th.sortable::after {
+    content: '↕';
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    opacity: 0.5;
+    transition: all var(--transition-smooth);
+}
+
+.data-table th.sortable:hover::after {
+    opacity: 1;
+}
+
+.data-table th.sort-asc::after {
+    content: '↑';
+    color: var(--primary-color);
+    opacity: 1;
+}
+
+.data-table th.sort-desc::after {
+    content: '↓';
+    color: var(--primary-color);
+    opacity: 1;
+}
+
+.data-table td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-primary);
+    vertical-align: middle;
+    transition: background-color var(--transition-smooth);
+}
+
+.data-table tr:hover td {
+    background: var(--primary-light);
+}
+
+.data-table tr:nth-child(even) td {
+    background: var(--background-secondary);
+}
+
+.data-table tr:nth-child(even):hover td {
+    background: var(--primary-light);
+}
+
+/* =============================================================================
+   테이블 셀 특수 스타일
+   ============================================================================= */
+
+.table-cell-number {
+    text-align: right;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+}
+
+.table-cell-percentage {
+    text-align: right;
+    font-weight: 600;
+}
+
+.table-cell-percentage.positive {
+    color: var(--success-color);
+}
+
+.table-cell-percentage.negative {
+    color: var(--danger-color);
+}
+
+.table-cell-percentage.neutral {
+    color: var(--warning-color);
+}
+
+.table-cell-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table-cell-badge.primary {
+    background: var(--primary-light);
+    color: var(--primary-color);
+}
+
+.table-cell-badge.success {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--success-color);
+}
+
+.table-cell-badge.warning {
+    background: rgba(251, 191, 36, 0.1);
+    color: var(--warning-color);
+}
+
+.table-cell-badge.danger {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger-color);
+}
+
+.table-cell-avatar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.table-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.table-cell-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.table-action-btn {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid var(--border-color);
+    background: var(--surface-color);
+    color: var(--text-secondary);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.table-action-btn:hover {
+    background: var(--primary-light);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.table-action-btn.danger:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+}
+
+/* =============================================================================
+   페이지네이션
+   ============================================================================= */
+
+.table-footer {
+    padding: 1.5rem 2rem;
+    background: var(--background-secondary);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.table-info {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    flex: 1;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pagination-btn {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-color);
+    background: var(--surface-color);
+    color: var(--text-secondary);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    min-width: 40px;
+    text-align: center;
+}
+
+.pagination-btn:hover:not(.disabled) {
+    background: var(--primary-light);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.pagination-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.pagination-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-dots {
+    padding: 0.5rem 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+/* =============================================================================
+   통계 요약 테이블
+   ============================================================================= */
+
+.stats-summary-table {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.stats-summary-card {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all var(--transition-smooth);
+}
+
+.stats-summary-card:hover {
+    border-color: var(--primary-light);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.stats-summary-icon {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 0.75rem;
+}
+
+.stats-summary-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.stats-summary-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.stats-summary-change {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.stats-summary-change.positive {
+    color: var(--success-color);
+}
+
+.stats-summary-change.negative {
+    color: var(--danger-color);
+}
+
+/* =============================================================================
+   반응형 테이블
+   ============================================================================= */
+
+@media (max-width: 768px) {
+    .table-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .table-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .table-search-input {
+        width: 100%;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 0.75rem 1rem;
+    }
+
+    .table-footer {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .pagination {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .stats-summary-table {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}
+
+/* =============================================================================
+   로딩 상태
+   ============================================================================= */
+
+.table-loading {
+    padding: 3rem;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.table-loading-spinner {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border-color);
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+.table-empty {
+    padding: 3rem;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.table-empty-icon {
+    font-size: 3rem;
+    color: var(--border-color);
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

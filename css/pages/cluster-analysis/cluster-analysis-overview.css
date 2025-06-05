@@ -1,0 +1,500 @@
+/**
+ * PUBG Cluster Analysis - Overview Styles
+ * 클러스터 분석 페이지 개요 섹션 스타일
+ * 
+ * 포함 내용:
+ * - 개요 통계 섹션
+ * - 통계 카드 스타일
+ * - 개요 메트릭 표시
+ * - 요약 정보 카드
+ */
+
+/* ===============================
+   개요 섹션 기본 레이아웃
+   =============================== */
+.overview-section {
+    padding: var(--spacing-xl) 0;
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.overview-header {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.overview-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.overview-description {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* ===============================
+   통계 카드 그리드
+   =============================== */
+.overview-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.stat-card {
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    border: 2px solid transparent;
+    transition: var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+    opacity: 0;
+    transition: var(--transition-fast);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+}
+
+.stat-card:hover::before {
+    opacity: 1;
+}
+
+.stat-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-sm);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: var(--bg-white);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-trend {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.stat-trend.positive {
+    color: #4CAF50;
+}
+
+.stat-trend.negative {
+    color: #F44336;
+}
+
+.stat-trend.neutral {
+    color: var(--text-muted);
+}
+
+.stat-card-body {
+    text-align: left;
+}
+
+.stat-title {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-xs);
+    line-height: 1;
+}
+
+.stat-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin: 0;
+}
+
+/* ===============================
+   특별한 통계 카드 변형
+   =============================== */
+.stat-card.featured {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: var(--bg-white);
+    border: none;
+}
+
+.stat-card.featured .stat-title,
+.stat-card.featured .stat-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.stat-card.featured .stat-value {
+    color: var(--bg-white);
+}
+
+.stat-card.featured .stat-icon {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--bg-white);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.stat-card.featured::before {
+    background: rgba(255, 255, 255, 0.3);
+    opacity: 1;
+}
+
+/* ===============================
+   클러스터 요약 카드
+   =============================== */
+.cluster-summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-lg);
+}
+
+.cluster-summary-card {
+    background: var(--bg-white);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm);
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid;
+    transition: var(--transition-fast);
+    cursor: pointer;
+}
+
+.cluster-summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.cluster-summary-card.survivor {
+    border-left-color: var(--cluster-survivor-color);
+}
+
+.cluster-summary-card.explorer {
+    border-left-color: var(--cluster-explorer-color);
+}
+
+.cluster-summary-card.aggressive {
+    border-left-color: var(--cluster-aggressive-color);
+}
+
+.cluster-summary-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+}
+
+.cluster-summary-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.cluster-summary-icon.survivor {
+    background: var(--cluster-survivor-color);
+}
+
+.cluster-summary-icon.explorer {
+    background: var(--cluster-explorer-color);
+}
+
+.cluster-summary-icon.aggressive {
+    background: var(--cluster-aggressive-color);
+}
+
+.cluster-summary-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.cluster-summary-count {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 2px;
+}
+
+.cluster-summary-percentage {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* ===============================
+   메트릭 그룹
+   =============================== */
+.metrics-group {
+    background: var(--bg-light);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.metrics-group-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+    text-align: center;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--spacing-sm);
+}
+
+.metric-item {
+    background: var(--bg-white);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm);
+    text-align: center;
+    border: 2px solid transparent;
+    transition: var(--transition-fast);
+}
+
+.metric-item:hover {
+    border-color: var(--primary-color);
+    transform: scale(1.02);
+}
+
+.metric-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    line-height: 1;
+}
+
+.metric-unit {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-left: 2px;
+}
+
+/* ===============================
+   통계 프로그레스 바
+   =============================== */
+.stat-progress {
+    margin-top: var(--spacing-xs);
+}
+
+.stat-progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--bg-muted);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.stat-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+    border-radius: 3px;
+    transition: width 1s ease-out;
+    position: relative;
+}
+
+.stat-progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.3), 
+        transparent
+    );
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* ===============================
+   데이터 비교 섹션
+   =============================== */
+.data-comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.comparison-card {
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    border: 2px solid transparent;
+    transition: var(--transition-fast);
+}
+
+.comparison-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+.comparison-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+    text-align: center;
+}
+
+.comparison-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.comparison-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-xs) 0;
+    border-bottom: 1px solid var(--bg-muted);
+}
+
+.comparison-item:last-child {
+    border-bottom: none;
+}
+
+.comparison-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.comparison-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+/* ===============================
+   카운터 애니메이션
+   =============================== */
+.counter-number {
+    display: inline-block;
+    font-weight: 600;
+    transition: var(--transition-fast);
+}
+
+.counter-number.animating {
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+/* ===============================
+   로딩 상태
+   =============================== */
+.overview-loading {
+    text-align: center;
+    padding: var(--spacing-xl);
+}
+
+.overview-loading .loading-spinner {
+    margin-bottom: var(--spacing-sm);
+}
+
+.loading-text {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* ===============================
+   오류 상태
+   =============================== */
+.overview-error {
+    text-align: center;
+    padding: var(--spacing-xl);
+    background: #fff5f5;
+    border-radius: var(--radius-lg);
+    border: 2px solid #fecaca;
+}
+
+.overview-error .error-icon {
+    font-size: 48px;
+    color: #ef4444;
+    margin-bottom: var(--spacing-sm);
+}
+
+.overview-error .error-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #dc2626;
+    margin-bottom: var(--spacing-xs);
+}
+
+.overview-error .error-message {
+    color: #7f1d1d;
+    margin-bottom: var(--spacing-sm);
+}
+
+.overview-error .retry-button {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 500;
+    transition: var(--transition-fast);
+}
+
+.overview-error .retry-button:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+}

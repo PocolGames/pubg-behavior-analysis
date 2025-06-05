@@ -1,0 +1,589 @@
+/**
+ * PUBG Cluster Analysis - Cards Styles
+ * 클러스터 분석 페이지 카드 시스템 스타일
+ * 
+ * 포함 내용:
+ * - 클러스터 카드 그리드
+ * - 상세 클러스터 카드
+ * - 카드 호버 효과
+ * - 클러스터 타입별 테마
+ */
+
+/* ===============================
+   클러스터 카드 그리드
+   =============================== */
+.cluster-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.cluster-cards-grid.compact {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.cluster-cards-grid.expanded {
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+/* ===============================
+   기본 클러스터 카드
+   =============================== */
+.cluster-card {
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: var(--transition-smooth);
+    border: 2px solid transparent;
+    position: relative;
+    cursor: pointer;
+}
+
+.cluster-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.cluster-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+}
+
+.cluster-card:hover::before {
+    transform: scaleX(1);
+}
+
+/* ===============================
+   상세 클러스터 카드
+   =============================== */
+.detailed-cluster-card {
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    transition: var(--transition-smooth);
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.detailed-cluster-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* 클러스터 타입별 테마 */
+.detailed-cluster-card.survivor-type {
+    border-top: 4px solid var(--cluster-survivor-color);
+}
+
+.detailed-cluster-card.survivor-type:hover {
+    border-color: var(--cluster-survivor-color);
+    background: var(--cluster-survivor-bg);
+}
+
+.detailed-cluster-card.explorer-type {
+    border-top: 4px solid var(--cluster-explorer-color);
+}
+
+.detailed-cluster-card.explorer-type:hover {
+    border-color: var(--cluster-explorer-color);
+    background: var(--cluster-explorer-bg);
+}
+
+.detailed-cluster-card.aggressive-type {
+    border-top: 4px solid var(--cluster-aggressive-color);
+}
+
+.detailed-cluster-card.aggressive-type:hover {
+    border-color: var(--cluster-aggressive-color);
+    background: var(--cluster-aggressive-bg);
+}
+
+/* ===============================
+   카드 헤더
+   =============================== */
+.cluster-header {
+    padding: var(--spacing-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+    border-bottom: 1px solid var(--bg-muted);
+    position: relative;
+}
+
+.cluster-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        var(--primary-color), 
+        transparent
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.detailed-cluster-card:hover .cluster-header::after {
+    opacity: 1;
+}
+
+.cluster-info {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    flex: 1;
+}
+
+.cluster-icon {
+    font-size: 28px;
+    color: var(--primary-color);
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: var(--bg-white);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-fast);
+}
+
+.detailed-cluster-card:hover .cluster-icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: var(--shadow-md);
+}
+
+.cluster-details {
+    flex: 1;
+}
+
+.cluster-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-color);
+    transition: var(--transition-fast);
+}
+
+.detailed-cluster-card:hover .cluster-name {
+    color: var(--primary-color);
+}
+
+.cluster-description {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-bottom: var(--spacing-xs);
+}
+
+.cluster-stats {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.cluster-percentage {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: var(--bg-white);
+    padding: 4px 12px;
+    border-radius: var(--radius-xl);
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cluster-percentage::before {
+    content: '👥';
+    font-size: 0.8rem;
+}
+
+.cluster-count {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.cluster-detail-btn {
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    background: transparent;
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: var(--transition-fast);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.cluster-detail-btn:hover {
+    background: var(--primary-color);
+    color: var(--bg-white);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.cluster-detail-btn i {
+    font-size: 0.9rem;
+    transition: transform 0.3s ease;
+}
+
+.cluster-detail-btn:hover i {
+    transform: translateX(3px);
+}
+
+/* ===============================
+   카드 컨텐츠 영역
+   =============================== */
+.cluster-features {
+    padding: var(--spacing-md);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+    align-items: start;
+}
+
+.cluster-features.single-column {
+    grid-template-columns: 1fr;
+}
+
+/* 특성 레이더 차트 영역 */
+.feature-radar {
+    position: relative;
+    height: 200px;
+    background: var(--bg-light);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed var(--bg-muted);
+    transition: var(--transition-fast);
+}
+
+.detailed-cluster-card:hover .feature-radar {
+    border-color: var(--primary-color);
+    background: var(--cluster-survivor-bg);
+}
+
+.radar-placeholder {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.radar-placeholder i {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-xs);
+    color: var(--primary-color);
+}
+
+/* 주요 특성 목록 */
+.key-features h6 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-color);
+    border-bottom: 2px solid var(--bg-muted);
+    padding-bottom: 5px;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.feature-list li {
+    padding: 8px 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    position: relative;
+    padding-left: 25px;
+    transition: var(--transition-fast);
+    border-radius: var(--radius-sm);
+    margin-bottom: 2px;
+}
+
+.feature-list li:hover {
+    color: var(--text-color);
+    background: var(--bg-light);
+    padding-left: 30px;
+}
+
+.feature-list li::before {
+    content: '▶';
+    position: absolute;
+    left: 8px;
+    color: var(--primary-color);
+    font-size: 0.8rem;
+    transition: var(--transition-fast);
+}
+
+.feature-list li:hover::before {
+    left: 13px;
+    transform: scale(1.2);
+}
+
+/* ===============================
+   카드 푸터
+   =============================== */
+.cluster-footer {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-light);
+    border-top: 1px solid var(--bg-muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cluster-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.cluster-action-btn {
+    background: none;
+    border: 2px solid var(--bg-muted);
+    color: var(--text-muted);
+    width: 35px;
+    height: 35px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    font-size: 0.9rem;
+}
+
+.cluster-action-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: var(--cluster-survivor-bg);
+    transform: scale(1.1);
+}
+
+.cluster-meta {
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+/* ===============================
+   특수 카드 변형
+   =============================== */
+.cluster-card.featured {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: var(--bg-white);
+    border: none;
+    transform: scale(1.02);
+}
+
+.cluster-card.featured .cluster-header {
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+.cluster-card.featured .cluster-name,
+.cluster-card.featured .cluster-description,
+.cluster-card.featured .cluster-count {
+    color: var(--bg-white);
+}
+
+.cluster-card.featured .cluster-icon {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--bg-white);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.cluster-card.featured .cluster-detail-btn {
+    border-color: var(--bg-white);
+    color: var(--bg-white);
+}
+
+.cluster-card.featured .cluster-detail-btn:hover {
+    background: var(--bg-white);
+    color: var(--primary-color);
+}
+
+/* ===============================
+   카드 로딩 상태
+   =============================== */
+.cluster-card.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.cluster-card.loading .cluster-header,
+.cluster-card.loading .cluster-features {
+    position: relative;
+    overflow: hidden;
+}
+
+.cluster-card.loading .cluster-header::before,
+.cluster-card.loading .cluster-features::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.6), 
+        transparent
+    );
+    animation: shimmer 2s infinite;
+    z-index: 1;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* ===============================
+   카드 오류 상태
+   =============================== */
+.cluster-card.error {
+    border-color: #ef4444;
+    background: #fef2f2;
+}
+
+.cluster-card.error .cluster-header {
+    background: #fee2e2;
+}
+
+.cluster-card.error .cluster-icon {
+    background: #ef4444;
+    color: var(--bg-white);
+}
+
+.cluster-card.error .cluster-name {
+    color: #dc2626;
+}
+
+.error-message {
+    padding: var(--spacing-md);
+    text-align: center;
+    color: #7f1d1d;
+    font-size: 0.9rem;
+}
+
+.error-retry {
+    background: #ef4444;
+    color: var(--bg-white);
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: var(--transition-fast);
+}
+
+.error-retry:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+}
+
+/* ===============================
+   카드 애니메이션
+   =============================== */
+.cluster-card-enter {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+}
+
+.cluster-card-enter-active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cluster-card-exit {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.cluster-card-exit-active {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+    transition: all 0.4s ease;
+}
+
+/* 스태거 애니메이션 */
+.cluster-card:nth-child(1) { animation-delay: 0.1s; }
+.cluster-card:nth-child(2) { animation-delay: 0.2s; }
+.cluster-card:nth-child(3) { animation-delay: 0.3s; }
+.cluster-card:nth-child(4) { animation-delay: 0.4s; }
+.cluster-card:nth-child(5) { animation-delay: 0.5s; }
+.cluster-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* ===============================
+   반응형 카드 레이아웃
+   =============================== */
+@media (max-width: 768px) {
+    .cluster-cards-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .cluster-features {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+    
+    .cluster-header {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        align-items: flex-start;
+    }
+    
+    .cluster-stats {
+        justify-content: flex-start;
+    }
+    
+    .cluster-detail-btn {
+        align-self: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .cluster-info {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .cluster-icon {
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .cluster-stats {
+        justify-content: center;
+    }
+}

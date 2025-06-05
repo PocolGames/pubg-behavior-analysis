@@ -6,6 +6,7 @@
  * 
  * 파일 구조:
  * - components/component-*.css: 개별 컴포넌트 파일들
+ * - components/chart-components.css: 차트 관련 컴포넌트 (새로 추가)
  * - components.css: 메인 import 파일 (현재 파일)
  */
 
@@ -35,6 +36,9 @@
 /* Animation Components - 애니메이션 효과 관련 스타일 */
 @import url('./components/component-animations.css');
 
+/* Chart Components - 차트 및 데이터 시각화 관련 스타일 (새로 추가) */
+@import url('./components/chart-components.css');
+
 /* === Responsive Imports (Must be last) === */
 
 /* Responsive Components - 반응형 미디어 쿼리 (마지막에 import) */
@@ -45,7 +49,8 @@
  * 1. 기본 컴포넌트들 (buttons, forms, tables, alerts, modals, navigation)
  * 2. 레이아웃 컴포넌트들 (cards)
  * 3. 효과 컴포넌트들 (animations)
- * 4. 반응형 스타일 (responsive) - 마지막에 적용되어야 함
+ * 4. 특화 컴포넌트들 (chart-components) - 새로 추가
+ * 5. 반응형 스타일 (responsive) - 마지막에 적용되어야 함
  * 
  * 이 순서는 CSS 캐스케이딩과 우선순위를 고려한 것입니다.
  */

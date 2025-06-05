@@ -1,0 +1,162 @@
+/* ===== PUBG Dashboard - Player Type Cards ===== */
+
+/* Player Types Section */
+.player-types-section {
+    margin-bottom: 4rem;
+}
+
+.player-types-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* Player Type Cards */
+.player-type-card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(15px);
+}
+
+.player-type-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--type-color), transparent);
+    transition: all 0.3s ease;
+}
+
+.player-type-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border-color: var(--type-color);
+}
+
+.player-type-card:hover::before {
+    background: linear-gradient(90deg, var(--type-color), var(--type-color), var(--type-color));
+    box-shadow: 0 0 20px var(--type-color);
+}
+
+/* Player Type Specific Colors */
+.survivor-type {
+    --type-color: #4CAF50;
+    border-left: 3px solid #4CAF50;
+}
+
+.explorer-type {
+    --type-color: #2196F3;
+    border-left: 3px solid #2196F3;
+}
+
+.aggressive-type {
+    --type-color: #F44336;
+    border-left: 3px solid #F44336;
+}
+
+.player-type-card .type-icon {
+    font-size: 2.5rem;
+    color: var(--type-color);
+    margin-bottom: 0.5rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.player-type-card .type-name {
+    color: #ffffff;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.card-content {
+    position: relative;
+    z-index: 2;
+}
+
+.type-percentage {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--type-color);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 20px rgba(var(--type-color), 0.5);
+}
+
+.type-count {
+    color: #b0b0b0;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.type-features {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+}
+
+.feature-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    padding: 0.5rem 0;
+}
+
+.feature-item:last-child {
+    margin-bottom: 0;
+}
+
+.feature-name {
+    color: #c0c0c0;
+    font-size: 0.9rem;
+    flex: 1;
+}
+
+.feature-value {
+    color: var(--type-color);
+    font-weight: 600;
+    font-size: 1rem;
+    background: rgba(var(--type-color), 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    border: 1px solid rgba(var(--type-color), 0.3);
+}
+
+/* Responsive Design for Player Cards */
+@media (max-width: 768px) {
+    .player-types-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .player-type-card {
+        padding: 1.5rem;
+    }
+    
+    .type-percentage {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .player-type-card {
+        padding: 1rem;
+    }
+    
+    .type-percentage {
+        font-size: 2rem;
+    }
+}

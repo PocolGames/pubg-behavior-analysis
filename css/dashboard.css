@@ -1,153 +1,47 @@
 /* ===== PUBG 플레이어 행동 분석 - Dashboard CSS ===== */
 
-/* Player Types Section */
-.player-types-section {
-    margin-bottom: 4rem;
-}
+/* Import Dashboard Components */
+@import url('./dashboard/dashboard-player-cards.css');
+@import url('./dashboard/dashboard-analysis-cards.css');
+@import url('./dashboard/dashboard-insight-cards.css');
+@import url('./dashboard/dashboard-progress-elements.css');
+@import url('./dashboard/dashboard-tooltips-badges.css');
 
-.player-types-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
+/* ===== Dashboard Main Layout ===== */
+/* This file contains only the main dashboard layout and imports all component styles */
 
-/* Player Type Cards */
-.player-type-card {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 20px;
+/* Dashboard Container */
+.dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
     padding: 2rem;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s ease;
-    backdrop-filter: blur(15px);
 }
 
-.player-type-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, transparent, var(--type-color), transparent);
-    transition: all 0.3s ease;
+/* Section Headers */
+.section-header {
+    margin-bottom: 2rem;
 }
 
-.player-type-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    border-color: var(--type-color);
-}
-
-.player-type-card:hover::before {
-    background: linear-gradient(90deg, var(--type-color), var(--type-color), var(--type-color));
-    box-shadow: 0 0 20px var(--type-color);
-}
-
-/* Player Type Specific Colors */
-.survivor-type {
-    --type-color: #4CAF50;
-    border-left: 3px solid #4CAF50;
-}
-
-.explorer-type {
-    --type-color: #2196F3;
-    border-left: 3px solid #2196F3;
-}
-
-.aggressive-type {
-    --type-color: #F44336;
-    border-left: 3px solid #F44336;
-}
-
-.player-type-card .type-icon {
-    font-size: 2.5rem;
-    color: var(--type-color);
-    margin-bottom: 0.5rem;
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
-
-.player-type-card .type-name {
+.section-title {
     color: #ffffff;
-    font-size: 1.4rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-}
-
-.card-content {
-    position: relative;
-    z-index: 2;
-}
-
-.type-percentage {
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: 700;
-    color: var(--type-color);
-    line-height: 1;
     margin-bottom: 0.5rem;
-    text-shadow: 0 0 20px rgba(var(--type-color), 0.5);
 }
 
-.type-count {
+.section-subtitle {
     color: #b0b0b0;
     font-size: 1.1rem;
-    margin-bottom: 1.5rem;
-    font-weight: 500;
+    line-height: 1.6;
 }
 
-.type-features {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 1rem;
-}
-
-.feature-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.8rem;
-    padding: 0.5rem 0;
-}
-
-.feature-item:last-child {
-    margin-bottom: 0;
-}
-
-.feature-name {
-    color: #c0c0c0;
-    font-size: 0.9rem;
-    flex: 1;
-}
-
-.feature-value {
-    color: var(--type-color);
-    font-weight: 600;
-    font-size: 1rem;
-    background: rgba(var(--type-color), 0.1);
-    padding: 0.25rem 0.75rem;
-    border-radius: 12px;
-    border: 1px solid rgba(var(--type-color), 0.3);
-}
-
-/* Quick Analysis Section */
-.quick-analysis-section {
+/* Global Dashboard Styles */
+.dashboard-section {
     margin-bottom: 4rem;
 }
 
-.analysis-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.analysis-card {
+/* Common Card Base */
+.card-base {
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 16px;
@@ -157,430 +51,37 @@
     backdrop-filter: blur(10px);
 }
 
-.analysis-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255, 107, 53, 0.05), rgba(102, 126, 234, 0.05));
-    border-radius: 16px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 1;
+/* Dashboard Responsive Layout */
+@media (max-width: 1200px) {
+    .dashboard-container {
+        padding: 1.5rem;
+    }
 }
 
-.analysis-card:hover::after {
-    opacity: 1;
-}
-
-.analysis-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 107, 53, 0.3);
-}
-
-.analysis-card .card-header {
-    position: relative;
-    z-index: 2;
-    margin-bottom: 1.5rem;
-}
-
-.analysis-card .card-content {
-    position: relative;
-    z-index: 2;
-}
-
-/* Performance Metrics */
-.performance-metrics {
-    margin-bottom: 1.5rem;
-}
-
-.metric {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.metric:last-child {
-    border-bottom: none;
-}
-
-.metric-label {
-    color: #b0b0b0;
-    font-size: 0.95rem;
-}
-
-.metric-value {
-    color: #ffffff;
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-
-/* Feature Ranking */
-.feature-ranking {
-    margin-bottom: 1.5rem;
-}
-
-.rank-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.rank-item:last-child {
-    border-bottom: none;
-}
-
-.rank-number {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    background: linear-gradient(45deg, #ff6b35, #f7931e);
-    color: white;
-    border-radius: 50%;
-    font-weight: 700;
-    font-size: 0.9rem;
-    flex-shrink: 0;
-}
-
-.rank-feature {
-    flex: 1;
-    color: #e0e0e0;
-    font-size: 0.95rem;
-}
-
-.rank-impact {
-    color: #ff6b35;
-    font-weight: 600;
-    font-size: 1rem;
-}
-
-/* Prediction Tool */
-.tool-description {
-    color: #c0c0c0;
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
-}
-
-.prediction-stats {
-    display: flex;
-    gap: 2rem;
-    margin-bottom: 1.5rem;
-}
-
-.pred-stat {
-    text-align: center;
-    flex: 1;
-}
-
-.pred-label {
-    display: block;
-    color: #888;
-    font-size: 0.85rem;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.pred-value {
-    color: #56ab2f;
-    font-weight: 700;
-    font-size: 1.5rem;
-}
-
-/* Insights Section */
-.insights-section {
-    margin-bottom: 4rem;
-}
-
-.insights-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.insight-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    padding: 2rem;
-    text-align: center;
-    position: relative;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(8px);
-}
-
-.insight-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: conic-gradient(from 0deg, transparent, rgba(255, 107, 53, 0.1), transparent);
-    animation: rotate 4s linear infinite;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.insight-card:hover::before {
-    opacity: 1;
-}
-
-@keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-.insight-card:hover {
-    transform: translateY(-8px);
-    border-color: rgba(255, 107, 53, 0.3);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-}
-
-.insight-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 1.5rem;
-    background: linear-gradient(45deg, #ff6b35, #f7931e);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 2;
-}
-
-.insight-icon i {
-    font-size: 2rem;
-    color: white;
-}
-
-.insight-title {
-    color: #ffffff;
-    margin-bottom: 1rem;
-    font-size: 1.3rem;
-    position: relative;
-    z-index: 2;
-}
-
-.insight-description {
-    color: #b0b0b0;
-    line-height: 1.6;
-    position: relative;
-    z-index: 2;
-}
-
-/* Progress Bars */
-.progress-bar {
-    width: 100%;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    overflow: hidden;
-    margin: 0.5rem 0;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #ff6b35, #f7931e);
-    border-radius: 4px;
-    transition: width 1s ease;
-    position: relative;
-}
-
-.progress-fill::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-}
-
-/* Data Visualization Containers */
-.chart-container {
-    position: relative;
-    height: 300px;
-    margin: 1rem 0;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 12px;
-    padding: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.chart-title {
-    text-align: center;
-    color: #ffffff;
-    margin-bottom: 1rem;
-    font-weight: 600;
-}
-
-/* Responsive Design for Dashboard */
 @media (max-width: 768px) {
-    .player-types-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+    .dashboard-container {
+        padding: 1rem;
     }
     
-    .analysis-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+    .section-title {
+        font-size: 1.75rem;
     }
     
-    .insights-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    .player-type-card {
-        padding: 1.5rem;
-    }
-    
-    .analysis-card {
-        padding: 1.5rem;
-    }
-    
-    .type-percentage {
-        font-size: 2.5rem;
-    }
-    
-    .prediction-stats {
-        gap: 1rem;
+    .section-subtitle {
+        font-size: 1rem;
     }
 }
 
 @media (max-width: 480px) {
-    .player-type-card {
-        padding: 1rem;
+    .dashboard-container {
+        padding: 0.75rem;
     }
     
-    .analysis-card {
-        padding: 1rem;
-    }
-    
-    .insight-card {
-        padding: 1.5rem;
-    }
-    
-    .type-percentage {
-        font-size: 2rem;
-    }
-    
-    .insight-icon {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .insight-icon i {
+    .section-title {
         font-size: 1.5rem;
     }
     
-    .prediction-stats {
-        flex-direction: column;
-        gap: 1rem;
+    .card-base {
+        padding: 1.5rem;
     }
-}
-
-/* Loading States */
-.card-loading {
-    opacity: 0.6;
-    pointer-events: none;
-}
-
-.card-loading::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 30px;
-    height: 30px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: #ff6b35;
-    animation: spin 1s ease-in-out infinite;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-}
-
-/* Tooltip Styles */
-.tooltip {
-    position: relative;
-    cursor: help;
-}
-
-.tooltip::before {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.9);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    z-index: 1000;
-}
-
-.tooltip:hover::before {
-    opacity: 1;
-    visibility: visible;
-    bottom: calc(100% + 5px);
-}
-
-/* Badge Styles */
-.badge {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-radius: 12px;
-    border: 1px solid;
-}
-
-.badge-success {
-    background: rgba(86, 171, 47, 0.2);
-    color: #56ab2f;
-    border-color: #56ab2f;
-}
-
-.badge-warning {
-    background: rgba(255, 193, 7, 0.2);
-    color: #ffc107;
-    border-color: #ffc107;
-}
-
-.badge-danger {
-    background: rgba(244, 67, 54, 0.2);
-    color: #f44336;
-    border-color: #f44336;
-}
-
-.badge-info {
-    background: rgba(33, 150, 243, 0.2);
-    color: #2196f3;
-    border-color: #2196f3;
 }

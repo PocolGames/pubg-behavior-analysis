@@ -1,0 +1,207 @@
+/* ===== PUBG Dashboard - Analysis Cards ===== */
+
+/* Quick Analysis Section */
+.quick-analysis-section {
+    margin-bottom: 4rem;
+}
+
+.analysis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.analysis-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 2rem;
+    position: relative;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.analysis-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.05), rgba(102, 126, 234, 0.05));
+    border-radius: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.analysis-card:hover::after {
+    opacity: 1;
+}
+
+.analysis-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 107, 53, 0.3);
+}
+
+.analysis-card .card-header {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 1.5rem;
+}
+
+.analysis-card .card-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* Performance Metrics */
+.performance-metrics {
+    margin-bottom: 1.5rem;
+}
+
+.metric {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.metric:last-child {
+    border-bottom: none;
+}
+
+.metric-label {
+    color: #b0b0b0;
+    font-size: 0.95rem;
+}
+
+.metric-value {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* Feature Ranking */
+.feature-ranking {
+    margin-bottom: 1.5rem;
+}
+
+.rank-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rank-item:last-child {
+    border-bottom: none;
+}
+
+.rank-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(45deg, #ff6b35, #f7931e);
+    color: white;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.rank-feature {
+    flex: 1;
+    color: #e0e0e0;
+    font-size: 0.95rem;
+}
+
+.rank-impact {
+    color: #ff6b35;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Prediction Tool */
+.tool-description {
+    color: #c0c0c0;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.prediction-stats {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.pred-stat {
+    text-align: center;
+    flex: 1;
+}
+
+.pred-label {
+    display: block;
+    color: #888;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pred-value {
+    color: #56ab2f;
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+/* Data Visualization Containers */
+.chart-container {
+    position: relative;
+    height: 300px;
+    margin: 1rem 0;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.chart-title {
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+/* Responsive Design for Analysis Cards */
+@media (max-width: 768px) {
+    .analysis-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .analysis-card {
+        padding: 1.5rem;
+    }
+    
+    .prediction-stats {
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .analysis-card {
+        padding: 1rem;
+    }
+    
+    .prediction-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}

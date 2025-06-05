@@ -19,22 +19,27 @@
 </head>
 <body>
     <!-- Header -->
-    <header class="main-header">
+    <header class="header">
         <div class="container">
-            <div class="header-content">
-                <div class="logo-section">
+            <div class="nav-brand">
+                <a href="../index.html">
                     <i class="fas fa-crosshairs logo-icon"></i>
-                    <h1 class="site-title">PUBG 플레이어 행동 분석</h1>
-                </div>
-                <nav class="main-nav">
-                    <ul class="nav-list">
-                        <li><a href="#overview" class="nav-link active">개요</a></li>
-                        <li><a href="pages/cluster-analysis.html" class="nav-link">클러스터 분석</a></li>
-                        <li><a href="pages/model-performance.html" class="nav-link">모델 성능</a></li>
-                        <li><a href="pages/player-prediction.html" class="nav-link">플레이어 예측</a></li>
-                    </ul>
-                </nav>
+                    <span>PUBG 플레이어 행동 분석</span>
+                </a>
             </div>
+            
+            <nav class="nav-menu">
+                <a href="#overview" class="nav-link active">대시보드</a>
+                <a href="pages/cluster-analysis.html" class="nav-link">클러스터 분석</a>
+                <a href="pages/model-performance.html" class="nav-link">모델 성능</a>
+                <a href="pages/player-prediction.html" class="nav-link">플레이어 예측</a>
+            </nav>
+            
+            <button class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </header>
 

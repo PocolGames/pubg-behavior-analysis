@@ -1,7 +1,6 @@
 /* ===== Header Layout Styles ===== */
 
 /* Main Header (기존 main-header와 새로운 header 클래스 모두 지원) */
-.header,
 .main-header {
     background: var(--bg-card);
     backdrop-filter: var(--backdrop-blur-md);

@@ -1,0 +1,344 @@
+/* ===== PUBG Player Prediction - Responsive Styles ===== */
+
+/*
+ * 플레이어 예측 페이지 반응형 스타일
+ * - 태블릿 및 모바일 최적화
+ * - 그리드 레이아웃 조정
+ * - 터치 인터페이스 개선
+ * - 접근성 향상
+ */
+
+/* ===== Large Tablets (1200px and below) ===== */
+@media (max-width: 1200px) {
+    .prediction-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .input-panel {
+        position: static;
+    }
+    
+    .results-panel {
+        max-height: none;
+        overflow-y: visible;
+    }
+    
+    .model-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+/* ===== Tablets (768px and below) ===== */
+@media (max-width: 768px) {
+    /* Form Layout */
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .model-stats {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .probability-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+    
+    .result-metrics {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+    
+    /* Card Headers */
+    .input-panel .card-header,
+    .results-panel .card-header {
+        padding: 1rem 1.5rem;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .header-actions {
+        align-self: stretch;
+        justify-content: space-between;
+    }
+    
+    /* Content Padding */
+    .player-form,
+    .prediction-summary,
+    .chart-container,
+    .analysis-details,
+    .sample-players {
+        padding: 1.5rem;
+    }
+    
+    /* Quick Fill Buttons */
+    .quick-fill-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn-quick-fill {
+        text-align: center;
+        padding: 0.75rem 1rem;
+    }
+    
+    /* Chart Containers */
+    .chart-container canvas {
+        max-height: 250px;
+    }
+    
+    .chart-legend {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+}
+
+/* ===== Mobile Devices (480px and below) ===== */
+@media (max-width: 480px) {
+    /* Prediction Type Display */
+    .predicted-type {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .type-icon {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    /* Sample Players */
+    .sample-player {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+        padding: 1.5rem 1rem;
+    }
+    
+    .sample-icon {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+    
+    .sample-stats {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .sample-player .btn {
+        margin-left: 0;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    /* Statistics Items */
+    .stat-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .stat-icon {
+        margin-right: 0;
+        margin-bottom: 0.75rem;
+    }
+    
+    /* Detail Items */
+    .detail-item {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+    
+    /* Probability Grid */
+    .probability-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .result-metrics {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Content Padding */
+    .player-form,
+    .prediction-summary,
+    .chart-container,
+    .analysis-details,
+    .sample-players,
+    .model-description {
+        padding: 1rem;
+    }
+    
+    /* Form Sections */
+    .form-section h4 {
+        font-size: 1rem;
+        text-align: center;
+    }
+    
+    /* Chart Containers */
+    .chart-container canvas {
+        max-height: 200px;
+    }
+    
+    .chart-container h5 {
+        font-size: 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    /* Feature List */
+    .feature-item {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .feature-rank {
+        margin-right: 0;
+    }
+    
+    .feature-bar {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 0.5rem;
+    }
+}
+
+/* ===== Touch Device Optimizations ===== */
+@media (hover: none) and (pointer: coarse) {
+    /* Increase touch targets */
+    .sample-player,
+    .btn-quick-fill,
+    .detail-item {
+        min-height: 44px;
+    }
+    
+    .form-group input {
+        min-height: 44px;
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+    
+    .btn {
+        min-height: 44px;
+        padding: 0.75rem 1.5rem;
+    }
+    
+    /* Remove hover effects */
+    .sample-player:hover,
+    .detail-item:hover,
+    .probability-item:hover {
+        transform: none;
+        background: rgba(255, 255, 255, 0.03);
+    }
+}
+
+/* ===== High DPI Displays ===== */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .type-icon,
+    .sample-icon,
+    .stat-icon {
+        background-image: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+    }
+}
+
+/* ===== Landscape Mobile ===== */
+@media (max-width: 768px) and (orientation: landscape) {
+    .prediction-layout {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .results-panel {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+    
+    .model-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .chart-container canvas {
+        max-height: 180px;
+    }
+}
+
+/* ===== Print Styles ===== */
+@media print {
+    .prediction-interface {
+        margin: 0;
+    }
+    
+    .input-panel,
+    .header-actions,
+    .quick-fill-section,
+    .form-actions {
+        display: none;
+    }
+    
+    .prediction-layout {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .results-panel .card,
+    .model-info .card {
+        background: white;
+        color: black;
+        border: 1px solid #ccc;
+        box-shadow: none;
+    }
+    
+    .results-panel .card-header h3,
+    .type-info h4,
+    .stat-info h4 {
+        color: black;
+    }
+    
+    .chart-container canvas {
+        max-height: 200px;
+    }
+}
+
+/* ===== Accessibility Improvements ===== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .confidence-fill,
+    .probability-fill,
+    .feature-fill {
+        transition: none;
+    }
+}
+
+/* ===== High Contrast Mode ===== */
+@media (prefers-contrast: high) {
+    .input-panel .card,
+    .results-panel .card,
+    .model-info .card {
+        border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+    
+    .form-group input {
+        border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+    
+    .form-group input:focus {
+        border: 2px solid #64b5f6;
+    }
+    
+    .sample-player,
+    .detail-item,
+    .probability-item {
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+}

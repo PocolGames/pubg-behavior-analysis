@@ -1,0 +1,373 @@
+/* ===== PUBG Player Prediction - Components Styles ===== */
+
+/*
+ * 플레이어 예측 페이지 컴포넌트 스타일
+ * - 샘플 플레이어 카드
+ * - 모델 정보 섹션
+ * - 분석 상세 정보
+ * - 통계 표시 컴포넌트
+ */
+
+/* ===== Sample Players ===== */
+.sample-players {
+    padding: 1.5rem 2rem;
+}
+
+.sample-players h5 {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.sample-players h5 i {
+    margin-right: 0.5rem;
+    color: #64b5f6;
+}
+
+.sample-player {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.sample-player:last-child {
+    margin-bottom: 0;
+}
+
+.sample-player:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.sample-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.sample-icon.survivor {
+    background: linear-gradient(135deg, #4caf50, #81c784);
+}
+
+.sample-icon.explorer {
+    background: linear-gradient(135deg, #2196f3, #64b5f6);
+}
+
+.sample-icon.aggressive {
+    background: linear-gradient(135deg, #f44336, #ef5350);
+}
+
+.sample-icon.balanced {
+    background: linear-gradient(135deg, #ff9800, #ffc107);
+}
+
+.sample-icon i {
+    color: #ffffff;
+    font-size: 1.2rem;
+}
+
+.sample-info {
+    flex: 1;
+}
+
+.sample-info h5 {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 0.3rem 0;
+}
+
+.sample-info p {
+    color: #b0b0b0;
+    font-size: 0.85rem;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.sample-stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.sample-stat {
+    font-size: 0.75rem;
+    color: #888;
+}
+
+.sample-stat strong {
+    color: #e0e0e0;
+}
+
+.sample-player .btn {
+    margin-left: 1rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+/* ===== Analysis Details ===== */
+.analysis-details {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.analysis-details h5 {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.analysis-details h5 i {
+    margin-right: 0.5rem;
+    color: #ff9800;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+.detail-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.detail-label {
+    color: #b0b0b0;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.detail-value {
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.detail-value.high {
+    color: #4caf50;
+}
+
+.detail-value.medium {
+    color: #ff9800;
+}
+
+.detail-value.low {
+    color: #f44336;
+}
+
+/* ===== Model Information ===== */
+.model-info {
+    margin-top: 3rem;
+}
+
+.model-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    margin-bottom: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    text-align: left;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #ff9800, #ffc107);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    flex-shrink: 0;
+    box-shadow: 0 3px 10px rgba(255, 152, 0, 0.3);
+}
+
+.stat-icon.accuracy {
+    background: linear-gradient(135deg, #4caf50, #81c784);
+    box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+}
+
+.stat-icon.features {
+    background: linear-gradient(135deg, #2196f3, #64b5f6);
+    box-shadow: 0 3px 10px rgba(33, 150, 243, 0.3);
+}
+
+.stat-icon.samples {
+    background: linear-gradient(135deg, #9c27b0, #ba68c8);
+    box-shadow: 0 3px 10px rgba(156, 39, 176, 0.3);
+}
+
+.stat-icon i {
+    color: #ffffff;
+    font-size: 1.5rem;
+}
+
+.stat-info h4 {
+    color: #ffffff;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 0 0.2rem 0;
+}
+
+.stat-info p {
+    color: #b0b0b0;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.model-description {
+    padding: 0 2rem 2rem 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 1rem;
+    padding-top: 2rem;
+}
+
+.model-description h4 {
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.model-description h4 i {
+    margin-right: 0.5rem;
+    color: #64b5f6;
+}
+
+.model-description p {
+    color: #e0e0e0;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+}
+
+.model-description p:last-child {
+    margin-bottom: 0;
+}
+
+/* ===== Feature Importance ===== */
+.feature-importance {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feature-importance h5 {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.feature-importance h5 i {
+    margin-right: 0.5rem;
+    color: #64b5f6;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.feature-item:last-child {
+    margin-bottom: 0;
+}
+
+.feature-rank {
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #64b5f6, #81c784);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.feature-name {
+    flex: 1;
+    color: #e0e0e0;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.feature-score {
+    color: #4caf50;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-left: 1rem;
+}
+
+.feature-bar {
+    width: 60px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin-left: 1rem;
+    overflow: hidden;
+}
+
+.feature-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4caf50, #81c784);
+    border-radius: 2px;
+    transition: width 0.6s ease-in-out;
+}

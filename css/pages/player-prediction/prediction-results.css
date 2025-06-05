@@ -1,0 +1,358 @@
+/* ===== PUBG Player Prediction - Results Styles ===== */
+
+/*
+ * 플레이어 예측 결과 스타일
+ * - 예측 결과 요약
+ * - 차트 컨테이너
+ * - 분석 상세 정보
+ * - 신뢰도 표시
+ */
+
+/* ===== Prediction Summary ===== */
+.prediction-summary {
+    padding: 2rem;
+}
+
+.predicted-type {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(100, 181, 246, 0.1), rgba(129, 199, 132, 0.1));
+    border: 1px solid rgba(100, 181, 246, 0.3);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.type-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #64b5f6, #81c784);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.5rem;
+    flex-shrink: 0;
+}
+
+.type-icon i {
+    font-size: 1.8rem;
+    color: #ffffff;
+}
+
+.type-info h4 {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.type-info p {
+    color: #b0b0b0;
+    font-size: 1rem;
+    margin: 0 0 1rem 0;
+    line-height: 1.4;
+}
+
+/* ===== Confidence Score ===== */
+.confidence-score {
+    color: #e0e0e0;
+    font-size: 0.95rem;
+}
+
+.confidence-score strong {
+    color: #4caf50;
+    font-size: 1.1rem;
+    margin-left: 0.3rem;
+}
+
+.confidence-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.confidence-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4caf50, #81c784);
+    border-radius: 4px;
+    transition: width 1s ease-in-out;
+}
+
+.confidence-percentage {
+    display: inline-block;
+    margin-top: 0.3rem;
+    font-weight: 600;
+    color: #4caf50;
+}
+
+/* ===== Chart Containers ===== */
+.chart-container {
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.chart-container:last-child {
+    margin-bottom: 0;
+}
+
+.chart-container h5 {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-container h5 i {
+    margin-right: 0.5rem;
+    color: #64b5f6;
+}
+
+.chart-wrapper {
+    position: relative;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.chart-container canvas {
+    max-height: 300px;
+    border-radius: 6px;
+}
+
+/* ===== Chart Loading State ===== */
+.chart-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    color: #b0b0b0;
+    font-size: 0.9rem;
+}
+
+.chart-loading i {
+    margin-right: 0.5rem;
+    animation: spin 1s infinite linear;
+}
+
+/* ===== Chart Legend Custom ===== */
+.chart-legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #e0e0e0;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    margin-right: 0.5rem;
+}
+
+/* ===== Probability Distribution ===== */
+.probability-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.probability-item {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+.probability-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.probability-label {
+    color: #b0b0b0;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.probability-value {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.probability-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.probability-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #64b5f6, #81c784);
+    border-radius: 2px;
+    transition: width 0.8s ease-in-out;
+}
+
+/* ===== Result Metrics ===== */
+.result-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.metric-item {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.metric-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #ff9800, #ffc107);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.75rem;
+}
+
+.metric-icon i {
+    color: #ffffff;
+    font-size: 1.2rem;
+}
+
+.metric-value {
+    color: #ffffff;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+}
+
+.metric-label {
+    color: #b0b0b0;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ===== Prediction Explanation ===== */
+.prediction-explanation {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.explanation-title {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.explanation-title i {
+    margin-right: 0.5rem;
+    color: #64b5f6;
+}
+
+.explanation-text {
+    color: #e0e0e0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.key-factors {
+    margin-top: 1rem;
+}
+
+.key-factors h6 {
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.factor-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.factor-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.factor-item:last-child {
+    border-bottom: none;
+}
+
+.factor-icon {
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #4caf50, #81c784);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+}
+
+.factor-icon i {
+    color: #ffffff;
+    font-size: 0.7rem;
+}
+
+.factor-text {
+    color: #e0e0e0;
+    font-size: 0.85rem;
+    flex: 1;
+}
+
+.factor-impact {
+    color: #4caf50;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}

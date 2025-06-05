@@ -1,0 +1,160 @@
+/* ===== PUBG 플레이어 행동 분석 - Navigation Components ===== */
+
+/* Tabs */
+.tabs {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 2rem;
+}
+
+.tab-list {
+    display: flex;
+    list-style: none;
+    gap: 0;
+}
+
+.tab-item {
+    margin: 0;
+}
+
+.tab-link {
+    display: block;
+    padding: 1rem 1.5rem;
+    color: #888;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.tab-link:hover {
+    color: #e0e0e0;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-link.active {
+    color: #ff6b35;
+    border-bottom-color: #ff6b35;
+    background: rgba(255, 107, 53, 0.1);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Accordion */
+.accordion {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.accordion-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.accordion-item:last-child {
+    border-bottom: none;
+}
+
+.accordion-header {
+    background: none;
+    border: none;
+    width: 100%;
+    padding: 1.5rem;
+    text-align: left;
+    color: #e0e0e0;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.accordion-header:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+}
+
+.accordion-header.active {
+    color: #ff6b35;
+    background: rgba(255, 107, 53, 0.1);
+}
+
+.accordion-icon {
+    transition: transform 0.3s ease;
+}
+
+.accordion-header.active .accordion-icon {
+    transform: rotate(180deg);
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.accordion-content.active {
+    max-height: 500px;
+}
+
+.accordion-body {
+    padding: 1.5rem;
+    color: #b0b0b0;
+    line-height: 1.6;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 2rem 0;
+}
+
+.page-item {
+    list-style: none;
+}
+
+.page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: #e0e0e0;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.page-link:hover {
+    border-color: #ff6b35;
+    background: rgba(255, 107, 53, 0.1);
+    color: #ff6b35;
+}
+
+.page-item.active .page-link {
+    background: linear-gradient(45deg, #ff6b35, #f7931e);
+    border-color: #ff6b35;
+    color: white;
+}
+
+.page-item.disabled .page-link {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}

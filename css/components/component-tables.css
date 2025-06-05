@@ -1,0 +1,48 @@
+/* ===== PUBG 플레이어 행동 분석 - Table Components ===== */
+
+/* Table Styles */
+.table-container {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.table th {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    font-weight: 600;
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.table td {
+    color: #e0e0e0;
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table-striped tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.table-sm th,
+.table-sm td {
+    padding: 0.5rem;
+}

@@ -21,11 +21,17 @@
     
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Navigation Component -->
+    <script src="../components/navigation.js"></script>
 </head>
 <body>
     <!-- Header -->
-    <header class="header">
+    <!-- Navigation will be inserted here by JavaScript -->
         <div class="container">
+    
+    <!-- 하드코딩된 네비게이션 주석 처리 -->
+    <!--
             <div class="nav-brand">
                 <a href="../index.html">
                     <i class="fas fa-gamepad"></i>
@@ -47,6 +53,7 @@
             </button>
         </div>
     </header>
+    -->
 
     <!-- Page Header -->
     <section class="page-header">
@@ -418,5 +425,12 @@
     <script src="../js/main.js"></script>
     <script src="../js/chart-utils.js"></script>
     <script src="../js/model-dashboard.js"></script>
+    
+    <!-- Initialize Navigation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initNavigation();
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,504 @@
+/**
+ * PUBG 플레이어 행동 분석 - 기본 CSS
+ * Phase 1: 기능 중심, 최소한의 스타일링
+ */
+
+/* ==========================================================================
+   기본 설정
+   ========================================================================== */
+
+:root {
+    /* 컬러 변수 - 플레이어 유형별 */
+    --survivor-color: #28a745;
+    --explorer-color: #17a2b8;
+    --aggressive-color: #dc3545;
+    
+    /* 보조 컬러 */
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --danger-color: #dc3545;
+    
+    /* 중성 컬러 */
+    --light-bg: #f8f9fa;
+    --dark-bg: #343a40;
+    --border-color: #dee2e6;
+    
+    /* 간격 */
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    
+    /* 그림자 */
+    --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+}
+
+/* 전역 스타일 */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* ==========================================================================
+   네비게이션
+   ========================================================================== */
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #fff !important;
+}
+
+/* ==========================================================================
+   히어로 섹션
+   ========================================================================== */
+
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #0056b3 100%);
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+}
+
+.hero-section .display-4 {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-section .lead {
+    opacity: 0.95;
+}
+
+.hero-section .btn {
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.hero-section .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* ==========================================================================
+   입력 폼 스타일
+   ========================================================================== */
+
+#analysis-section {
+    background-color: var(--light-bg);
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+    border-bottom: none;
+    padding: 1.25rem;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+/* 폼 그룹 스타일 */
+.form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* 카테고리별 색상 구분 */
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.text-success {
+    color: var(--success-color) !important;
+}
+
+.text-warning {
+    color: #e67e22 !important;
+}
+
+.text-info {
+    color: var(--info-color) !important;
+}
+
+/* 제출 버튼 */
+.btn-primary {
+    background: linear-gradient(45deg, var(--primary-color), #0056b3);
+    border: none;
+    border-radius: 50px;
+    padding: 1rem 2.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, #0056b3, var(--primary-color));
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-primary:disabled {
+    background: var(--secondary-color);
+    transform: none;
+    box-shadow: none;
+}
+
+/* ==========================================================================
+   사이드바 스타일
+   ========================================================================== */
+
+.player-type-preview .type-item {
+    padding: 0.75rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.player-type-preview .type-item:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.badge {
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+}
+
+/* ==========================================================================
+   결과 섹션
+   ========================================================================== */
+
+#results-section {
+    background-color: var(--light-bg);
+    border-top: 3px solid var(--primary-color);
+}
+
+#main-result-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: var(--shadow-lg);
+}
+
+.player-type-result {
+    padding: var(--spacing-lg);
+}
+
+.type-icon {
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* 신뢰도 미터 */
+.confidence-meter {
+    margin: var(--spacing-lg) 0;
+}
+
+.progress {
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    overflow: hidden;
+}
+
+.progress-bar {
+    border-radius: 10px;
+    transition: width 0.6s ease;
+}
+
+/* 강점/약점 리스트 */
+.list-unstyled li {
+    padding: 0.25rem 0;
+    transition: padding-left 0.3s ease;
+}
+
+.list-unstyled li:hover {
+    padding-left: 0.5rem;
+}
+
+/* ==========================================================================
+   상세 분석 카드
+   ========================================================================== */
+
+.style-details,
+.improvement-tips {
+    padding: var(--spacing-md);
+}
+
+.stats-summary {
+    background-color: var(--light-bg);
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    margin-top: var(--spacing-md);
+}
+
+.stats-summary .row > div {
+    padding: 0.5rem;
+}
+
+/* 타입 분포 */
+.type-distribution {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+}
+
+/* ==========================================================================
+   버튼 스타일
+   ========================================================================== */
+
+.btn-outline-primary {
+    border-radius: 50px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ==========================================================================
+   유틸리티 클래스
+   ========================================================================== */
+
+/* 스크롤 부드럽게 */
+html {
+    scroll-behavior: smooth;
+}
+
+/* 플레이어 유형별 색상 클래스 */
+.survivor-color {
+    color: var(--survivor-color) !important;
+}
+
+.explorer-color {
+    color: var(--explorer-color) !important;
+}
+
+.aggressive-color {
+    color: var(--aggressive-color) !important;
+}
+
+.survivor-bg {
+    background-color: var(--survivor-color) !important;
+}
+
+.explorer-bg {
+    background-color: var(--explorer-color) !important;
+}
+
+.aggressive-bg {
+    background-color: var(--aggressive-color) !important;
+}
+
+/* 테두리 색상 */
+.border-survivor {
+    border-left: 4px solid var(--survivor-color) !important;
+}
+
+.border-explorer {
+    border-left: 4px solid var(--explorer-color) !important;
+}
+
+.border-aggressive {
+    border-left: 4px solid var(--aggressive-color) !important;
+}
+
+/* ==========================================================================
+   반응형 디자인 (기본)
+   ========================================================================== */
+
+/* 태블릿 */
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: 300px;
+        text-align: center;
+    }
+    
+    .hero-section .display-4 {
+        font-size: 2rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem;
+    }
+    
+    .player-type-result {
+        padding: var(--spacing-md);
+    }
+    
+    .btn-primary {
+        padding: 0.875rem 2rem;
+        font-size: 1rem;
+    }
+}
+
+/* 모바일 */
+@media (max-width: 576px) {
+    .hero-section .display-4 {
+        font-size: 1.75rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 1rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .player-type-result {
+        padding: var(--spacing-sm);
+    }
+    
+    .type-icon {
+        font-size: 3rem !important;
+    }
+    
+    .btn-primary {
+        width: 100%;
+        padding: 1rem;
+    }
+    
+    .btn-outline-primary {
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
+   접근성
+   ========================================================================== */
+
+/* 포커스 표시 개선 */
+.form-control:focus,
+.btn:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* 고대비 모드 지원 */
+@media (prefers-contrast: high) {
+    .card {
+        border: 2px solid #000;
+    }
+    
+    .form-control {
+        border: 2px solid #000;
+    }
+}
+
+/* 움직임 감소 선호 시 */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* ==========================================================================
+   인쇄 스타일
+   ========================================================================== */
+
+@media print {
+    .navbar,
+    .hero-section,
+    footer {
+        display: none;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+    
+    .btn {
+        display: none;
+    }
+    
+    body {
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+}
+
+/* ==========================================================================
+   로딩 및 상태 표시
+   ========================================================================== */
+
+/* 로딩 스피너 */
+.fa-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 결과 나타나는 효과 (기본) */
+#results-section {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#results-section[style*="display: none"] {
+    opacity: 0;
+}
+
+/* ==========================================================================
+   개발자 도구 (디버깅용)
+   ========================================================================== */
+
+/* 개발 모드일 때만 표시 */
+.debug-info {
+    display: none;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    z-index: 9999;
+}
+
+/* 콘솔에서 .debug-info { display: block !important; } 로 활성화 가능 */

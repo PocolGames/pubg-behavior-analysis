@@ -22,6 +22,8 @@
     <script src="js/navigation-debugger.js"></script>
     <!-- Browser Compatibility Checker -->
     <script src="js/browser-compatibility.js"></script>
+    <!-- CSS Optimizer -->
+    <script src="js/css-optimizer.js"></script>
     
     <style>
         /* 테스트용 추가 스타일 */
@@ -115,6 +117,100 @@
                 width: 100%;
                 max-width: 250px;
             }
+        }
+        
+        /* 접근성 테스트 관련 스타일 */
+        .accessibility-test {
+            background: rgba(76, 175, 80, 0.1);
+            border-left: 4px solid #4CAF50;
+            padding: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            border-radius: var(--border-radius-md);
+        }
+        
+        .accessibility-test h4 {
+            color: #4CAF50;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .accessibility-test ul {
+            margin: 0;
+            padding-left: var(--spacing-lg);
+        }
+        
+        .accessibility-test li {
+            margin: var(--spacing-xs) 0;
+        }
+        
+        /* 접근성 시각화를 위한 스타일 */
+        .highlight-focus .nav-link:focus,
+        .highlight-focus .dropdown-item:focus,
+        .highlight-focus .nav-toggle:focus,
+        .highlight-focus .test-btn:focus {
+            outline: 3px solid #FF0000 !important;
+            outline-offset: 3px !important;
+            background: rgba(255, 0, 0, 0.2) !important;
+            box-shadow: 0 0 0 6px rgba(255, 0, 0, 0.3) !important;
+        }
+        
+        .show-tabindex [tabindex]:not([tabindex="-1"]) {
+            position: relative;
+        }
+        
+        .show-tabindex [tabindex]:not([tabindex="-1"])::before {
+            content: attr(tabindex);
+            position: absolute;
+            top: -20px;
+            right: -10px;
+            background: #FF0000;
+            color: white;
+            font-size: 10px;
+            padding: 2px 4px;
+            border-radius: 2px;
+            font-weight: bold;
+            z-index: 9999;
+            font-family: monospace;
+        }
+        
+        .show-tabindex [tabindex="0"]::before {
+            content: "0";
+            background: #2196F3;
+        }
+        
+        .test-results {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-light);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            font-size: var(--font-size-sm);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .test-results h5 {
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .test-results h6 {
+            color: var(--text-primary);
+            margin: var(--spacing-md) 0 var(--spacing-xs) 0;
+        }
+        
+        .test-results table {
+            font-size: var(--font-size-xs);
+        }
+        
+        .test-results ul {
+            margin: var(--spacing-xs) 0;
+            padding-left: var(--spacing-md);
+        }
+        
+        .test-results li {
+            margin: var(--spacing-xs) 0;
         }
     </style>
 </head>
@@ -215,6 +311,70 @@
                             <i class="fas fa-browser"></i>
                             브라우저 호환성 체크
                         </button>
+                        <button onclick="CSSOptimizer.runFullAnalysis()" class="test-btn">
+                            <i class="fas fa-code"></i>
+                            CSS 최적화 분석
+                        </button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Accessibility Test Section -->
+            <section class="test-section" id="main-content">
+                <div class="test-content">
+                    <h2 class="test-title">
+                        <i class="fas fa-universal-access"></i>
+                        접근성 테스트
+                    </h2>
+                    <p class="test-description">
+                        네비게이션의 접근성 기능을 테스트합니다. 키보드 네비게이션, 스크린 리더 지원, ARIA 속성 등을 확인할 수 있습니다.
+                    </p>
+                    
+                    <!-- 키보드 네비게이션 도움말 -->
+                    <div class="accessibility-test">
+                        <h4><i class="fas fa-keyboard"></i> 키보드 네비게이션 가이드</h4>
+                        <ul>
+                            <li><strong>Tab:</strong> 다음 요소로 이동</li>
+                            <li><strong>Shift + Tab:</strong> 이전 요소로 이동</li>
+                            <li><strong>Enter/Space:</strong> 링크나 버튼 활성화</li>
+                            <li><strong>Arrow Down:</strong> 드롭다운 메뉴 열기/다음 항목</li>
+                            <li><strong>Arrow Up:</strong> 드롭다운에서 이전 항목</li>
+                            <li><strong>Escape:</strong> 메뉴 닫기</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 접근성 테스트 버튼들 -->
+                    <div class="test-buttons">
+                        <button onclick="runAccessibilityCheck()" class="test-btn">
+                            <i class="fas fa-check-circle"></i>
+                            접근성 검사 실행
+                        </button>
+                        <button onclick="toggleFocusVisualization()" class="test-btn">
+                            <i class="fas fa-eye"></i>
+                            포커스 시각화
+                        </button>
+                        <button onclick="toggleTabIndexVisualization()" class="test-btn">
+                            <i class="fas fa-sort-numeric-down"></i>
+                            Tab 순서 표시
+                        </button>
+                        <button onclick="testKeyboardNavigation()" class="test-btn">
+                            <i class="fas fa-keyboard"></i>
+                            키보드 네비게이션 테스트
+                        </button>
+                        <button onclick="testScreenReaderText()" class="test-btn">
+                            <i class="fas fa-volume-up"></i>
+                            스크린 리더 텍스트 확인
+                        </button>
+                        <button onclick="testAriaAttributes()" class="test-btn">
+                            <i class="fas fa-tags"></i>
+                            ARIA 속성 검사
+                        </button>
+                    </div>
+                    
+                    <!-- 접근성 테스트 결과 -->
+                    <div id="accessibilityResults" class="test-results" style="display: none;">
+                        <h4>접근성 테스트 결과:</h4>
+                        <div id="accessibilityOutput"></div>
                     </div>
                 </div>
             </section>
@@ -298,6 +458,248 @@
             // 약간의 지연 후 정보 업데이트 (네비게이션 로드 대기)
             setTimeout(updateNavigationInfo, 500);
         });
+        
+        // ===== 접근성 테스트 함수들 =====
+        
+        // 접근성 검사 실행
+        function runAccessibilityCheck() {
+            const outputDiv = document.getElementById('accessibilityOutput');
+            const resultsDiv = document.getElementById('accessibilityResults');
+            
+            resultsDiv.style.display = 'block';
+            outputDiv.innerHTML = '<p>🔄 접근성 검사 실행 중...</p>';
+            
+            setTimeout(() => {
+                // NavigationComponent의 접근성 검사 실행
+                const nav = new NavigationComponent();
+                const issues = nav.checkAccessibility();
+                
+                let output = '<h5>✅ 접근성 검사 완료</h5>';
+                
+                if (issues.length === 0) {
+                    output += '<p style="color: #4CAF50;">🎉 모든 접근성 검사를 통과했습니다!</p>';
+                } else {
+                    output += `<p style="color: #FF9800;">⚠️ ${issues.length}개의 문제를 발견했습니다:</p><ul>`;
+                    issues.forEach(issue => {
+                        output += `<li>${issue}</li>`;
+                    });
+                    output += '</ul>';
+                }
+                
+                // 추가 접근성 검사
+                output += checkAdditionalAccessibility();
+                
+                outputDiv.innerHTML = output;
+            }, 500);
+        }
+        
+        // 추가 접근성 검사
+        function checkAdditionalAccessibility() {
+            let output = '<h5>📋 추가 접근성 검사:</h5>';
+            
+            // 헤딩 구조 검사
+            const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            output += `<p>• 헤딩 요소: ${headings.length}개 발견</p>`;
+            
+            // 링크 텍스트 검사
+            const links = document.querySelectorAll('a');
+            let linksWithoutText = 0;
+            links.forEach(link => {
+                if (!link.textContent.trim() && !link.getAttribute('aria-label')) {
+                    linksWithoutText++;
+                }
+            });
+            output += `<p>• 링크 검사: ${links.length}개 중 ${linksWithoutText}개에 텍스트 없음</p>`;
+            
+            // 폼 레이블 검사
+            const inputs = document.querySelectorAll('input, select, textarea');
+            let inputsWithoutLabels = 0;
+            inputs.forEach(input => {
+                if (!input.labels?.length && !input.getAttribute('aria-label') && !input.getAttribute('aria-labelledby')) {
+                    inputsWithoutLabels++;
+                }
+            });
+            output += `<p>• 폼 요소: ${inputs.length}개 중 ${inputsWithoutLabels}개에 레이블 없음</p>`;
+            
+            // ARIA 역할 검사
+            const ariaElements = document.querySelectorAll('[role]');
+            output += `<p>• ARIA 역할: ${ariaElements.length}개 요소에 적용됨</p>`;
+            
+            return output;
+        }
+        
+        // 포커스 시각화 토글
+        function toggleFocusVisualization() {
+            document.body.classList.toggle('highlight-focus');
+            const isActive = document.body.classList.contains('highlight-focus');
+            
+            if (isActive) {
+                showNotification('포커스 시각화가 활성화되었습니다. Tab 키를 눌러 확인해보세요.');
+            } else {
+                showNotification('포커스 시각화가 비활성화되었습니다.');
+            }
+        }
+        
+        // Tab 순서 시각화 토글
+        function toggleTabIndexVisualization() {
+            document.body.classList.toggle('show-tabindex');
+            const isActive = document.body.classList.contains('show-tabindex');
+            
+            if (isActive) {
+                showNotification('Tab 인덱스가 표시되었습니다.');
+            } else {
+                showNotification('Tab 인덱스 표시가 해제되었습니다.');
+            }
+        }
+        
+        // 키보드 네비게이션 테스트
+        function testKeyboardNavigation() {
+            const outputDiv = document.getElementById('accessibilityOutput');
+            const resultsDiv = document.getElementById('accessibilityResults');
+            
+            resultsDiv.style.display = 'block';
+            outputDiv.innerHTML = `
+                <h5>⌨️ 키보드 네비게이션 테스트</h5>
+                <p>다음 단계를 따라 테스트해보세요:</p>
+                <ol>
+                    <li>Tab 키를 눌러 네비게이션 요소들로 이동해보세요</li>
+                    <li>화살표 키로 드롭다운 메뉴를 조작해보세요</li>
+                    <li>Escape 키로 메뉴를 닫아보세요</li>
+                    <li>Enter/Space 키로 링크를 활성화해보세요</li>
+                </ol>
+                <p><strong>현재 포커스된 요소:</strong> <span id="currentFocus">없음</span></p>
+                <button onclick="startFocusTracking()" style="margin: 10px 5px; padding: 8px 12px; background: #2196F3; color: white; border: none; border-radius: 4px;">포커스 추적 시작</button>
+                <button onclick="stopFocusTracking()" style="margin: 10px 5px; padding: 8px 12px; background: #f44336; color: white; border: none; border-radius: 4px;">포커스 추적 중지</button>
+            `;
+        }
+        
+        // 포커스 추적 시작
+        let focusTracker = null;
+        function startFocusTracking() {
+            if (focusTracker) return;
+            
+            focusTracker = setInterval(() => {
+                const focused = document.activeElement;
+                const focusDisplay = document.getElementById('currentFocus');
+                if (focusDisplay) {
+                    if (focused && focused !== document.body) {
+                        focusDisplay.textContent = `${focused.tagName}${focused.className ? '.' + focused.className : ''}${focused.id ? '#' + focused.id : ''}`;
+                    } else {
+                        focusDisplay.textContent = '없음';
+                    }
+                }
+            }, 100);
+            
+            showNotification('포커스 추적이 시작되었습니다.');
+        }
+        
+        // 포커스 추적 중지
+        function stopFocusTracking() {
+            if (focusTracker) {
+                clearInterval(focusTracker);
+                focusTracker = null;
+                showNotification('포커스 추적이 중지되었습니다.');
+            }
+        }
+        
+        // 스크린 리더 텍스트 확인
+        function testScreenReaderText() {
+            const outputDiv = document.getElementById('accessibilityOutput');
+            const resultsDiv = document.getElementById('accessibilityResults');
+            
+            resultsDiv.style.display = 'block';
+            
+            let output = '<h5>📢 스크린 리더 텍스트 분석</h5>';
+            
+            // ARIA 레이블 수집
+            const ariaLabels = document.querySelectorAll('[aria-label]');
+            output += `<h6>ARIA 레이블 (${ariaLabels.length}개):</h6><ul>`;
+            ariaLabels.forEach(el => {
+                output += `<li><strong>${el.tagName}:</strong> "${el.getAttribute('aria-label')}"</li>`;
+            });
+            output += '</ul>';
+            
+            // Alt 텍스트 수집
+            const images = document.querySelectorAll('img[alt]');
+            output += `<h6>이미지 Alt 텍스트 (${images.length}개):</h6><ul>`;
+            images.forEach(img => {
+                output += `<li>"${img.getAttribute('alt')}"</li>`;
+            });
+            output += '</ul>';
+            
+            // 스크린 리더 전용 텍스트
+            const srOnly = document.querySelectorAll('.sr-only');
+            output += `<h6>스크린 리더 전용 텍스트 (${srOnly.length}개):</h6><ul>`;
+            srOnly.forEach(el => {
+                output += `<li>"${el.textContent}"</li>`;
+            });
+            output += '</ul>';
+            
+            outputDiv.innerHTML = output;
+        }
+        
+        // ARIA 속성 검사
+        function testAriaAttributes() {
+            const outputDiv = document.getElementById('accessibilityOutput');
+            const resultsDiv = document.getElementById('accessibilityResults');
+            
+            resultsDiv.style.display = 'block';
+            
+            let output = '<h5>🏷️ ARIA 속성 검사</h5>';
+            
+            // 모든 ARIA 속성 수집
+            const ariaElements = document.querySelectorAll('[aria-expanded], [aria-haspopup], [aria-controls], [aria-labelledby], [role]');
+            
+            output += `<p>총 ${ariaElements.length}개 요소에 ARIA 속성이 발견되었습니다:</p>`;
+            
+            const ariaStats = {};
+            ariaElements.forEach(el => {
+                const attributes = Array.from(el.attributes).filter(attr => 
+                    attr.name.startsWith('aria-') || attr.name === 'role'
+                );
+                
+                attributes.forEach(attr => {
+                    if (!ariaStats[attr.name]) ariaStats[attr.name] = 0;
+                    ariaStats[attr.name]++;
+                });
+            });
+            
+            output += '<table style="width: 100%; border-collapse: collapse; margin: 10px 0;">';
+            output += '<tr style="background: rgba(255,255,255,0.1);"><th style="padding: 8px; border: 1px solid #444;">속성</th><th style="padding: 8px; border: 1px solid #444;">사용 횟수</th></tr>';
+            
+            Object.entries(ariaStats).forEach(([attr, count]) => {
+                output += `<tr><td style="padding: 8px; border: 1px solid #444;">${attr}</td><td style="padding: 8px; border: 1px solid #444; text-align: center;">${count}</td></tr>`;
+            });
+            
+            output += '</table>';
+            
+            outputDiv.innerHTML = output;
+        }
+        
+        // 알림 표시 함수
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: rgba(33, 150, 243, 0.9);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                z-index: 10000;
+                font-weight: 500;
+                max-width: 300px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
     </script>
 </body>
 </html>

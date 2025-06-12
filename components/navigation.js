@@ -156,6 +156,7 @@ class NavigationComponent {
                         <a href="${dropdownPath}" 
                            class="dropdown-item" 
                            role="menuitem"
+                           aria-label="${dropdownItem.name} 페이지로 이동"
                            tabindex="-1"
                            id="dropdown-${item.id}-${dropdownIndex}">
                             <i class="${dropdownItem.icon}" aria-hidden="true"></i>
@@ -173,6 +174,7 @@ class NavigationComponent {
                            aria-expanded="false"
                            aria-haspopup="true"
                            aria-controls="dropdown-menu-${item.id}"
+                           aria-label="${item.name} 메뉴 열기"
                            id="dropdown-toggle-${item.id}"
                            tabindex="0">
                             ${item.name}
@@ -193,6 +195,7 @@ class NavigationComponent {
                        class="nav-link${activeClass}" 
                        data-page="${item.id}"
                        role="menuitem"
+                       aria-label="${item.name} 페이지로 이동"
                        tabindex="0"
                        ${isActive ? 'aria-current="page"' : ''}>
                         ${item.name}
@@ -424,11 +427,23 @@ class NavigationComponent {
     checkAccessibility() {
         const issues = [];
         
-        // ARIA 레이블 확인
-        const elementsNeedingLabels = document.querySelectorAll('button, [role="button"]');
+        // ARIA 레이블 확인 - 더 정확한 검사
+        const elementsNeedingLabels = document.querySelectorAll('button:not([aria-label]):not([aria-labelledby]), [role="button"]:not([aria-label]):not([aria-labelledby])');
         elementsNeedingLabels.forEach(element => {
-            if (!element.getAttribute('aria-label') && !element.getAttribute('aria-labelledby')) {
+            // 텍스트 내용이 있는지 확인
+            const hasTextContent = element.textContent && element.textContent.trim().length > 0;
+            if (!hasTextContent) {
                 issues.push(`요소에 접근성 레이블이 없습니다: ${element.tagName} ${element.className}`);
+            }
+        });
+        
+        // 링크 요소 확인
+        const linksNeedingLabels = document.querySelectorAll('a:not([aria-label]):not([aria-labelledby])');
+        linksNeedingLabels.forEach(element => {
+            const hasTextContent = element.textContent && element.textContent.trim().length > 0;
+            const hasTitle = element.getAttribute('title');
+            if (!hasTextContent && !hasTitle) {
+                issues.push(`링크에 접근성 레이블이 없습니다: ${element.href}`);
             }
         });
         
@@ -442,11 +457,9 @@ class NavigationComponent {
         });
         
         // 이미지 alt 텍스트 확인
-        const images = document.querySelectorAll('img');
+        const images = document.querySelectorAll('img:not([alt])');
         images.forEach(img => {
-            if (!img.getAttribute('alt')) {
-                issues.push(`이미지에 alt 텍스트가 없습니다: ${img.src}`);
-            }
+            issues.push(`이미지에 alt 텍스트가 없습니다: ${img.src}`);
         });
         
         if (issues.length === 0) {

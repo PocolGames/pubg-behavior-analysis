@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>네비게이션 테스트 - PUBG 플레이어 행동 분석</title>
+    
+    <!-- Main CSS Files -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/components.css">
+    
+    <!-- External CSS Libraries -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Navigation Component -->
+    <script src="components/navigation.js"></script>
+    <!-- Navigation Debugger -->
+    <script src="js/navigation-debugger.js"></script>
+    <!-- Browser Compatibility Checker -->
+    <script src="js/browser-compatibility.js"></script>
+    
+    <style>
+        /* 테스트용 추가 스타일 */
+        .test-section {
+            padding: 60px 0;
+            background: var(--bg-card);
+            margin: 40px 0;
+            border-radius: var(--border-radius-xl);
+            border: 1px solid var(--border-light);
+        }
+        
+        .test-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+            text-align: center;
+        }
+        
+        .test-title {
+            color: var(--color-primary);
+            font-size: var(--font-size-2xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .test-description {
+            color: var(--text-secondary);
+            line-height: var(--line-height-relaxed);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .test-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .test-btn {
+            padding: var(--spacing-md) var(--spacing-lg);
+            background: var(--gradient-secondary);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: var(--border-radius-lg);
+            transition: var(--transition-all);
+            font-weight: var(--font-weight-medium);
+        }
+        
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-btn-secondary-hover);
+        }
+        
+        .navigation-info {
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-xl) 0;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-sm) 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: var(--font-weight-medium);
+            color: var(--text-primary);
+        }
+        
+        .info-value {
+            color: var(--color-primary);
+            font-family: var(--font-mono);
+            font-size: var(--font-size-sm);
+        }
+        
+        @media (max-width: 768px) {
+            .test-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .test-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation will be inserted here by JavaScript -->
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Test Section -->
+            <section class="test-section">
+                <div class="test-content">
+                    <h1 class="test-title">
+                        <i class="fas fa-vial"></i>
+                        네비게이션 동작 테스트
+                    </h1>
+                    <p class="test-description">
+                        이 페이지는 네비게이션 컴포넌트의 동작을 테스트하기 위한 페이지입니다.<br>
+                        상단 네비게이션 바가 올바르게 표시되고, 각 링크가 정상적으로 작동하는지 확인할 수 있습니다.
+                    </p>
+                    
+                    <!-- Navigation Information -->
+                    <div class="navigation-info">
+                        <h3 style="color: var(--color-primary); margin-bottom: var(--spacing-md);">
+                            <i class="fas fa-info-circle"></i>
+                            네비게이션 정보
+                        </h3>
+                        <div class="info-item">
+                            <span class="info-label">현재 페이지:</span>
+                            <span class="info-value" id="currentPath">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">기준 경로:</span>
+                            <span class="info-value" id="basePath">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">네비게이션 로드:</span>
+                            <span class="info-value" id="navStatus">로딩 중...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">화면 크기:</span>
+                            <span class="info-value" id="screenSize">-</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Test Buttons -->
+                    <div class="test-buttons">
+                        <a href="index.html" class="test-btn">
+                            <i class="fas fa-home"></i>
+                            메인 페이지
+                        </a>
+                        <a href="pages/cluster-analysis.html" class="test-btn">
+                            <i class="fas fa-project-diagram"></i>
+                            클러스터 분석
+                        </a>
+                        <a href="pages/model-performance.html" class="test-btn">
+                            <i class="fas fa-chart-line"></i>
+                            모델 성능
+                        </a>
+                        <a href="pages/player-prediction.html" class="test-btn">
+                            <i class="fas fa-user-check"></i>
+                            플레이어 예측
+                        </a>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Mobile Test Section -->
+            <section class="test-section">
+                <div class="test-content">
+                    <h2 class="test-title">
+                        <i class="fas fa-mobile-alt"></i>
+                        반응형 테스트
+                    </h2>
+                    <p class="test-description">
+                        브라우저 창의 크기를 조절하여 모바일 네비게이션이 올바르게 작동하는지 확인해보세요.<br>
+                        768px 이하에서 햄버거 메뉴가 나타나야 합니다.
+                    </p>
+                    
+                    <div style="display: flex; gap: var(--spacing-md); justify-content: center; flex-wrap: wrap; margin-top: var(--spacing-lg);">
+                        <button onclick="testMobileMenu()" class="test-btn">
+                            <i class="fas fa-bars"></i>
+                            모바일 메뉴 토글 테스트
+                        </button>
+                        <button onclick="updateScreenInfo()" class="test-btn">
+                            <i class="fas fa-sync"></i>
+                            화면 정보 업데이트
+                        </button>
+                        <button onclick="NavigationDebugger.runFullDiagnostic()" class="test-btn">
+                            <i class="fas fa-bug"></i>
+                            전체 진단 실행
+                        </button>
+                        <button onclick="NavigationDebugger.testEventListeners()" class="test-btn">
+                            <i class="fas fa-mouse-pointer"></i>
+                            이벤트 테스트
+                        </button>
+                        <button onclick="BrowserCompatibilityChecker.runFullCompatibilityCheck()" class="test-btn">
+                            <i class="fas fa-browser"></i>
+                            브라우저 호환성 체크
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- JavaScript for Testing -->
+    <script>
+        // 네비게이션 정보 업데이트
+        function updateNavigationInfo() {
+            document.getElementById('currentPath').textContent = window.location.pathname;
+            
+            // NavigationComponent가 로드되었는지 확인
+            if (typeof NavigationComponent !== 'undefined') {
+                const nav = new NavigationComponent();
+                const info = nav.getInfo();
+                
+                document.getElementById('basePath').textContent = info.basePath;
+                document.getElementById('navStatus').textContent = '✅ 정상 로드됨';
+                
+                console.log('Navigation Info:', info);
+            } else {
+                document.getElementById('basePath').textContent = '로드 실패';
+                document.getElementById('navStatus').textContent = '❌ 로드 실패';
+            }
+        }
+        
+        // 화면 크기 정보 업데이트
+        function updateScreenInfo() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            document.getElementById('screenSize').textContent = `${width}x${height}px`;
+            
+            // 반응형 상태 표시
+            let responsiveState = '';
+            if (width <= 480) {
+                responsiveState = ' (XS)';
+            } else if (width <= 768) {
+                responsiveState = ' (모바일)';
+            } else if (width <= 992) {
+                responsiveState = ' (태블릿)';
+            } else {
+                responsiveState = ' (데스크톱)';
+            }
+            
+            document.getElementById('screenSize').textContent += responsiveState;
+        }
+        
+        // 모바일 메뉴 테스트
+        function testMobileMenu() {
+            const navToggle = document.getElementById('navToggle');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            if (navToggle && navMenu) {
+                navToggle.click();
+                console.log('Mobile menu toggle test executed');
+                
+                setTimeout(() => {
+                    const isActive = navMenu.classList.contains('active');
+                    alert(`모바일 메뉴 상태: ${isActive ? '열림' : '닫힘'}`);
+                }, 100);
+            } else {
+                alert('모바일 메뉴 요소를 찾을 수 없습니다.');
+            }
+        }
+        
+        // 페이지 로드 시 실행
+        window.addEventListener('load', function() {
+            updateNavigationInfo();
+            updateScreenInfo();
+        });
+        
+        // 창 크기 변경시 업데이트
+        window.addEventListener('resize', updateScreenInfo);
+        
+        // 네비게이션 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            initNavigation();
+            console.log('Navigation test page loaded');
+            
+            // 약간의 지연 후 정보 업데이트 (네비게이션 로드 대기)
+            setTimeout(updateNavigationInfo, 500);
+        });
+    </script>
+</body>
+</html>

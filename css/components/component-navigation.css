@@ -1,6 +1,232 @@
 /* ===== PUBG 플레이어 행동 분석 - Navigation Components ===== */
 
-/* Tabs */
+/* ===== Header Navigation Bar ===== */
+/* Main Header (기존 main-header와 새로운 header 클래스 모두 지원) */
+.main-header,
+.header {
+    background: var(--bg-card);
+    backdrop-filter: var(--backdrop-blur-md);
+    border-bottom: 1px solid var(--border-light);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    padding: var(--spacing-md) 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.header-content,
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+}
+
+/* Logo Section */
+.logo,
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: var(--font-weight-bold);
+}
+
+.logo a,
+.nav-brand a {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.logo i,
+.nav-brand i,
+.logo-icon {
+    font-size: var(--font-size-lg);
+    color: var(--color-primary);
+    animation: pulse var(--animation-slower) infinite;
+}
+
+.logo span,
+.nav-brand span,
+.site-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+}
+
+/* Navigation Menu */
+.nav,
+.nav-menu {
+    display: flex;
+    gap: var(--spacing-lg);
+    align-items: center;
+}
+
+.nav a,
+.nav-menu a,
+.nav-link {
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-weight: var(--font-weight-medium);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    transition: var(--transition-all);
+    position: relative;
+}
+
+.nav a:hover,
+.nav a.active,
+.nav-menu a:hover,
+.nav-menu a.active,
+.nav-link:hover,
+.nav-link.active {
+    color: var(--color-primary);
+    background: rgba(255, 107, 53, 0.1);
+}
+
+.nav a::after,
+.nav-menu a::after,
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--gradient-primary);
+    transition: var(--transition-all);
+    transform: translateX(-50%);
+}
+
+.nav a:hover::after,
+.nav a.active::after,
+.nav-menu a:hover::after,
+.nav-menu a.active::after,
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 80%;
+}
+
+/* Mobile Menu Button */
+.mobile-menu-btn,
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    gap: 4px;
+}
+
+.mobile-menu-btn span,
+.nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--text-primary);
+    transition: var(--transition-all);
+    border-radius: 1px;
+}
+
+.mobile-menu-btn:hover span,
+.nav-toggle:hover span {
+    background: var(--color-primary);
+}
+
+/* Legacy Support - 기존 클래스명도 지원 */
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.main-nav .nav-list {
+    display: flex;
+    list-style: none;
+    gap: var(--spacing-lg);
+    margin: 0;
+    padding: 0;
+}
+
+/* Responsive Header */
+@media (max-width: 768px) {
+    .mobile-menu-btn,
+    .nav-toggle {
+        display: flex;
+    }
+    
+    .nav,
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--bg-card);
+        backdrop-filter: var(--backdrop-blur-lg);
+        flex-direction: column;
+        padding: var(--spacing-md);
+        gap: var(--spacing-sm);
+        border-top: 1px solid var(--border-light);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .nav.active,
+    .nav-menu.active {
+        display: flex;
+    }
+    
+    .header-content,
+    .header .container {
+        position: relative;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-content,
+    .header .container {
+        padding: 0 var(--container-padding-mobile);
+    }
+    
+    .logo span,
+    .nav-brand span,
+    .site-title {
+        font-size: var(--font-size-lg);
+    }
+    
+    .logo i,
+    .nav-brand i,
+    .logo-icon {
+        font-size: var(--font-size-xl);
+    }
+
+    .main-nav .nav-list {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-sm);
+    }
+}
+
+/* Animation for pulse effect */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+/* ===== Tab Navigation Components ===== */
 .tabs {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     margin-bottom: 2rem;

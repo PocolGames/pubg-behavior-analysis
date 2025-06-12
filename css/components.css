@@ -27,7 +27,7 @@
 /* Modal Components - 모달 및 오버레이 관련 스타일 */
 @import url('./components/component-modals.css');
 
-/* Navigation Components - 탭, 아코디언, 페이지네이션 관련 스타일 */
+/* Navigation Components - 탭, 아코디언, 페이지네이션 및 메인 네비게이션 바 관련 스타일 */
 @import url('./components/component-navigation.css');
 
 /* Card Components - 카드 레이아웃 관련 스타일 */

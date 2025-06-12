@@ -61,7 +61,13 @@ function handleFormSubmit(event) {
     } catch (error) {
         console.error('분석 중 오류 발생:', error);
         hideLoadingState();
-        showErrorMessage('분석 중 오류가 발생했습니다. 다시 시도해주세요.');
+        // 고급 에러 처리
+        if (window.ErrorHandler) {
+            window.ErrorHandler.handleAnalysisError('CALCULATION_FAILED', userStats);
+            window.ErrorHandler.logError('form_submission', error, 'user_initiated_analysis');
+        } else {
+            showErrorMessage('분석 중 오류가 발생했습니다. 다시 시도해주세요.');
+        }
     }
 }
 

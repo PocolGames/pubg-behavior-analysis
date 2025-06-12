@@ -126,6 +126,18 @@ function validateInput(stats) {
         errors.push('헤드샷 킬은 총 킬 수보다 클 수 없습니다.');
     }
     
+    if (stats.assists > stats.kills * 3) {
+        errors.push('어시스트가 비정상적으로 높습니다. (킬의 3배 이하로 입력해주세요)');
+    }
+    
+    if (stats.longestKill > 0 && stats.kills === 0) {
+        errors.push('킬이 0인데 최장 킬 거리가 있을 수 없습니다.');
+    }
+    
+    if (stats.revives > 10) {
+        errors.push('팀원 부활 횟수가 비정상적으로 높습니다.');
+    }
+    
     if (errors.length > 0) {
         showErrorMessage(errors.join('\n'));
         return false;
@@ -157,7 +169,7 @@ function calculateFeatures(stats) {
     // 추가 특성 (기본값으로 설정)
     const numGroups = 25; // 기본값
     const maxPlace = 100; // 기본값
-    const DBNOs = Math.floor(stats.kills * 1.2); // 킬의 1.2배로 추정
+    const DBNOs = Math.max(0, Math.floor(stats.kills * 1.1 + stats.assists * 0.5)); // 더 정확한 추정
     const roadKills = 0; // 기본값
     const vehicleDestroys = 0; // 기본값
     const teamKills = 0; // 기본값
@@ -204,18 +216,17 @@ function calculateFeatures(stats) {
  */
 function standardizeFeatures(features) {
     // 간단한 표준화 (Z-score 정규화)
-    // 실제로는 훈련 데이터의 평균과 표준편차를 사용해야 하지만,
-    // 여기서는 대략적인 값을 사용
+    // 실제 분석 데이터에서 계산된 평균과 표준편차 사용
     const means = [
-        1147, 6.5, 47, 1748, 1.1, 129, 1.4, 3.7, 0.9, 0.23,
-        596, 23, 1800, 0.16, 0.01, 150, 2.5, 0.6, 1.5, 4.8,
-        0.4, 0.05, 25, 100, 1.1, 0.23, 4.5, 0.002, 0.01, 0.03
+        1147.4, 6.8, 47.6, 1748.3, 1.1, 129.2, 1.37, 3.66, 0.91, 0.23,
+        596.4, 22.95, 1800, 0.16, 0.008, 144.5, 2.47, 0.55, 1.4, 4.86,
+        0.43, 0.044, 25, 100, 1.08, 0.23, 4.5, 0.002, 0.008, 0.027
     ];
     
     const stds = [
-        1164, 1.2, 27, 1500, 1.7, 161, 2.7, 2.5, 1.5, 0.59,
-        1445, 35, 300, 0.47, 0.02, 200, 3.0, 0.4, 2.0, 1.5,
-        0.5, 0.2, 5, 20, 1.2, 0.6, 30, 0.05, 0.09, 0.17
+        1164.2, 1.18, 27.5, 1580.8, 1.71, 161.1, 2.68, 2.46, 1.46, 0.59,
+        1445.1, 35.2, 300, 0.47, 0.015, 185.3, 2.85, 0.42, 1.8, 1.45,
+        0.49, 0.20, 4.5, 18.3, 1.15, 0.60, 30.7, 0.048, 0.089, 0.17
     ];
     
     return features.map((feature, index) => {
@@ -324,6 +335,18 @@ function updateMainResultCard(prediction) {
     const confidence = (prediction.confidence * 100).toFixed(1);
     
     const resultContent = document.getElementById('result-content');
+    const mainResultCard = document.getElementById('main-result-card');
+    
+    // 카드에 클러스터 타입에 따른 테두리 색상 적용
+    mainResultCard.className = 'card shadow-lg';
+    if (clusterInfo.type === 'Survivor') {
+        mainResultCard.classList.add('border-survivor');
+    } else if (clusterInfo.type === 'Explorer') {
+        mainResultCard.classList.add('border-explorer');
+    } else if (clusterInfo.type === 'Aggressive') {
+        mainResultCard.classList.add('border-aggressive');
+    }
+    
     resultContent.innerHTML = `
         <div class="player-type-result">
             <div class="type-icon mb-3" style="font-size: 4rem;">
@@ -332,6 +355,9 @@ function updateMainResultCard(prediction) {
             <h2 class="mb-3" style="color: ${clusterInfo.color};">
                 ${clusterInfo.name}
             </h2>
+            <div class="badge mb-3" style="background-color: ${clusterInfo.color}20; color: ${clusterInfo.color}; font-size: 0.9rem;">
+                ${clusterInfo.type} 타입 • ${clusterInfo.percentage}% 비율
+            </div>
             <p class="lead mb-4">${clusterInfo.description}</p>
             
             <div class="confidence-meter mb-4">
@@ -342,11 +368,18 @@ function updateMainResultCard(prediction) {
                         ${confidence}%
                     </div>
                 </div>
+                <small class="text-muted">
+                    ${confidence >= 80 ? '매우 높은 신뢰도' : 
+                      confidence >= 60 ? '높은 신뢰도' : 
+                      confidence >= 40 ? '보통 신뢰도' : '낮은 신뢰도'}
+                </small>
             </div>
             
             <div class="row text-start">
                 <div class="col-md-6">
-                    <h6 class="text-success">강점</h6>
+                    <h6 class="text-success">
+                        <i class="fas fa-plus-circle me-2"></i>강점
+                    </h6>
                     <ul class="list-unstyled">
                         ${clusterInfo.strengths.map(strength => 
                             `<li><i class="fas fa-check text-success me-2"></i>${strength}</li>`
@@ -354,10 +387,12 @@ function updateMainResultCard(prediction) {
                     </ul>
                 </div>
                 <div class="col-md-6">
-                    <h6 class="text-warning">약점</h6>
+                    <h6 class="text-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>개선점
+                    </h6>
                     <ul class="list-unstyled">
                         ${clusterInfo.weaknesses.map(weakness => 
-                            `<li><i class="fas fa-times text-warning me-2"></i>${weakness}</li>`
+                            `<li><i class="fas fa-arrow-up text-warning me-2"></i>${weakness}</li>`
                         ).join('')}
                     </ul>
                 </div>
@@ -376,29 +411,48 @@ function updateStyleAnalysis(prediction, userStats) {
     styleAnalysis.innerHTML = `
         <div class="style-details">
             <div class="mb-4">
-                <h6 class="text-primary">플레이 전략</h6>
+                <h6 class="text-primary">
+                    <i class="fas fa-chess me-2"></i>플레이 전략
+                </h6>
                 <p class="mb-3">${clusterInfo.strategy}</p>
             </div>
             
             <div class="mb-4">
-                <h6 class="text-primary">주요 특징</h6>
+                <h6 class="text-primary">
+                    <i class="fas fa-star me-2"></i>주요 특징
+                </h6>
                 <ul class="list-unstyled">
                     ${clusterInfo.characteristics.map(char => 
-                        `<li class="mb-2"><i class="fas fa-star text-warning me-2"></i>${char}</li>`
+                        `<li class="mb-2"><i class="fas fa-chevron-right text-primary me-2"></i>${char}</li>`
                     ).join('')}
                 </ul>
             </div>
             
             <div class="stats-summary">
-                <h6 class="text-primary">입력한 스탯 요약</h6>
+                <h6 class="text-primary">
+                    <i class="fas fa-chart-bar me-2"></i>입력한 스탯 요약
+                </h6>
                 <div class="row">
-                    <div class="col-6">
-                        <small class="text-muted">킬/데미지</small><br>
+                    <div class="col-4">
+                        <small class="text-muted">전투력</small><br>
                         <strong>${userStats.kills}킬 / ${userStats.damageDealt}dmg</strong>
                     </div>
-                    <div class="col-6">
-                        <small class="text-muted">이동거리</small><br>
+                    <div class="col-4">
+                        <small class="text-muted">이동력</small><br>
                         <strong>${(userStats.walkDistance + userStats.rideDistance).toLocaleString()}m</strong>
+                    </div>
+                    <div class="col-4">
+                        <small class="text-muted">생존력</small><br>
+                        <strong>${userStats.heals + userStats.boosts}회</strong>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <h6 class="text-primary mb-2">
+                        <i class="fas fa-users me-2"></i>플레이어 유형 분포
+                    </h6>
+                    <div id="playerDistributionBars">
+                        ${createPlayerDistributionBars(prediction)}
                     </div>
                 </div>
             </div>
@@ -522,11 +576,141 @@ function hideLoadingState() {
 
 // 에러 메시지 표시
 function showErrorMessage(message) {
-    alert(message); // 간단한 alert 사용, 나중에 모달로 교체 가능
+    // 기존 에러 메시지 제거
+    const existingError = document.querySelector('.error-message');
+    if (existingError) {
+        existingError.remove();
+    }
+    
+    // 새 에러 메시지 생성
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'alert alert-danger error-message mt-3';
+    errorDiv.innerHTML = `
+        <h6><i class="fas fa-exclamation-triangle me-2"></i>입력 오류</h6>
+        <p class="mb-0">${message.replace(/\n/g, '<br>')}</p>
+    `;
+    
+    // 폼 아래에 추가
+    const form = document.getElementById('statsForm');
+    if (form) {
+        form.appendChild(errorDiv);
+        
+        // 에러 메시지로 스크롤
+        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // 5초 후 자동 제거
+        setTimeout(() => {
+            if (errorDiv && errorDiv.parentNode) {
+                errorDiv.remove();
+            }
+        }, 5000);
+    }
 }
 
 // 입력 검증 설정
 function setupInputValidation() {
-    // 실시간 입력 검증은 나중에 구현
-    console.log('입력 검증 설정 완료');
+    const inputs = document.querySelectorAll('#statsForm input[type="number"]');
+    
+    inputs.forEach(input => {
+        // 실시간 검증
+        input.addEventListener('input', function() {
+            validateSingleInput(this);
+        });
+        
+        // 포커스 잃을 때 검증
+        input.addEventListener('blur', function() {
+            validateSingleInput(this);
+        });
+    });
+    
+    console.log('실시간 입력 검증 설정 완료');
+}
+
+// 플레이어 분포 막대 그래프 생성 (Chart.js 대신 CSS로)
+function createPlayerDistributionBars(prediction) {
+    const clusterInfo = window.CLUSTER_DATA.CLUSTER_INFO;
+    const currentCluster = prediction.predictedCluster;
+    
+    let barsHTML = '';
+    
+    for (let clusterId in clusterInfo) {
+        const info = clusterInfo[clusterId];
+        const isCurrentPlayer = parseInt(clusterId) === currentCluster;
+        const barClass = isCurrentPlayer ? 'bg-primary' : 'bg-secondary';
+        const opacity = isCurrentPlayer ? '1' : '0.3';
+        
+        barsHTML += `
+            <div class="mb-2">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <small class="fw-bold ${isCurrentPlayer ? 'text-primary' : 'text-muted'}">
+                        ${info.icon} ${info.name}
+                        ${isCurrentPlayer ? '<i class="fas fa-arrow-left ms-1"></i>' : ''}
+                    </small>
+                    <small class="text-muted">${info.percentage}%</small>
+                </div>
+                <div class="progress" style="height: 8px;">
+                    <div class="progress-bar ${barClass}" 
+                         style="width: ${info.percentage}%; opacity: ${opacity}; background-color: ${info.color};">
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    return barsHTML;
+}
+
+// 개별 입력 필드 검증
+function validateSingleInput(input) {
+    const value = parseFloat(input.value) || 0;
+    const min = parseFloat(input.min) || 0;
+    const max = parseFloat(input.max) || Infinity;
+    
+    // 기존 에러 표시 제거
+    input.classList.remove('is-invalid', 'is-valid');
+    const existingFeedback = input.parentNode.querySelector('.invalid-feedback');
+    if (existingFeedback) {
+        existingFeedback.remove();
+    }
+    
+    let isValid = true;
+    let errorMessage = '';
+    
+    // 범위 검증
+    if (value < min) {
+        isValid = false;
+        errorMessage = `최소값: ${min}`;
+    } else if (value > max) {
+        isValid = false;
+        errorMessage = `최대값: ${max}`;
+    }
+    
+    // 논리적 검증 (특정 필드)
+    if (input.id === 'headshotKills') {
+        const killsValue = parseInt(document.getElementById('kills').value) || 0;
+        if (value > killsValue) {
+            isValid = false;
+            errorMessage = '헤드샷 킬은 총 킬보다 클 수 없습니다';
+        }
+    }
+    
+    if (input.id === 'longestKill') {
+        const killsValue = parseInt(document.getElementById('kills').value) || 0;
+        if (value > 0 && killsValue === 0) {
+            isValid = false;
+            errorMessage = '킬이 0이면 최장 킬 거리도 0이어야 합니다';
+        }
+    }
+    
+    // 시각적 피드백
+    if (input.value && !isValid) {
+        input.classList.add('is-invalid');
+        
+        const feedback = document.createElement('div');
+        feedback.className = 'invalid-feedback';
+        feedback.textContent = errorMessage;
+        input.parentNode.appendChild(feedback);
+    } else if (input.value) {
+        input.classList.add('is-valid');
+    }
 }

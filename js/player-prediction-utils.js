@@ -15,7 +15,7 @@ let predictionConfig = null;
  */
 document.addEventListener('DOMContentLoaded', function() {
     // Player Prediction 페이지에서만 실행
-    if (window.location.pathname.includes('player-prediction.html') || 
+    if (window.location.pathname.includes('player-prediction.html') && 
         document.getElementById('playerForm')) {
         
         console.log('🎮 플레이어 예측 페이지 감지됨');
@@ -68,7 +68,15 @@ async function initializePlayerPrediction() {
  */
 async function loadPredictionConfig() {
     try {
-        const response = await fetch('./data/player-prediction.json');
+        // 현재 경로에 따라 적절한 데이터 경로 결정
+        let dataPath = './data/player-prediction.json';
+        
+        // pages 폴더에서 실행되는 경우 상위 디렉토리의 data 폴더 참조
+        if (window.location.pathname.includes('/pages/')) {
+            dataPath = '../data/player-prediction.json';
+        }
+        
+        const response = await fetch(dataPath);
         if (response.ok) {
             predictionConfig = await response.json();
             console.log('✅ 예측 설정 로드 완료:', predictionConfig.metadata);

@@ -56,7 +56,15 @@ class PlayerPredictor {
         try {
             this.showLoading('플레이어 예측 데이터 로딩 중...');
             
-            const response = await fetch('./data/player-prediction.json');
+            // 현재 경로에 따라 적절한 데이터 경로 결정
+            let dataPath = './data/player-prediction.json';
+            
+            // pages 폴더에서 실행되는 경우 상위 디렉토리의 data 폴더 참조
+            if (window.location.pathname.includes('/pages/')) {
+                dataPath = '../data/player-prediction.json';
+            }
+            
+            const response = await fetch(dataPath);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }

@@ -255,6 +255,64 @@ class NavigationComponent {
                     !isExpanded ? '메뉴 닫기' : '메뉴 열기'
                 );
             });
+        }
+    }
+
+    /**
+     * 드롭다운 메뉴를 설정합니다.
+     */
+    setupDropdownMenus() {
+        const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+        
+        dropdownToggles.forEach(toggle => {
+            const menu = toggle.nextElementSibling;
+            
+            // 클릭 이벤트
+            toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+                
+                // 다른 드롭다운 닫기
+                this.closeAllDropdowns();
+                
+                // 현재 드롭다운 토글
+                if (!isExpanded) {
+                    toggle.setAttribute('aria-expanded', 'true');
+                    menu.classList.add('show');
+                }
+            });
+            
+            // 호버 이벤트
+            const dropdown = toggle.closest('.nav-item-dropdown');
+            dropdown.addEventListener('mouseenter', () => {
+                toggle.setAttribute('aria-expanded', 'true');
+                menu.classList.add('show');
+            });
+            
+            dropdown.addEventListener('mouseleave', () => {
+                toggle.setAttribute('aria-expanded', 'false');
+                menu.classList.remove('show');
+            });
+        });
+        
+        // 외부 클릭으로 드롭다운 닫기
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.nav-item-dropdown')) {
+                this.closeAllDropdowns();
+            }
+        });
+    }
+
+    /**
+     * 모든 드롭다운을 닫습니다.
+     */
+    closeAllDropdowns() {
+        const dropdowns = document.querySelectorAll('.dropdown-menu');
+        const toggles = document.querySelectorAll('.dropdown-toggle');
+        
+        dropdowns.forEach(dropdown => dropdown.classList.remove('show'));
+        toggles.forEach(toggle => toggle.setAttribute('aria-expanded', 'false'));
+    }
 
     /**
      * 키보드 네비게이션을 설정합니다.
@@ -426,6 +484,8 @@ class NavigationComponent {
             
             // 이벤트 설정
             this.setupMobileToggle();
+            this.setupDropdownMenus();
+            this.setupKeyboardNavigation();
             
             // 접근성 검사 (개발 모드에서만)
             if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {

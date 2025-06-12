@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Favicon</title>
+</head>
+<body>
+    <canvas id="canvas" width="32" height="32" style="border: 1px solid #000; image-rendering: pixelated; width: 128px; height: 128px;"></canvas>
+    <br><br>
+    <button onclick="downloadFavicon()">Download Favicon</button>
+    
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // 배경색 설정 (어두운 색)
+        ctx.fillStyle = '#1a1a1a';
+        ctx.fillRect(0, 0, 32, 32);
+        
+        // 십자선 그리기 (PUBG 스타일)
+        ctx.strokeStyle = '#ff6b35';
+        ctx.lineWidth = 2;
+        
+        // 수직선
+        ctx.beginPath();
+        ctx.moveTo(16, 8);
+        ctx.lineTo(16, 24);
+        ctx.stroke();
+        
+        // 수평선
+        ctx.beginPath();
+        ctx.moveTo(8, 16);
+        ctx.lineTo(24, 16);
+        ctx.stroke();
+        
+        // 중심점
+        ctx.fillStyle = '#ff6b35';
+        ctx.fillRect(15, 15, 2, 2);
+        
+        function downloadFavicon() {
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'favicon.ico';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+        
+        // 자동으로 다운로드
+        setTimeout(downloadFavicon, 500);
+    </script>
+</body>
+</html>

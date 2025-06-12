@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUBG 플레이어 행동 분석</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-crosshairs me-2"></i>
+                PUBG 플레이어 분석
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">홈</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pages/dashboard.html">대시보드</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pages/about.html">정보</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section bg-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-3">
+                        당신의 PUBG 플레이 스타일은?
+                    </h1>
+                    <p class="lead mb-4">
+                        게임 스탯을 입력하고 AI가 분석한 8가지 플레이어 유형 중 
+                        어디에 속하는지 확인해보세요!
+                    </p>
+                    <button class="btn btn-light btn-lg" onclick="scrollToAnalysis()">
+                        <i class="fas fa-chart-line me-2"></i>
+                        분석 시작하기
+                    </button>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <i class="fas fa-user-friends display-1 opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Input Section -->
+    <section id="analysis-section" class="py-5">
+        <div class="container">
+            <div class="row">
+                <!-- Input Form -->
+                <div class="col-lg-8">
+                    <div class="card shadow">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="card-title mb-0">
+                                <i class="fas fa-gamepad me-2"></i>
+                                게임 스탯 입력
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="statsForm">
+                                <!-- Basic Stats -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <h5 class="text-primary mb-3">
+                                            <i class="fas fa-trophy me-2"></i>
+                                            기본 전투 스탯
+                                        </h5>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="kills" class="form-label">킬 수</label>
+                                        <input type="number" class="form-control" id="kills" min="0" max="50" value="0">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="assists" class="form-label">어시스트</label>
+                                        <input type="number" class="form-control" id="assists" min="0" max="20" value="0">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="damageDealt" class="form-label">총 데미지</label>
+                                        <input type="number" class="form-control" id="damageDealt" min="0" max="5000" value="0">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="headshotKills" class="form-label">헤드샷 킬</label>
+                                        <input type="number" class="form-control" id="headshotKills" min="0" max="20" value="0">
+                                    </div>
+                                </div>
+
+                                <!-- Movement Stats -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <h5 class="text-success mb-3">
+                                            <i class="fas fa-running me-2"></i>
+                                            이동 스탯
+                                        </h5>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="walkDistance" class="form-label">보행 거리 (m)</label>
+                                        <input type="number" class="form-control" id="walkDistance" min="0" max="10000" value="0">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="rideDistance" class="form-label">차량 이동 거리 (m)</label>
+                                        <input type="number" class="form-control" id="rideDistance" min="0" max="20000" value="0">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="swimDistance" class="form-label">수영 거리 (m)</label>
+                                        <input type="number" class="form-control" id="swimDistance" min="0" max="2000" value="0">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="longestKill" class="form-label">최장 킬 거리 (m)</label>
+                                        <input type="number" class="form-control" id="longestKill" min="0" max="1000" value="0">
+                                    </div>
+                                </div>
+
+                                <!-- Survival Stats -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <h5 class="text-warning mb-3">
+                                            <i class="fas fa-heart me-2"></i>
+                                            생존 스탯
+                                        </h5>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="heals" class="form-label">치료 아이템 사용</label>
+                                        <input type="number" class="form-control" id="heals" min="0" max="50" value="0">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="boosts" class="form-label">부스터 사용</label>
+                                        <input type="number" class="form-control" id="boosts" min="0" max="30" value="0">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="revives" class="form-label">팀원 부활</label>
+                                        <input type="number" class="form-control" id="revives" min="0" max="10" value="0">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="weaponsAcquired" class="form-label">무기 획득 수</label>
+                                        <input type="number" class="form-control" id="weaponsAcquired" min="0" max="20" value="0">
+                                    </div>
+                                </div>
+
+                                <!-- Game Info -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <h5 class="text-info mb-3">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            게임 정보
+                                        </h5>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="killPlace" class="form-label">킬 순위</label>
+                                        <input type="number" class="form-control" id="killPlace" min="1" max="100" value="50">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="matchDuration" class="form-label">게임 시간 (초)</label>
+                                        <input type="number" class="form-control" id="matchDuration" min="0" max="3000" value="1800">
+                                    </div>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                                        <i class="fas fa-magic me-2"></i>
+                                        플레이어 유형 분석하기
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Info Sidebar -->
+                <div class="col-lg-4">
+                    <div class="card shadow">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-lightbulb me-2"></i>
+                                플레이어 유형 미리보기
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="player-type-preview">
+                                <div class="type-item mb-3">
+                                    <span class="badge bg-success me-2">🛡️</span>
+                                    <strong>Survivor</strong> - 생존 중심
+                                </div>
+                                <div class="type-item mb-3">
+                                    <span class="badge bg-info me-2">🔍</span>
+                                    <strong>Explorer</strong> - 탐험 중심
+                                </div>
+                                <div class="type-item mb-3">
+                                    <span class="badge bg-danger me-2">💀</span>
+                                    <strong>Aggressive</strong> - 공격 중심
+                                </div>
+                            </div>
+                            <hr>
+                            <p class="text-muted small">
+                                총 8가지 세부 유형으로 분류됩니다.
+                                정확한 분석을 위해 실제 게임 스탯을 입력해주세요.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Tips Card -->
+                    <div class="card shadow mt-4">
+                        <div class="card-header bg-warning text-dark">
+                            <h6 class="card-title mb-0">
+                                <i class="fas fa-star me-2"></i>
+                                분석 팁
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    최근 게임 평균 스탯 입력
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    정확한 수치 입력 권장
+                                </li>
+                                <li class="mb-0">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    모든 필드 작성 필수
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results-section" class="py-5 bg-light" style="display: none;">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="text-center mb-5">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        분석 결과
+                    </h2>
+                </div>
+            </div>
+
+            <!-- Main Result Card -->
+            <div class="row mb-4">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card shadow-lg" id="main-result-card">
+                        <div class="card-body text-center py-5">
+                            <div id="result-content">
+                                <!-- 결과가 여기에 동적으로 삽입됩니다 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Analysis -->
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                플레이 스타일 분석
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="style-analysis">
+                                <!-- 스타일 분석 내용 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-target me-2"></i>
+                                개선 제안
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="improvement-suggestions">
+                                <!-- 개선 제안 내용 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Try Again Button -->
+            <div class="text-center mt-4">
+                <button class="btn btn-outline-primary" onclick="resetAnalysis()">
+                    <i class="fas fa-redo me-2"></i>
+                    다시 분석하기
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">
+                        <i class="fas fa-code me-2"></i>
+                        PUBG 플레이어 행동 분석 시스템
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">
+                        AI 기반 머신러닝 분석 | 2024
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Data -->
+    <script src="data/cluster-data.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</body>
+</html>

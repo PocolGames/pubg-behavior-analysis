@@ -6,20 +6,20 @@
     <title>클러스터 분석 - PUBG 플레이어 행동 분석</title>
     <meta name="description" content="8가지 PUBG 플레이어 유형 클러스터 상세 분석 및 특성 비교">
     
-    <!-- CSS Files -->
+    <!-- Main CSS Files -->
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/components.css">
     <link rel="stylesheet" href="../css/cluster-analysis.css">
     
-    <!-- Chart.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    
-    <!-- Font Awesome Icons -->
+    <!-- External CSS Libraries -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- JavaScript Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     
     <!-- Navigation Component -->
     <script src="../components/navigation.js"></script>
@@ -480,11 +480,8 @@
     
     <!-- Initialize Navigation -->
     <script>
-        // 네비게이션 컴포넌트 초기화
-        initNavigation();
-        
-        // 페이지 로드 완료 후 추가 스크립트 실행
         document.addEventListener('DOMContentLoaded', function() {
+            initNavigation();
             console.log('Cluster Analysis page loaded with navigation component');
         });
     </script>

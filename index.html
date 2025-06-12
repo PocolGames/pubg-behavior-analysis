@@ -11,11 +11,11 @@
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/components.css">
     
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
+    <!-- External CSS Libraries -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Navigation Component -->
     <script src="components/navigation.js"></script>
@@ -308,8 +308,10 @@
     
     <!-- Initialize Navigation -->
     <script>
-        // Initialize navigation component
-        initNavigation();
+        document.addEventListener('DOMContentLoaded', function() {
+            initNavigation();
+            console.log('Index page loaded with navigation component');
+        });
     </script>
 </body>
 </html>
